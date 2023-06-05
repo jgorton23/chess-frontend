@@ -17,27 +17,26 @@ export class BoardComponent implements OnInit {
 
   selectedPiece: {x: number, y: number} | null = null;
 
+  playerColor = 'b';
+
   select(event: number[]){
     var x = event[1];
     var y = event[0];
-    if(this.selectedPiece === null && this.grid[y][x].piece != ''){
+    if(this.selectedPiece === null && this.grid[y][x].color === this.playerColor){
       this.grid[y][x].selected = true;
       this.selectedPiece = {x: x, y: y};
     }else if(this.selectedPiece !== null){
       this.grid[this.selectedPiece.y][this.selectedPiece.x].selected = false;
       if(this.grid[y][x].possible){
-        // console.log(this.grid[this.selectedPiece.y][this.selectedPiece.x]);
-        // console.log(this.selectedPiece.x,this.selectedPiece.y,"=>",x,y);
         this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
         this.grid[y][x].color = this.grid[this.selectedPiece.y][this.selectedPiece.x].color;
         this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = '';
         this.grid[this.selectedPiece.y][this.selectedPiece.x].color = '';
-        // console.log(this.grid[y][x]);
-      }else if(this.grid[y][x].piece === ''){
-        this.selectedPiece = null;
-      }else{
+      }else if(this.grid[y][x].color === this.playerColor){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
+      }else{
+        this.selectedPiece = null;
       }
     }
     if(this.selectedPiece){
