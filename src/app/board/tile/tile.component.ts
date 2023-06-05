@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BoardComponent } from '../board.component';
+import { tile } from '../board-util.service';
 
 @Component({
   selector: 'app-tile',
@@ -15,7 +16,7 @@ export class TileComponent implements OnInit {
   }
 
   @Input()
-  piece: String = ""
+  tile: tile = {piece: "", selected: false};
 
   @Input()
   row = 0
@@ -23,13 +24,9 @@ export class TileComponent implements OnInit {
   @Input()
   col = 0
 
-  @Input() parent: BoardComponent | null = null;
+  @Output() press: EventEmitter<number[]> = new EventEmitter<number[]>();
 
   isSelected(){
-    return this.parent!.isSelected(this.col, this.row);
-  }
-
-  select(){
-
+    return this.tile.selected;
   }
 }

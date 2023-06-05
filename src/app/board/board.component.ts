@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { BoardUtilService } from './board-util.service';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { BoardUtilService, tile } from './board-util.service';
 
 @Component({
   selector: 'app-board',
@@ -13,14 +13,14 @@ export class BoardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  grid = this.boardUtil.standard();
+  grid: tile[][] = this.boardUtil.standard();
     
 
   isSelected(x: number, y: number){
-    return x === 2 && (y === 2 || y === 1);
+    return this.grid[y][x].selected;
   }
 
-  get isSelectedFunc(){
-    return this.isSelected.bind(this);
+  select(event: number[]){
+    console.log(event);
   }
 }

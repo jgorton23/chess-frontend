@@ -5,7 +5,7 @@
     odd: (row + col) % 2 === 1,
     active: isSelected()
   }"
-  (onclick)="select()"
+  (click)="press.emit([row, col])"
 >
-  <strong>{{ piece }}</strong>
+  <strong>{{ tile.piece }}</strong>
 </div>

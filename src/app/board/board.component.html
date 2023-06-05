@@ -1,7 +1,12 @@
 <div class="container">
   <div class="row" *ngFor="let row of grid; index as y">
     <div class="col g-0" *ngFor="let col of row; index as x">
-      <app-tile [piece]="col" [row]="y" [col]="x" [parent]="this"></app-tile>
+      <app-tile
+        [tile]="col"
+        [row]="y"
+        [col]="x"
+        (press)="select($event)"
+      ></app-tile>
     </div>
   </div>
 </div>
