@@ -12,3 +12,7 @@ div.even {
 div.odd {
   background-color: brown;
 }
+
+div.active {
+  filter: hue-rotate(60deg);
+}

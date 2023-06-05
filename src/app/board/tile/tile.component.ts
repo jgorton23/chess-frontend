@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { BoardComponent } from '../board.component';
 
 @Component({
   selector: 'app-tile',
@@ -10,15 +11,25 @@ export class TileComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    
+
   }
 
   @Input()
-  piece = ""
+  piece: String = ""
 
   @Input()
   row = 0
   
   @Input()
   col = 0
+
+  @Input() parent: BoardComponent | null = null;
+
+  isSelected(){
+    return this.parent!.isSelected(this.col, this.row);
+  }
+
+  select(){
+
+  }
 }

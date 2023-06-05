@@ -1,6 +1,11 @@
 <div
   class="d-flex justify-content-center align-items-center"
-  [ngClass]="(row + col) % 2 === 0 ? 'even' : 'odd'"
+  [ngClass]="{
+    even: (row + col) % 2 === 0,
+    odd: (row + col) % 2 === 1,
+    active: isSelected()
+  }"
+  (onclick)="select()"
 >
   <strong>{{ piece }}</strong>
 </div>

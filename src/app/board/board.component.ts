@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BoardUtilService } from './board-util.service';
 
 @Component({
   selector: 'app-board',
@@ -7,19 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private boardUtil: BoardUtilService) { }
 
   ngOnInit(): void {
   }
 
-  grid = [
-    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-    ['r', 'n', 'b', 'k', 'q', 'b', 'n', 'r']]
+  grid = this.boardUtil.standard();
+    
 
+  isSelected(x: number, y: number){
+    return x === 2 && (y === 2 || y === 1);
+  }
+
+  get isSelectedFunc(){
+    return this.isSelected.bind(this);
+  }
 }
