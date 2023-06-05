@@ -16,7 +16,7 @@ export class TileComponent implements OnInit {
   }
 
   @Input()
-  tile: tile = {piece: "", selected: false};
+  tile: tile = {piece: "", selected: false, possible: false};
 
   @Input()
   row = 0
@@ -28,5 +28,9 @@ export class TileComponent implements OnInit {
 
   isSelected(){
     return this.tile.selected;
+  }
+
+  isPossible(){
+    return this.tile.possible;
   }
 }

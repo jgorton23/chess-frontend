@@ -3,7 +3,8 @@
   [ngClass]="{
     even: (row + col) % 2 === 0,
     odd: (row + col) % 2 === 1,
-    active: isSelected()
+    active: isSelected(),
+    possible: isPossible()
   }"
   (click)="press.emit([row, col])"
 >

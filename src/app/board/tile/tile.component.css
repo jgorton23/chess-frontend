@@ -16,3 +16,8 @@ div.odd {
 div.active {
   filter: hue-rotate(60deg);
 }
+
+div.possible {
+  outline: solid black;
+  outline-offset: -3px;
+}
