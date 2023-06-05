@@ -16,7 +16,7 @@ export class TileComponent implements OnInit {
   }
 
   @Input()
-  tile: tile = {piece: "", selected: false, possible: false};
+  tile: tile = {piece: '', color: '', selected: false, possible: false};
 
   @Input()
   row = 0
