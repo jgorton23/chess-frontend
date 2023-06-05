@@ -10,6 +10,7 @@ export class TileComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
   @Input()

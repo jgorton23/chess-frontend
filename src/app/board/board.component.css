@@ -1,3 +1,4 @@
 div.container {
-  width: 240px;
+  min-width: 200px;
+  width: 50%;
 }
