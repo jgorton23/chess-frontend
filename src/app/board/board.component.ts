@@ -17,12 +17,12 @@ export class BoardComponent implements OnInit {
 
   selectedPiece: {x: number, y: number} | null = null;
 
-  playerColor = 'b';
+  // playerColor = 'w';
 
   select(event: number[]){
     var x = event[1];
     var y = event[0];
-    if(this.selectedPiece === null && this.grid[y][x].color === this.playerColor){
+    if(this.selectedPiece === null && this.grid[y][x].color !== ''){
       this.grid[y][x].selected = true;
       this.selectedPiece = {x: x, y: y};
     }else if(this.selectedPiece !== null){
@@ -32,7 +32,7 @@ export class BoardComponent implements OnInit {
         this.grid[y][x].color = this.grid[this.selectedPiece.y][this.selectedPiece.x].color;
         this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = '';
         this.grid[this.selectedPiece.y][this.selectedPiece.x].color = '';
-      }else if(this.grid[y][x].color === this.playerColor){
+      }else if(this.grid[y][x].color !== ''){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
       }else{

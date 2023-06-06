@@ -4,7 +4,8 @@
     even: (row + col) % 2 === 0,
     odd: (row + col) % 2 === 1,
     active: isSelected(),
-    possible: isPossible()
+    possible: isPossible(),
+    white: tile.color === 'w'
   }"
   (click)="press.emit([row, col])"
 >

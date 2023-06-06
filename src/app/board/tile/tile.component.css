@@ -21,3 +21,7 @@ div.possible {
   outline: solid black;
   outline-offset: -3px;
 }
+
+div.white {
+  color: white;
+}
