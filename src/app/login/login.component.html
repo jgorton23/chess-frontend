@@ -7,13 +7,19 @@
       <h1 class="align-self-center pt-4 mb-4">
         <strong> Login </strong>
       </h1>
-      <form action="" class="mb-4">
+      <form
+        #loginForm="ngForm"
+        class="mb-4"
+        (ngSubmit)="login(loginForm.value)"
+      >
         <div class="form-floating mb-4">
           <input
             type="email"
             id="userEmail"
             class="form-control"
             placeholder="example@email.com"
+            name="email"
+            ngModel
           />
           <label for="userEmail">Email</label>
         </div>
@@ -23,6 +29,8 @@
             id="userPass"
             class="form-control"
             placeholder="password"
+            name="password"
+            ngModel
           />
           <label for="userPass">Password</label>
         </div>

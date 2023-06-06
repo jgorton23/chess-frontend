@@ -7,13 +7,19 @@
       <h1 class="align-self-center pt-4 mb-4">
         <strong> Register </strong>
       </h1>
-      <form action="" class="mb-4">
+      <form
+        #registerForm="ngForm"
+        class="mb-4"
+        (ngSubmit)="register(registerForm.value)"
+      >
         <div class="form-floating mb-4">
           <input
             type="email"
             id="userEmail"
             class="form-control"
             placeholder="example@email.com"
+            name="email"
+            ngModel
           />
           <label for="userEmail">Email</label>
         </div>
@@ -23,17 +29,21 @@
             id="userPass"
             class="form-control"
             placeholder="password"
+            name="password"
+            ngModel
           />
           <label for="userPass">Password</label>
         </div>
         <div class="form-floating mb-4">
           <input
             type="password"
-            id="userPass"
+            id="userConfirmPass"
             class="form-control"
             placeholder="password"
+            name="passwordConfirm"
+            ngModel
           />
-          <label for="userPass">Confirm Password</label>
+          <label for="userConfirmPass">Confirm Password</label>
         </div>
         <button
           type="submit"

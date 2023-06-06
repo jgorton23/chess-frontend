@@ -7,6 +7,8 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { BoardComponent } from './board/board.component';
 import { TileComponent } from './board/tile/tile.component';
+import { HomeComponent } from './home/home.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,10 +16,12 @@ import { TileComponent } from './board/tile/tile.component';
     RegisterComponent,
     LoginComponent,
     BoardComponent,
-    TileComponent
+    TileComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule
   ],
   providers: [],
