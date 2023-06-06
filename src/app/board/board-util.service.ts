@@ -23,7 +23,7 @@ export class BoardUtilService {
       ['', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', ''],
       ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-      ['r', 'n', 'b', 'k', 'q', 'b', 'n', 'r']
+      ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
     ].map((row, index) => {
       return row.map(
         (s) => {return {piece: s, color: index <= 1 ? 'b' : index >= 6 ? 'w' : '', selected: false, possible: false}}
