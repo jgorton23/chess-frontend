@@ -3,12 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { BoardComponent } from './board/board.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent},
-  { path: '', redirectTo: 'login', pathMatch: 'full'},
-  { path: 'register', component: RegisterComponent},
+  { path: 'login', title: 'Chess Login' ,component: LoginComponent},
+  { path: 'register', title: 'chess Register', component: RegisterComponent},
+  { path: 'home', title: 'Jacob\'s Chess', component: HomeComponent},
   { path: 'board', component: BoardComponent},
+  { path: '**', redirectTo: 'login'}
 ];
 
 @NgModule({
