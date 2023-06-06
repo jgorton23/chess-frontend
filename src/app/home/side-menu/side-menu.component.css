@@ -1,0 +1,9 @@
+.open-close-container {
+  border: 1px solid #dddddd;
+  color: #000000;
+  font-weight: bold;
+  font-size: 20px;
+  height: 100vh;
+  width: 300px;
+  background-color: green;
+}
