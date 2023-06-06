@@ -24,4 +24,58 @@ div.possible {
 
 div.white {
   color: white;
+  content: icon;
+}
+
+div span.b.b {
+  content: url(../../../assets/blackBishop.png);
+}
+
+div span.w.b {
+  content: url(../../../assets/whiteBishop.png);
+}
+
+div span.b.p {
+  content: url(../../../assets/blackPawn.png);
+}
+
+div span.w.p {
+  content: url(../../../assets/pawn.png);
+}
+
+div span.w.r {
+  content: url(../../../assets/whiteRook.png);
+}
+
+div span.b.r {
+  content: url(../../../assets/blackRook.png);
+}
+
+div span.w.n {
+  content: url(../../../assets/whiteKnight.png);
+}
+
+div span.b.n {
+  content: url(../../../assets/blackKnight.png);
+}
+
+div span.w.q {
+  content: url(../../../assets/whiteQueen.png);
+}
+
+div span.b.q {
+  content: url(../../../assets/blackQueen.png);
+}
+
+div span.w.k {
+  content: url(../../../assets/whiteKing.png);
+}
+
+div span.b.k {
+  content: url(../../../assets/blackKing.png);
+}
+
+span {
+  max-height: 100%;
+  max-width: 100%;
 }

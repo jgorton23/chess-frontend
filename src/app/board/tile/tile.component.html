@@ -4,10 +4,11 @@
     even: (row + col) % 2 === 0,
     odd: (row + col) % 2 === 1,
     active: isSelected(),
-    possible: isPossible(),
-    white: tile.color === 'w'
+    possible: isPossible()
   }"
   (click)="press.emit([row, col])"
 >
-  <strong>{{ tile.piece }}</strong>
+  <!-- <strong>{{ tile.piece }}</strong> -->
+  <!-- <img alt="pawn" /> -->
+  <span [class]="tile.piece + ' ' + tile.color"></span>
 </div>
