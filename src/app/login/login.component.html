@@ -3,11 +3,34 @@
     class="row d-flex align-items-center justify-content-center"
     style="height: 100%"
   >
-    <div class="d-flex card">
-      <h1 class="align-self-center pt-4">
+    <div class="d-flex align-items-center card">
+      <h1 class="align-self-center pt-4 mb-4">
         <strong> Login </strong>
       </h1>
-      <form action=""></form>
+      <form action="" class="mb-4">
+        <div class="form-floating mb-4">
+          <input
+            type="email"
+            id="userEmail"
+            class="form-control"
+            placeholder="example@email.com"
+          />
+          <label for="userEmail">Email</label>
+        </div>
+        <div class="form-floating mb-4">
+          <input
+            type="password"
+            id="userPass"
+            class="form-control"
+            placeholder="password"
+          />
+          <label for="userPass">Password</label>
+        </div>
+        <button type="submit" class="btn btn-secondary w-100">
+          <h3>Submit</h3>
+        </button>
+      </form>
+      <p>Create an account</p>
     </div>
   </div>
 </div>

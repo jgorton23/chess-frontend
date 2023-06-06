@@ -15,3 +15,15 @@
   height: 410px;
   width: 329px;
 }
+
+.form-control {
+  background-color: rgb(60, 60, 60);
+  color: white;
+  outline: none;
+  border: none;
+  box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.65);
+}
+
+label {
+  color: white;
+}
