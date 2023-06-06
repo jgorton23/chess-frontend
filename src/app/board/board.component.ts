@@ -90,8 +90,64 @@ export class BoardComponent implements OnInit {
         }
         break;
       case 'r':
+        // down
+        for(var j = 1; j+y < this.grid.length; j++){
+          // if the rook is blocked by its own piece
+          if(this.grid[y+j][x].color === this.grid[y][x].color){
+            break;
+          }
+          // if the rook can move here mark it possible
+          this.grid[y+j][x].possible = true;
+          // if the rook can capture a piece, it can't move further
+          if(this.grid[y+j][x].color !== ''){
+            break;
+          }
+        }
+        // up
+        for(var j = 1; y-j >= 0; j++){
+          if(this.grid[y-j][x].color === this.grid[y][x].color){
+            break;
+          }
+          this.grid[y-j][x].possible = true;
+          if(this.grid[y-j][x].color !== ''){
+            break;
+          }
+        }
+        // left
+        for(var j = 1; x-j >= 0; j++){
+          if(this.grid[y][x-j].color === this.grid[y][x].color){
+            break;
+          }
+          this.grid[y][x-j].possible = true;
+          if(this.grid[y][x-j].color !== ''){
+            break;
+          }
+        }
+        // right
+        for(var j = 1; x+j < this.grid[0].length; j++){
+          if(this.grid[y][x+j].color === this.grid[y][x].color){
+            break;
+          }
+          this.grid[y][x+j].possible = true;
+          if(this.grid[y][x+j].color !== ''){
+            break;
+          }
+        }
         break;
       case 'n':
+        var possibilities = [[-2,1], [-2,-1], [-1,2], [-1,-2]]
+        for(let possibility of possibilities){
+          if(this.isInBounds(x+possibility[0], y+possibility[1])){
+            if(this.grid[y+possibility[1]][x+possibility[0]].color !== this.grid[y][x].color){
+              this.grid[y+possibility[1]][x+possibility[0]].possible = true;
+            }
+          }
+          if(this.isInBounds(x-possibility[0], y-possibility[1])){
+            if(this.grid[y-possibility[1]][x-possibility[0]].color !== this.grid[y][x].color){
+              this.grid[y-possibility[1]][x-possibility[0]].possible = true;
+            }
+          }
+        }
         break;
       case 'b':
         break;
@@ -102,5 +158,9 @@ export class BoardComponent implements OnInit {
       default:
         return;
     }
+  }
+
+  isInBounds(x: number,y: number){
+    return 0 <= x && 0 <= y && x < this.grid[0].length && y < this.grid.length;
   }
 }
