@@ -188,6 +188,15 @@ export class BoardComponent implements OnInit {
         }
         break;
       case 'k':
+        for(var i = Math.max(0, y-1); i <= Math.min(y+1, this.grid.length-1); i++){
+          for(var j = Math.max(0, x-1); j <= Math.min(x+1, this.grid[0].length-1); j++){
+            if(i !== y || j !== x){
+              if(this.grid[i][j].color !== this.grid[y][x].color){
+                this.grid[i][j].possible = true;
+              }
+            }
+          }
+        }
         break;
       case 'q':
         break;
