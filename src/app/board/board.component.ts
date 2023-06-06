@@ -150,6 +150,42 @@ export class BoardComponent implements OnInit {
         }
         break;
       case 'b':
+        for(var j = 1; y+j < this.grid.length && x+j < this.grid[0].length; j++){
+          if(this.grid[y+j][x+j].color === this.grid[y][x].color){
+            break;
+          }
+          this.grid[y+j][x+j].possible = true;
+          if(this.grid[y+j][x+j].color !== ''){
+            break;
+          }
+        }
+        for(var j = 1; y-j >= 0 && x+j < this.grid[0].length; j++){
+          if(this.grid[y-j][x+j].color === this.grid[y][x].color){
+            break;
+          }
+          this.grid[y-j][x+j].possible = true;
+          if(this.grid[y-j][x+j].color !== ''){
+            break;
+          }
+        }
+        for(var j = 1; y-j >= 0 && x-j >= 0; j++){
+          if(this.grid[y-j][x-j].color === this.grid[y][x].color){
+            break;
+          }
+          this.grid[y-j][x-j].possible = true;
+          if(this.grid[y-j][x-j].color !== ''){
+            break;
+          }
+        }
+        for(var j = 1; y+j < this.grid.length && x-j >= 0; j++){
+          if(this.grid[y+j][x-j].color === this.grid[y][x].color){
+            break;
+          }
+          this.grid[y+j][x-j].possible = true;
+          if(this.grid[y+j][x-j].color !== ''){
+            break;
+          }
+        }
         break;
       case 'k':
         break;
