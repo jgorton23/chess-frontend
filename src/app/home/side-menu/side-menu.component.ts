@@ -27,9 +27,4 @@ export class SideMenuComponent implements OnInit {
 
   @Input()
   isOpen: boolean = false;
-
-  // toggle() {
-  //   this.isOpen = !this.isOpen;
-  // }
-
 }
