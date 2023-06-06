@@ -1,0 +1,9 @@
+.body {
+  background: -webkit-linear-gradient(
+    bottom,
+    rgb(133, 133, 133),
+    rgb(61, 61, 61)
+  );
+  max-width: none;
+  height: 100vh;
+}
