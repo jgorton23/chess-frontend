@@ -91,49 +91,7 @@ export class BoardComponent implements OnInit {
         }
         break;
       case 'r':
-        // down
-        for(var j = 1; j+y < this.grid.length; j++){
-          // if the rook is blocked by its own piece
-          if(this.grid[y+j][x].color === this.grid[y][x].color){
-            break;
-          }
-          // if the rook can move here mark it possible
-          this.grid[y+j][x].possible = true;
-          // if the rook can capture a piece, it can't move further
-          if(this.grid[y+j][x].color !== ''){
-            break;
-          }
-        }
-        // up
-        for(var j = 1; y-j >= 0; j++){
-          if(this.grid[y-j][x].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y-j][x].possible = true;
-          if(this.grid[y-j][x].color !== ''){
-            break;
-          }
-        }
-        // left
-        for(var j = 1; x-j >= 0; j++){
-          if(this.grid[y][x-j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y][x-j].possible = true;
-          if(this.grid[y][x-j].color !== ''){
-            break;
-          }
-        }
-        // right
-        for(var j = 1; x+j < this.grid[0].length; j++){
-          if(this.grid[y][x+j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y][x+j].possible = true;
-          if(this.grid[y][x+j].color !== ''){
-            break;
-          }
-        }
+        this.searchStraight(x, y);
         break;
       case 'n':
         var possibilities = [[-2,1], [-2,-1], [-1,2], [-1,-2]]
@@ -151,42 +109,7 @@ export class BoardComponent implements OnInit {
         }
         break;
       case 'b':
-        for(var j = 1; y+j < this.grid.length && x+j < this.grid[0].length; j++){
-          if(this.grid[y+j][x+j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y+j][x+j].possible = true;
-          if(this.grid[y+j][x+j].color !== ''){
-            break;
-          }
-        }
-        for(var j = 1; y-j >= 0 && x+j < this.grid[0].length; j++){
-          if(this.grid[y-j][x+j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y-j][x+j].possible = true;
-          if(this.grid[y-j][x+j].color !== ''){
-            break;
-          }
-        }
-        for(var j = 1; y-j >= 0 && x-j >= 0; j++){
-          if(this.grid[y-j][x-j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y-j][x-j].possible = true;
-          if(this.grid[y-j][x-j].color !== ''){
-            break;
-          }
-        }
-        for(var j = 1; y+j < this.grid.length && x-j >= 0; j++){
-          if(this.grid[y+j][x-j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y+j][x-j].possible = true;
-          if(this.grid[y+j][x-j].color !== ''){
-            break;
-          }
-        }
+        this.searchDiagonal(x, y);
         break;
       case 'k':
         for(var i = Math.max(0, y-1); i <= Math.min(y+1, this.grid.length-1); i++){
@@ -200,88 +123,96 @@ export class BoardComponent implements OnInit {
         }
         break;
       case 'q':
-        for(var j = 1; y+j < this.grid.length && x+j < this.grid[0].length; j++){
-          if(this.grid[y+j][x+j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y+j][x+j].possible = true;
-          if(this.grid[y+j][x+j].color !== ''){
-            break;
-          }
-        }
-        for(var j = 1; y-j >= 0 && x+j < this.grid[0].length; j++){
-          if(this.grid[y-j][x+j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y-j][x+j].possible = true;
-          if(this.grid[y-j][x+j].color !== ''){
-            break;
-          }
-        }
-        for(var j = 1; y-j >= 0 && x-j >= 0; j++){
-          if(this.grid[y-j][x-j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y-j][x-j].possible = true;
-          if(this.grid[y-j][x-j].color !== ''){
-            break;
-          }
-        }
-        for(var j = 1; y+j < this.grid.length && x-j >= 0; j++){
-          if(this.grid[y+j][x-j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y+j][x-j].possible = true;
-          if(this.grid[y+j][x-j].color !== ''){
-            break;
-          }
-        }
-        // down
-        for(var j = 1; j+y < this.grid.length; j++){
-          // if the rook is blocked by its own piece
-          if(this.grid[y+j][x].color === this.grid[y][x].color){
-            break;
-          }
-          // if the rook can move here mark it possible
-          this.grid[y+j][x].possible = true;
-          // if the rook can capture a piece, it can't move further
-          if(this.grid[y+j][x].color !== ''){
-            break;
-          }
-        }
-        // up
-        for(var j = 1; y-j >= 0; j++){
-          if(this.grid[y-j][x].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y-j][x].possible = true;
-          if(this.grid[y-j][x].color !== ''){
-            break;
-          }
-        }
-        // left
-        for(var j = 1; x-j >= 0; j++){
-          if(this.grid[y][x-j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y][x-j].possible = true;
-          if(this.grid[y][x-j].color !== ''){
-            break;
-          }
-        }
-        // right
-        for(var j = 1; x+j < this.grid[0].length; j++){
-          if(this.grid[y][x+j].color === this.grid[y][x].color){
-            break;
-          }
-          this.grid[y][x+j].possible = true;
-          if(this.grid[y][x+j].color !== ''){
-            break;
-          }
-        }
+        this.searchDiagonal(x, y);
+        this.searchStraight(x, y);
         break;
       default:
         return;
+    }
+  }
+
+  searchDiagonal(x: number, y: number){
+    for(var j = 1; y+j < this.grid.length && x+j < this.grid[0].length; j++){
+      if(this.grid[y+j][x+j].color === this.grid[y][x].color){
+        break;
+      }
+      this.grid[y+j][x+j].possible = true;
+      if(this.grid[y+j][x+j].color !== ''){
+        break;
+      }
+    }
+    for(var j = 1; y-j >= 0 && x+j < this.grid[0].length; j++){
+      if(this.grid[y-j][x+j].color === this.grid[y][x].color){
+        break;
+      }
+      this.grid[y-j][x+j].possible = true;
+      if(this.grid[y-j][x+j].color !== ''){
+        break;
+      }
+    }
+    for(var j = 1; y-j >= 0 && x-j >= 0; j++){
+      if(this.grid[y-j][x-j].color === this.grid[y][x].color){
+        break;
+      }
+      this.grid[y-j][x-j].possible = true;
+      if(this.grid[y-j][x-j].color !== ''){
+        break;
+      }
+    }
+    for(var j = 1; y+j < this.grid.length && x-j >= 0; j++){
+      if(this.grid[y+j][x-j].color === this.grid[y][x].color){
+        break;
+      }
+      this.grid[y+j][x-j].possible = true;
+      if(this.grid[y+j][x-j].color !== ''){
+        break;
+      }
+    }
+  }
+
+  searchStraight(x: number, y: number){
+    // down
+    for(var j = 1; j+y < this.grid.length; j++){
+      // if the rook is blocked by its own piece
+      if(this.grid[y+j][x].color === this.grid[y][x].color){
+        break;
+      }
+      // if the rook can move here mark it possible
+      this.grid[y+j][x].possible = true;
+      // if the rook can capture a piece, it can't move further
+      if(this.grid[y+j][x].color !== ''){
+        break;
+      }
+    }
+    // up
+    for(var j = 1; y-j >= 0; j++){
+      if(this.grid[y-j][x].color === this.grid[y][x].color){
+        break;
+      }
+      this.grid[y-j][x].possible = true;
+      if(this.grid[y-j][x].color !== ''){
+        break;
+      }
+    }
+    // left
+    for(var j = 1; x-j >= 0; j++){
+      if(this.grid[y][x-j].color === this.grid[y][x].color){
+        break;
+      }
+      this.grid[y][x-j].possible = true;
+      if(this.grid[y][x-j].color !== ''){
+        break;
+      }
+    }
+    // right
+    for(var j = 1; x+j < this.grid[0].length; j++){
+      if(this.grid[y][x+j].color === this.grid[y][x].color){
+        break;
+      }
+      this.grid[y][x+j].possible = true;
+      if(this.grid[y][x+j].color !== ''){
+        break;
+      }
     }
   }
 
