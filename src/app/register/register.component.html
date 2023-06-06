@@ -1,18 +1,52 @@
-<div class="container">
-  <div class="row">
-    <div class="col d-flex justify-content-center">
-      <h1>register</h1>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col d-flex justify-content-center">
-      <div style="width: 500px">
-        <app-board></app-board>
-      </div>
-      <!-- <div style="width: 15px"></div>
-      <div style="width: 300px">
-        <app-board></app-board>
-      </div> -->
+<div class="body container g-0">
+  <div
+    class="row d-flex align-items-center justify-content-center"
+    style="height: 100%"
+  >
+    <div class="d-flex align-items-center card">
+      <h1 class="align-self-center pt-4 mb-4">
+        <strong> Register </strong>
+      </h1>
+      <form action="" class="mb-4">
+        <div class="form-floating mb-4">
+          <input
+            type="email"
+            id="userEmail"
+            class="form-control"
+            placeholder="example@email.com"
+          />
+          <label for="userEmail">Email</label>
+        </div>
+        <div class="form-floating mb-4">
+          <input
+            type="password"
+            id="userPass"
+            class="form-control"
+            placeholder="password"
+          />
+          <label for="userPass">Password</label>
+        </div>
+        <div class="form-floating mb-4">
+          <input
+            type="password"
+            id="userPass"
+            class="form-control"
+            placeholder="password"
+          />
+          <label for="userPass">Confirm Password</label>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-secondary w-100 d-flex justify-content-center align-items-center"
+        >
+          <h6 class="m-2">
+            <strong> Submit </strong>
+          </h6>
+        </button>
+      </form>
+      <p>
+        <a href="login"> Already have an account </a>
+      </p>
     </div>
   </div>
 </div>
