@@ -1,1 +1,16 @@
-<div class="body container g-0"></div>
+<div class="body container g-0">
+  <nav class="navbar fixed-top navbar-dark bg-dark">
+    <button class="navbar-toggler ms-2" (click)="toggleSideMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-brand">
+      <strong> Jacob's Chess </strong>
+    </div>
+  </nav>
+  <!-- <div class="container" *ngIf="showSideMenu">
+    <div class="row">
+      <div class="col-8 sidemenu"></div>
+    </div>
+  </div> -->
+  <app-side-menu [isOpen]="showSideMenu"></app-side-menu>
+</div>

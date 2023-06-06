@@ -12,4 +12,10 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showSideMenu: boolean = true;
+
+  toggleSideMenu(){
+    this.showSideMenu = !this.showSideMenu;
+  }
+
 }

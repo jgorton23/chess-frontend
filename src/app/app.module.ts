@@ -9,6 +9,8 @@ import { BoardComponent } from './board/board.component';
 import { TileComponent } from './board/tile/tile.component';
 import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
+import { SideMenuComponent } from './home/side-menu/side-menu.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import { FormsModule } from '@angular/forms';
     LoginComponent,
     BoardComponent,
     TileComponent,
-    HomeComponent
+    HomeComponent,
+    SideMenuComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
