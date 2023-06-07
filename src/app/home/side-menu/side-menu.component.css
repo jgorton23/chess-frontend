@@ -4,6 +4,7 @@
   width: 300px;
   background-color: rgb(34, 37, 41);
   border-top: 1px solid black;
+  overflow: scroll;
 }
 
 .form-control {

@@ -8,6 +8,7 @@
   height: calc(100vh - 56px);
   margin-top: 56px;
   color: #ffffff;
+  overflow: scroll;
 }
 
 .slideout {
