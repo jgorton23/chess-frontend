@@ -27,4 +27,8 @@ export class SideMenuComponent implements OnInit {
 
   @Input()
   isOpen: boolean = false;
+
+  print(msg: String){
+    console.log(msg)
+  }
 }
