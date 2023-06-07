@@ -7,7 +7,47 @@
       <strong> Jacob's Chess </strong>
     </div>
   </nav>
-  <div style="height: 100%; margin-top: 56px">
+  <div
+    class="slideout"
+    [ngStyle]="{ 'pointer-events': showSideMenu ? 'none' : 'auto' }"
+  >
     <app-side-menu [isOpen]="showSideMenu"></app-side-menu>
+  </div>
+  <div class="row">
+    <div class="col d-flex">
+      <h2 class="m-3">
+        <strong> New Game </strong>
+      </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col m-3 d-flex justify-content-center">
+      <button
+        type="button"
+        class="btn btn-secondary w-50"
+        (click)="print('play friend')"
+      >
+        Play a friend
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col m-3 d-flex justify-content-center">
+      <button
+        type="button"
+        class="btn btn-secondary w-50"
+        (click)="print('play com')"
+      >
+        Play a computer
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col d-flex">
+      <h2 class="m-3">
+        <strong> Past Games </strong>
+      </h2>
+    </div>
   </div>
 </div>

@@ -18,4 +18,9 @@ export class HomeComponent implements OnInit {
     this.showSideMenu = !this.showSideMenu;
   }
 
+  print(msg: String) {
+    console.log(msg);
+    
+  }
+
 }
