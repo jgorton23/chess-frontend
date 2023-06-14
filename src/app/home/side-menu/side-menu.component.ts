@@ -1,5 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
+import { ApiPaths } from 'src/app/api-paths';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-side-menu',
@@ -23,12 +25,36 @@ export class SideMenuComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.updateProfile()
   }
 
   @Input()
   isOpen: boolean = false;
 
+  numFriends: number = 0;
+
+  username: String = "";
+
+  email: String = "";
+
   print(msg: String){
     console.log(msg)
+  }
+
+  async getProfile(): Promise<{friends: number, username: String, email: String} | null> {
+    const response = await fetch(`${environment.baseUrl}/${ApiPaths.Profile}`, {credentials: 'include'})
+    if(response.status === 200) {
+      return response.json();
+    }else{
+      console.log(response.json());
+      return null;
+    }
+  }
+
+  async updateProfile(): Promise<void> {
+    const profile = await this.getProfile()
+    this.numFriends = profile?.friends || 0
+    this.username = profile?.username || ""
+    this.email = profile?.email || ""
   }
 }

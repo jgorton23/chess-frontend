@@ -8,14 +8,14 @@
   </div>
   <div class="row">
     <div class="col">
-      <h3 class="mt-3 ms-3">JGorton23</h3>
+      <h3 class="mt-3 ms-3">{{ username }}</h3>
     </div>
   </div>
   <div class="row">
     <div class="col">
       <p class="ms-3">
-        17 friends
-        <button (click)="print('view friends')" class="edit">
+        {{ numFriends }} friends
+        <button (click)="updateProfile()" class="edit">
           <i class="fa-solid fa-user-group"></i>
         </button>
       </p>
@@ -45,7 +45,7 @@
           <i class="fa-solid fa-pencil"></i>
         </button>
       </label>
-      <input type="email" class="form-control" disabled="true" />
+      <input type="email" class="form-control" placeholder="{{ email }}" />
     </div>
   </div>
   <div class="row">
