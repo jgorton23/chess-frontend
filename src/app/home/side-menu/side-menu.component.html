@@ -49,22 +49,79 @@
     <div class="col m-3">
       <label for="email" class="form-label">
         Email
-        <button (click)="print('edit email')" class="edit">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
+        <div *ngIf="!editingEmail">
+          <button (click)="changeEmail()" class="edit">
+            <i class="fa-solid fa-pencil"></i>
+          </button>
+        </div>
+        <div *ngIf="editingEmail">
+          <button (click)="saveEmail()" class="edit">
+            <i class="fa-solid fa-floppy-disk" style="color: #ffffff"></i>
+          </button>
+          <button (click)="changeEmail()" class="edit">
+            <i class="fa-solid fa-xmark" style="color: #ffffff"></i>
+          </button>
+        </div>
       </label>
-      <input type="email" class="form-control" placeholder="{{ email }}" />
+      <input
+        type="email"
+        class="form-control"
+        [(ngModel)]="email"
+        [disabled]="!editingEmail"
+      />
     </div>
   </div>
   <div class="row">
     <div class="col m-3">
       <label for="pass" class="form-label">
         Password
-        <button (click)="print('edit pass')" class="edit">
-          <i class="fa-solid fa-pencil"></i>
-        </button>
+        <div *ngIf="!editingPassword">
+          <button (click)="changePassword()" class="edit">
+            <i class="fa-solid fa-pencil"></i>
+          </button>
+        </div>
+        <div *ngIf="editingPassword">
+          <button (click)="savePassword()" class="edit">
+            <i class="fa-solid fa-floppy-disk" style="color: #ffffff"></i>
+          </button>
+          <button (click)="changePassword()" class="edit">
+            <i class="fa-solid fa-xmark" style="color: #ffffff"></i>
+          </button>
+        </div>
       </label>
-      <input type="password" class="form-control" placeholder="**********" />
+      <input
+        type="password"
+        class="form-control"
+        placeholder="**********"
+        disabled
+        *ngIf="!editingPassword"
+      />
+      <form *ngIf="editingPassword" #passwordForm="ngForm">
+        <div class="form-floating mb-4">
+          <input
+            type="password"
+            id="userPass"
+            class="form-control"
+            placeholder=""
+            [(ngModel)]="newPassword"
+            name="password"
+            ngModel
+          />
+          <label for="userPass">New Password</label>
+        </div>
+        <div class="form-floating mb-4">
+          <input
+            type="password"
+            id="userConfirmPass"
+            class="form-control"
+            placeholder=""
+            [(ngModel)]="newPassword"
+            name="confirm"
+            ngModel
+          />
+          <label for="userConfirmPass">Confirm Password</label>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -37,7 +37,15 @@ export class SideMenuComponent implements OnInit {
 
   email: String = "";
 
+  newPassword: String = "";
+
+  confirmNewPassword: String = "";
+
   friendUsername: String = "";
+
+  editingEmail: boolean = false;
+  
+  editingPassword: boolean = false;
 
   print(msg: String){
     console.log(msg)
@@ -73,16 +81,56 @@ export class SideMenuComponent implements OnInit {
       }
     ).then(response => response.json()
     ).then(body => {
+      console.log(body);
       if(body.status === 200){
-        console.log(body);
         this.numFriends = body.friends;
         return body;
         // add success message?
       }else{
-        console.log(body);
+        // console.log(body);
+        // add error message
+      }
+    }) 
+  }
+
+  changeEmail(): void {
+    this.editingEmail = !this.editingEmail;
+  }
+
+  saveEmail(): void {
+    this.saveProfile({email: this.email})
+  }
+
+  changePassword(): void {
+    this.editingPassword = !this.editingPassword;
+  }
+
+  savePassword(): void {
+    this.saveProfile({password: this.newPassword, confirm: this.confirmNewPassword})
+  }
+
+  saveProfile(credentials: {email?: String, password?: String, confirm?: String}): void {
+    fetch(`${environment.baseUrl}/${ApiPaths.Profile}`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+        body: JSON.stringify(credentials),
+        headers: {
+          'Accept': "application/json, text/plain, */*",
+          'Content-Type': "application/json;charset=utf-8"
+        },
+      })
+    .then(Response => Response.json())
+    .then(body => {
+      console.log(body);
+      this.editingEmail = false;
+      this.editingPassword = false;
+      if(body.status === 200) {
+        // add success message
+        return body
+      }else{
         // add error message
       }
     })
-    
   }
 }
