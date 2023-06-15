@@ -60,7 +60,7 @@ export class SideMenuComponent implements OnInit {
     this.email = profile?.email || ""
   }
 
-   addFriend(): void{
+  addFriend(): void{
     fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
       {
         method: 'POST',
