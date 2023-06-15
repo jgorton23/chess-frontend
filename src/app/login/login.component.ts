@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async login(formData: {email: String, password: String}) {
+  async login(formData: {email: string, password: string}) {
     try {
       const response = await fetch(`${environment.baseUrl}/${ApiPaths.Login}`, {
         method: 'POST',

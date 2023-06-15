@@ -17,7 +17,7 @@ export interface DialogData {
 export class NewGamePopupComponent implements OnInit{
   constructor(private boardUtil: BoardUtilService) {}
 
-  friends: String[] = []
+  friends: string[] = []
 
   ngOnInit(): void {
     this.getFriends();
@@ -27,7 +27,7 @@ export class NewGamePopupComponent implements OnInit{
     fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, {credentials: 'include'})
       .then(response => response.json())
       .then(body => {
-        this.friends = body.friends.map((friend: {username: String, friends: number, email: String}) => friend.username)        
+        this.friends = body.friends.map((friend: {username: string, friends: number, email: string}) => friend.username)        
       })      
   }
 
@@ -35,7 +35,10 @@ export class NewGamePopupComponent implements OnInit{
     return this.boardUtil.getVariations();
   }
 
-  createGame(game: Game): void {
+  createGame(form: {opponent: string, variant: string}): void {
+    // let game: Game = {
+    //   board: this.boardUtil.standard
+    // }
     fetch(`${environment.baseUrl}/${ApiPaths.Game}/new`, 
       {
         credentials: 'include',
@@ -44,7 +47,7 @@ export class NewGamePopupComponent implements OnInit{
           'Accept': "application/json, text/plain, */*",
           'Content-Type': "application/json;charset=utf-8"
         },
-        body: JSON.stringify(game)
+        // body: JSON.stringify(game)
       }
     )
   }

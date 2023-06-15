@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
     this.showPopup = !this.showPopup;
   }
 
-  print(msg: String) {
+  print(msg: string) {
     console.log(msg);
   }
 

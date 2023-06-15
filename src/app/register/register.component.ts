@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async register(formData: {email: String, password: String, confirm: String}) {
+  async register(formData: {email: string, password: string, confirm: string}) {
     try {
       const params = {
         headers: {

@@ -33,25 +33,25 @@ export class SideMenuComponent implements OnInit {
 
   numFriends: number = 0;
 
-  username: String = "";
+  username: string = "";
 
-  email: String = "";
+  email: string = "";
 
-  newPassword: String = "";
+  newPassword: string = "";
 
-  confirmNewPassword: String = "";
+  confirmNewPassword: string = "";
 
-  friendUsername: String = "";
+  friendUsername: string = "";
 
   editingEmail: boolean = false;
   
   editingPassword: boolean = false;
 
-  print(msg: String){
+  print(msg: string){
     console.log(msg)
   }
 
-  async getProfile(): Promise<{friends: number, username: String, email: String} | null> {
+  async getProfile(): Promise<{friends: number, username: string, email: string} | null> {
     const response = await fetch(`${environment.baseUrl}/${ApiPaths.Profile}`, {credentials: 'include'})
     if(response.status === 200) {
       return response.json();
@@ -109,7 +109,7 @@ export class SideMenuComponent implements OnInit {
     this.saveProfile({password: this.newPassword, confirm: this.confirmNewPassword})
   }
 
-  saveProfile(credentials: {email?: String, password?: String, confirm?: String}): void {
+  saveProfile(credentials: {email?: string, password?: string, confirm?: string}): void {
     fetch(`${environment.baseUrl}/${ApiPaths.Profile}`,
       {
         method: 'PUT',

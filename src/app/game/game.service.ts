@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
 
 export type Game = {
-  id: String,
-  moves: String,
-  board: String[],
+  id: string,
+  moves: string,
+  board: string[],
   turn: number,
   whiteTime: number,
   blackTime: number,
-  whitePlayerId: String,
-  blackPlayerId: String,
-  whitePlayerUsername: String,
-  blackPlayerUsername: String,
+  whitePlayerId: string,
+  blackPlayerId: string,
+  whitePlayerUsername: string,
+  blackPlayerUsername: string,
+  started: boolean,
+  ended: boolean,
+  winner?: string
 }
 
 @Injectable({

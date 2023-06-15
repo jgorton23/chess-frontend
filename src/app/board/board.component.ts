@@ -211,7 +211,7 @@ export class BoardComponent implements OnInit {
         break;
       }
       this.grid[y][x+j].possible = true;
-      if(this.grid[y][x+j].color !== ''){
+      if(this.isEmptySquare(this.grid[y][x+j].piece)){
         break;
       }
     }
@@ -219,5 +219,21 @@ export class BoardComponent implements OnInit {
 
   isInBounds(x: number,y: number){
     return 0 <= x && 0 <= y && x < this.grid[0].length && y < this.grid.length;
+  }
+
+  isWhitePiece(c: string){
+    return "PQKBKR".indexOf(c) >= 0
+  }
+
+  isBlackPiece(c: string){
+    return "pqkbrk".indexOf(c) >= 0
+  }
+
+  areSameColor(c1: string, c2: string) {
+    return ("PQKBKR".indexOf(c1) >= 0 && "PQKBKR".indexOf(c2) >= 0) || ("pqkbrk".indexOf(c1) >= 0 && "pqkbrk".indexOf(c2) >= 0)
+  }
+
+  isEmptySquare(c: string) {
+    return c === ' ';
   }
 }
