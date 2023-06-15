@@ -17,14 +17,13 @@
   left: 0px;
   bottom: 0px;
   margin-top: 56px;
-  /* pointer-events: none; */
-  /* pointer-events: none; */
 }
 
-.underline {
-  height: 2px;
-  width: 100px;
-  background-color: white;
+.popup {
+  position: absolute;
+  height: calc(100vh - 56px);
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.65);
 }
 
 .btn-secondary {

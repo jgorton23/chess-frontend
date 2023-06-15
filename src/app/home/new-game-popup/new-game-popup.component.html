@@ -1,1 +1,39 @@
-<p>New Game Component Works!</p>
+<div class="body container g-0">
+  <div
+    class="row d-flex align-items-center justify-content-center"
+    style="height: 100%"
+  >
+    <div class="d-flex align-items-center justify-content-center card">
+      <h1 class="m-4">
+        <strong> New Game </strong>
+      </h1>
+
+      <form
+        #newGameForm="ngForm"
+        class="mb-4"
+        (ngSubmit)="createGame(newGameForm.value)"
+      >
+        <select class="form-select mb-4" name="opponent" id="opponent">
+          <option selected>Select Opponent</option>
+          <option *ngFor="let friend of friends" [value]="friend">
+            {{ friend }}
+          </option>
+        </select>
+        <select class="form-select mb-4" name="variant" id="variant">
+          <option selected>Select Variation</option>
+          <option *ngFor="let mode of getModes()" [value]="mode">
+            {{ mode }}
+          </option>
+        </select>
+        <button
+          type="submit"
+          class="btn btn-secondary w-100 d-flex justify-content-center align-items-center"
+        >
+          <h6 class="m-2">
+            <strong> Invite </strong>
+          </h6>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

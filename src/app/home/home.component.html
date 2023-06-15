@@ -13,6 +13,12 @@
   >
     <app-side-menu [isOpen]="showSideMenu"></app-side-menu>
   </div>
+  <div
+    *ngIf="showPopup"
+    class="popup d-flex justify-content-center align-items-center"
+  >
+    <app-new-game-popup></app-new-game-popup>
+  </div>
   <div class="row">
     <div class="col d-flex">
       <h2 class="m-3">

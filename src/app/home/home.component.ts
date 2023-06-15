@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   }
 
   togglePopup(): void {
-
+    this.showPopup = !this.showPopup;
   }
 
   print(msg: String) {
@@ -41,19 +41,4 @@ export class HomeComponent implements OnInit {
         this.pastGames = body.games
       });
   }
-
-  createGame(game: Game): void {
-    fetch(`${environment.baseUrl}/${ApiPaths.Game}/new`, 
-      {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          'Accept': "application/json, text/plain, */*",
-          'Content-Type': "application/json;charset=utf-8"
-        },
-        body: JSON.stringify(game)
-      }
-    )
-  }
-
 }

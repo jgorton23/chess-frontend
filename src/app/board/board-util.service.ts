@@ -29,4 +29,8 @@ export class BoardUtilService {
         (s) => {return {piece: s, color: index <= 1 ? 'b' : index >= 6 ? 'w' : '', selected: false, possible: false}}
       )});
   }
+
+  getVariations(): String[] {
+    return ["standard"]
+  }
 }

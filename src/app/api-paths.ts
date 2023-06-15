@@ -4,5 +4,5 @@ export enum ApiPaths {
     Profile = 'user/profile',
     Friends = 'user/friends',
     Games = 'user/games',
-    Game = '/game'
+    Game = 'game'
 }
