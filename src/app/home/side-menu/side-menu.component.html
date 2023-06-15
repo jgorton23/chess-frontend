@@ -26,7 +26,15 @@
       <label for="friends" class="form-label"> Add Friends </label>
       <div class="input-group">
         <span class="input-group-text" id="basic-addon1">@</span>
-        <input type="text" class="form-control" />
+        <input type="text" class="form-control" [(ngModel)]="friendUsername" />
+        <button
+          type="button"
+          class="input-group-text"
+          id="basic-addon1"
+          (click)="addFriend()"
+        >
+          +
+        </button>
       </div>
     </div>
   </div>

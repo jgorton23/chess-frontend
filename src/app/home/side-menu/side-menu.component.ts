@@ -37,6 +37,8 @@ export class SideMenuComponent implements OnInit {
 
   email: String = "";
 
+  friendUsername: String = "";
+
   print(msg: String){
     console.log(msg)
   }
@@ -56,5 +58,31 @@ export class SideMenuComponent implements OnInit {
     this.numFriends = profile?.friends || 0
     this.username = profile?.username || ""
     this.email = profile?.email || ""
+  }
+
+   addFriend(): void{
+    fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
+      {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({username: this.friendUsername}),
+        headers: {
+          'Accept': "application/json, text/plain, */*",
+          'Content-Type': "application/json;charset=utf-8"
+        },
+      }
+    ).then(response => response.json()
+    ).then(body => {
+      if(body.status === 200){
+        console.log(body);
+        this.numFriends = body.friends;
+        return body;
+        // add success message?
+      }else{
+        console.log(body);
+        // add error message
+      }
+    })
+    
   }
 }
