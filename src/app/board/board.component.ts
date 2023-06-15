@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { BoardUtilService, tile } from './board-util.service';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-board',

@@ -9,7 +9,7 @@
   </nav>
   <div
     class="slideout"
-    [ngStyle]="{ 'pointer-events': showSideMenu ? 'none' : 'auto' }"
+    [ngStyle]="{ 'pointer-events': showSideMenu ? 'auto' : 'none' }"
   >
     <app-side-menu [isOpen]="showSideMenu"></app-side-menu>
   </div>
@@ -25,7 +25,7 @@
       <button
         type="button"
         class="btn btn-secondary w-50"
-        (click)="print('play friend')"
+        (click)="togglePopup()"
       >
         Play a friend
       </button>

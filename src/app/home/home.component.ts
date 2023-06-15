@@ -18,10 +18,16 @@ export class HomeComponent implements OnInit {
 
   pastGames: Game[] = [];
 
-  showSideMenu: boolean = true;
+  showSideMenu: boolean = false;
+
+  showPopup: boolean = false;
 
   toggleSideMenu(){
     this.showSideMenu = !this.showSideMenu;
+  }
+
+  togglePopup(): void {
+
   }
 
   print(msg: String) {

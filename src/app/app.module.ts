@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatDialogModule } from "@angular/material";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
 import { SideMenuComponent } from './home/side-menu/side-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NewGamePopupComponent } from './home/new-game-popup/new-game-popup.component';
 
 @NgModule({
   declarations: [
@@ -20,13 +22,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BoardComponent,
     TileComponent,
     HomeComponent,
-    SideMenuComponent
+    SideMenuComponent,
+    NewGamePopupComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
