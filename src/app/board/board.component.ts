@@ -126,42 +126,8 @@ export class BoardComponent implements OnInit {
   }
 
   searchDiagonal(x: number, y: number){
-    for(var j = 1; y+j < this.grid.length && x+j < this.grid[0].length; j++){
-      if(this.areSameColor(this.grid[y+j][x+j].piece, this.grid[y][x].piece)){
-        break;
-      }
-      this.grid[y+j][x+j].possible = true;
-      if(!this.isEmptySquare(this.grid[y+j][x+j].piece)){
-        break;
-      }
-    }
-    for(var j = 1; y-j >= 0 && x+j < this.grid[0].length; j++){
-      if(this.areSameColor(this.grid[y-j][x+j].piece, this.grid[y][x].piece)){
-        break;
-      }
-      this.grid[y-j][x+j].possible = true;
-      if(!this.isEmptySquare(this.grid[y-j][x+j].piece)){
-        break;
-      }
-    }
-    for(var j = 1; y-j >= 0 && x-j >= 0; j++){
-      if(this.areSameColor(this.grid[y-j][x-j].piece, this.grid[y][x].piece)){
-        break;
-      }
-      this.grid[y-j][x-j].possible = true;
-      if(this.isEmptySquare(this.grid[y-j][x-j].piece)){
-        break;
-      }
-    }
-    for(var j = 1; y+j < this.grid.length && x-j >= 0; j++){
-      if(this.areSameColor(this.grid[y+j][x-j].piece, this.grid[y][x].piece)){
-        break;
-      }
-      this.grid[y+j][x-j].possible = true;
-      if(!this.isEmptySquare(this.grid[y+j][x-j].piece)){
-        break;
-      }
-    }
+    var lu = 1, ru = 1, ld = 1, rd = 1
+
   }
 
   searchStraight(x: number, y: number){
@@ -170,15 +136,11 @@ export class BoardComponent implements OnInit {
     var up = 1;
     var down = 1;
     var origin = this.grid[y][x].piece
-    console.log(this.grid[5].map(p => p.piece));
     
     while(left || right || up || down){
-      console.log("before", left, right, up, down)
       left &&= (this.isInBounds(x-left, y) && !this.areSameColor(this.grid[y][x-left].piece, origin))?left:0
       right &&= (this.isInBounds(x+right, y) && !this.areSameColor(this.grid[y][x+right].piece, origin))?right:0
-      console.log(up);
       up &&= (this.isInBounds(x, y-up) && !this.areSameColor(this.grid[y-up][x].piece, origin))?up:0
-      console.log(up);
       down &&= (this.isInBounds(x, y+down) && !this.areSameColor(this.grid[y+down][x].piece, origin))?down:0
       if(left){
         this.grid[y][x-left].possible = true;
@@ -203,7 +165,6 @@ export class BoardComponent implements OnInit {
         down+=1
         down &&= this.isEmptySquare(this.grid[y+down-1][x].piece)?down:0
       }
-      console.log("after", left, right, up, down)
     }
   }
 
