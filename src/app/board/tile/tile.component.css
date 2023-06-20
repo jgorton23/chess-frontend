@@ -27,55 +27,55 @@ div.white {
   content: icon;
 }
 
-div span.b.b {
+div span.b {
   content: url(../../../assets/blackBishop.png);
 }
 
-div span.w.b {
+div span.B {
   content: url(../../../assets/whiteBishop.png);
 }
 
-div span.b.p {
+div span.p {
   content: url(../../../assets/blackPawn.png);
 }
 
-div span.w.p {
+div span.P {
   content: url(../../../assets/pawn.png);
 }
 
-div span.w.r {
-  content: url(../../../assets/whiteRook.png);
-}
-
-div span.b.r {
+div span.r {
   content: url(../../../assets/blackRook.png);
 }
 
-div span.w.n {
+div span.R {
+  content: url(../../../assets/whiteRook.png);
+}
+
+div span.N {
   content: url(../../../assets/whiteKnight.png);
 }
 
-div span.b.n {
+div span.n {
   content: url(../../../assets/blackKnight.png);
 }
 
-div span.w.q {
+div span.Q {
   content: url(../../../assets/whiteQueen.png);
 }
 
-div span.b.q {
+div span.q {
   content: url(../../../assets/blackQueen.png);
 }
 
-div span.w.k {
+div span.K {
   content: url(../../../assets/whiteKing.png);
 }
 
-div span.b.k {
+div span.k {
   content: url(../../../assets/blackKing.png);
 }
 
 span {
-  max-height: 100%;
-  max-width: 100%;
+  max-height: 90%;
+  max-width: 90%;
 }

@@ -1,6 +1,5 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BoardUtilService, tile } from './board-util.service';
-import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-board',
@@ -23,18 +22,16 @@ export class BoardComponent implements OnInit {
   select(event: number[]){
     var x = event[1];
     var y = event[0];
-    if(this.selectedPiece === null && this.grid[y][x].color === this.playerColor){
+    if(this.selectedPiece === null && this.isPlayerColor(this.grid[y][x].piece)){
       this.grid[y][x].selected = true;
       this.selectedPiece = {x: x, y: y};
     }else if(this.selectedPiece !== null){
       this.grid[this.selectedPiece.y][this.selectedPiece.x].selected = false;
       if(this.grid[y][x].possible){
         this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
-        this.grid[y][x].color = this.grid[this.selectedPiece.y][this.selectedPiece.x].color;
-        this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = '';
-        this.grid[this.selectedPiece.y][this.selectedPiece.x].color = '';
+        this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = ' ';
         this.playerColor = this.playerColor === 'w' ? 'b' : 'w';
-      }else if(this.grid[y][x].color === this.playerColor){
+      }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
       }else{
@@ -62,61 +59,56 @@ export class BoardComponent implements OnInit {
   findReachable(x: number, y: number){
     switch(this.grid[y][x].piece){
       case 'p':
+      case 'P':
         var increment;
-        if(this.grid[y][x].color === 'w'){
+        if(this.isWhitePiece(this.grid[y][x].piece)){
           increment = -1;
         }else{
           increment = 1;
         }
-        if(this.grid[y+increment][x].piece === ''){
+        if(this.isEmptySquare(this.grid[y+increment][x].piece)){
           this.grid[y+increment][x].possible = true;
-          if(((y === 6 && this.grid[y][x].color === 'w') || (y === 1 && this.grid[y][x].color === 'b')) && this.grid[y+(2*increment)][x].piece === ''){
+          if(((y === 6 && this.isWhitePiece(this.grid[y][x].piece)) || (y === 1 && this.isBlackPiece(this.grid[y][x].piece))) && this.isEmptySquare(this.grid[y+(2*increment)][x].piece)){
             this.grid[y+(2*increment)][x].possible = true;
           }
         }
-        if(this.grid[y][x].color === 'w'){
-          if(x < 7 && this.grid[y+increment][x+1].color === 'b'){
-            this.grid[y+increment][x+1].possible = true;
-          }
-          if(x > 0 && this.grid[y+increment][x-1].color === 'b'){
-            this.grid[y+increment][x-1].possible = true;
-          }
+        if(x < 7 && !this.isEmptySquare(this.grid[y+increment][x+1].piece) && !this.areSameColor(this.grid[y+increment][x+1].piece, this.grid[y+increment][x].piece)){
+          this.grid[y+increment][x+1].possible = true;
         }
-        if(this.grid[y][x].color === 'b'){
-          if(x < 7 && this.grid[y+increment][x+1].color === 'w'){
-            this.grid[y+increment][x+1].possible = true;
-          }
-          if(x > 0 && this.grid[y+increment][x-1].color === 'w'){
-            this.grid[y+increment][x-1].possible = true;
-          }
+        if(x > 0 && !this.isEmptySquare(this.grid[y+increment][x-1].piece) && !this.areSameColor(this.grid[y+increment][x-1].piece, this.grid[y+increment][x].piece)){
+          this.grid[y+increment][x-1].possible = true;
         }
         break;
       case 'r':
+      case 'R':
         this.searchStraight(x, y);
         break;
       case 'n':
+      case 'N':
         var possibilities = [[-2,1], [-2,-1], [-1,2], [-1,-2]]
         for(let possibility of possibilities){
           if(this.isInBounds(x+possibility[0], y+possibility[1])){
-            if(this.grid[y+possibility[1]][x+possibility[0]].color !== this.grid[y][x].color){
+            if(!this.areSameColor(this.grid[y+possibility[1]][x+possibility[0]].piece, this.grid[y][x].piece)){
               this.grid[y+possibility[1]][x+possibility[0]].possible = true;
             }
           }
           if(this.isInBounds(x-possibility[0], y-possibility[1])){
-            if(this.grid[y-possibility[1]][x-possibility[0]].color !== this.grid[y][x].color){
+            if(!this.areSameColor(this.grid[y-possibility[1]][x-possibility[0]].piece, this.grid[y][x].piece)){
               this.grid[y-possibility[1]][x-possibility[0]].possible = true;
             }
           }
         }
         break;
       case 'b':
+      case 'B':
         this.searchDiagonal(x, y);
         break;
       case 'k':
+      case 'K':
         for(var i = Math.max(0, y-1); i <= Math.min(y+1, this.grid.length-1); i++){
           for(var j = Math.max(0, x-1); j <= Math.min(x+1, this.grid[0].length-1); j++){
             if(i !== y || j !== x){
-              if(this.grid[i][j].color !== this.grid[y][x].color){
+              if(!this.areSameColor(this.grid[i][j].piece, this.grid[y][x].piece)){
                 this.grid[i][j].possible = true;
               }
             }
@@ -124,6 +116,7 @@ export class BoardComponent implements OnInit {
         }
         break;
       case 'q':
+      case 'Q':
         this.searchDiagonal(x, y);
         this.searchStraight(x, y);
         break;
@@ -134,86 +127,83 @@ export class BoardComponent implements OnInit {
 
   searchDiagonal(x: number, y: number){
     for(var j = 1; y+j < this.grid.length && x+j < this.grid[0].length; j++){
-      if(this.grid[y+j][x+j].color === this.grid[y][x].color){
+      if(this.areSameColor(this.grid[y+j][x+j].piece, this.grid[y][x].piece)){
         break;
       }
       this.grid[y+j][x+j].possible = true;
-      if(this.grid[y+j][x+j].color !== ''){
+      if(!this.isEmptySquare(this.grid[y+j][x+j].piece)){
         break;
       }
     }
     for(var j = 1; y-j >= 0 && x+j < this.grid[0].length; j++){
-      if(this.grid[y-j][x+j].color === this.grid[y][x].color){
+      if(this.areSameColor(this.grid[y-j][x+j].piece, this.grid[y][x].piece)){
         break;
       }
       this.grid[y-j][x+j].possible = true;
-      if(this.grid[y-j][x+j].color !== ''){
+      if(!this.isEmptySquare(this.grid[y-j][x+j].piece)){
         break;
       }
     }
     for(var j = 1; y-j >= 0 && x-j >= 0; j++){
-      if(this.grid[y-j][x-j].color === this.grid[y][x].color){
+      if(this.areSameColor(this.grid[y-j][x-j].piece, this.grid[y][x].piece)){
         break;
       }
       this.grid[y-j][x-j].possible = true;
-      if(this.grid[y-j][x-j].color !== ''){
+      if(this.isEmptySquare(this.grid[y-j][x-j].piece)){
         break;
       }
     }
     for(var j = 1; y+j < this.grid.length && x-j >= 0; j++){
-      if(this.grid[y+j][x-j].color === this.grid[y][x].color){
+      if(this.areSameColor(this.grid[y+j][x-j].piece, this.grid[y][x].piece)){
         break;
       }
       this.grid[y+j][x-j].possible = true;
-      if(this.grid[y+j][x-j].color !== ''){
+      if(!this.isEmptySquare(this.grid[y+j][x-j].piece)){
         break;
       }
     }
   }
 
   searchStraight(x: number, y: number){
-    // down
-    for(var j = 1; j+y < this.grid.length; j++){
-      // if the rook is blocked by its own piece
-      if(this.grid[y+j][x].color === this.grid[y][x].color){
-        break;
+    var left = 1
+    var right = 1;
+    var up = 1;
+    var down = 1;
+    var origin = this.grid[y][x].piece
+    console.log(this.grid[5].map(p => p.piece));
+    
+    while(left || right || up || down){
+      console.log("before", left, right, up, down)
+      left &&= (this.isInBounds(x-left, y) && !this.areSameColor(this.grid[y][x-left].piece, origin))?left:0
+      right &&= (this.isInBounds(x+right, y) && !this.areSameColor(this.grid[y][x+right].piece, origin))?right:0
+      console.log(up);
+      up &&= (this.isInBounds(x, y-up) && !this.areSameColor(this.grid[y-up][x].piece, origin))?up:0
+      console.log(up);
+      down &&= (this.isInBounds(x, y+down) && !this.areSameColor(this.grid[y+down][x].piece, origin))?down:0
+      if(left){
+        this.grid[y][x-left].possible = true;
+        left+=1
+        left &&= this.isEmptySquare(this.grid[y][x-left+1].piece)?left:0
       }
-      // if the rook can move here mark it possible
-      this.grid[y+j][x].possible = true;
-      // if the rook can capture a piece, it can't move further
-      if(this.grid[y+j][x].color !== ''){
-        break;
+      if(right) {
+        this.grid[y][x+right].possible = true;
+        right+=1
+        right &&= this.isEmptySquare(this.grid[y][x+right-1].piece)?right:0
       }
-    }
-    // up
-    for(var j = 1; y-j >= 0; j++){
-      if(this.grid[y-j][x].color === this.grid[y][x].color){
-        break;
+      if (up) {
+        console.log(up)
+        this.grid[y-up][x].possible = true;
+        up+=1
+        console.log(up)
+        up &&= this.isEmptySquare(this.grid[y-up+1][x].piece)?up:0
+        console.log(up)
       }
-      this.grid[y-j][x].possible = true;
-      if(this.grid[y-j][x].color !== ''){
-        break;
+      if (down){
+        this.grid[y+down][x].possible = true;
+        down+=1
+        down &&= this.isEmptySquare(this.grid[y+down-1][x].piece)?down:0
       }
-    }
-    // left
-    for(var j = 1; x-j >= 0; j++){
-      if(this.grid[y][x-j].color === this.grid[y][x].color){
-        break;
-      }
-      this.grid[y][x-j].possible = true;
-      if(this.grid[y][x-j].color !== ''){
-        break;
-      }
-    }
-    // right
-    for(var j = 1; x+j < this.grid[0].length; j++){
-      if(this.grid[y][x+j].color === this.grid[y][x].color){
-        break;
-      }
-      this.grid[y][x+j].possible = true;
-      if(this.isEmptySquare(this.grid[y][x+j].piece)){
-        break;
-      }
+      console.log("after", left, right, up, down)
     }
   }
 
@@ -222,18 +212,22 @@ export class BoardComponent implements OnInit {
   }
 
   isWhitePiece(c: string){
-    return "PQKBKR".indexOf(c) >= 0
+    return "PQKBNR".indexOf(c) >= 0
   }
 
   isBlackPiece(c: string){
-    return "pqkbrk".indexOf(c) >= 0
+    return "pqkbnr".indexOf(c) >= 0
   }
 
-  areSameColor(c1: string, c2: string) {
-    return ("PQKBKR".indexOf(c1) >= 0 && "PQKBKR".indexOf(c2) >= 0) || ("pqkbrk".indexOf(c1) >= 0 && "pqkbrk".indexOf(c2) >= 0)
+  areSameColor(c1: string, c2: string) {        
+    return ("PQKBNR".indexOf(c1) >= 0 && "PQKBNR".indexOf(c2) >= 0) || ("pqkbnr".indexOf(c1) >= 0 && "pqkbnr".indexOf(c2) >= 0)
   }
 
   isEmptySquare(c: string) {
     return c === ' ';
+  }
+
+  isPlayerColor(c: string) {
+    return (this.playerColor === 'w' && this.isWhitePiece(c)) || (this.playerColor === 'b' && this.isBlackPiece(c))
   }
 }

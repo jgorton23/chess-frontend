@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 export type tile = {
-  piece: String,
+  piece: string,
   selected: Boolean,
   possible: Boolean
 }
@@ -28,7 +28,7 @@ export class BoardUtilService {
       )});
   }
 
-  getBoard(variation: String): String {
+  getBoard(variation: string): string {
     switch(variation){
       case variations.Standard:
         return "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
@@ -37,7 +37,7 @@ export class BoardUtilService {
     }
   }
 
-  getVariations(): String[] {
+  getVariations(): string[] {
     return ["standard"]
   }
 }
