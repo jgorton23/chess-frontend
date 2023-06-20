@@ -127,7 +127,28 @@ export class BoardComponent implements OnInit {
 
   searchDiagonal(x: number, y: number){
     var lu = 1, ru = 1, ld = 1, rd = 1
-
+    while (lu || ru || ld || rd) {
+      lu &&= (this.isInBounds(x-lu, y-lu) && !this.areSameColor(this.grid[y-lu][x-lu].piece, origin))?lu:0
+      ru &&= (this.isInBounds(x+ru, y-ru) && !this.areSameColor(this.grid[y-ru][x+ru].piece, origin))?ru:0
+      ld &&= (this.isInBounds(x-ld, y+ld) && !this.areSameColor(this.grid[y+ld][x-ld].piece, origin))?ld:0
+      rd &&= (this.isInBounds(x+rd, y+rd) && !this.areSameColor(this.grid[y+rd][x+rd].piece, origin))?rd:0
+      if (lu) {
+        this.grid[y-lu][x-lu].possible = true;
+        lu &&= this.isEmptySquare(this.grid[y-lu][x-lu].piece)?lu+1:0
+      }
+      if (ru) {
+        this.grid[y-ru][x+ru].possible = true;
+        ru &&= this.isEmptySquare(this.grid[y-ru][x+ru].piece)?ru+1:0
+      }
+      if (ld) {
+        this.grid[y+ld][x-ld].possible = true;
+        ld &&= this.isEmptySquare(this.grid[y+ld][x-ld].piece)?ld+1:0
+      }
+      if (rd) {
+        this.grid[y+rd][x+rd].possible = true;
+        rd &&= this.isEmptySquare(this.grid[y+rd][x+rd].piece)?rd+1:0
+      }
+    }
   }
 
   searchStraight(x: number, y: number){
@@ -144,26 +165,23 @@ export class BoardComponent implements OnInit {
       down &&= (this.isInBounds(x, y+down) && !this.areSameColor(this.grid[y+down][x].piece, origin))?down:0
       if(left){
         this.grid[y][x-left].possible = true;
-        left+=1
-        left &&= this.isEmptySquare(this.grid[y][x-left+1].piece)?left:0
+        // left+=1
+        left &&= this.isEmptySquare(this.grid[y][x-left+1].piece)?left+1:0
       }
       if(right) {
         this.grid[y][x+right].possible = true;
-        right+=1
-        right &&= this.isEmptySquare(this.grid[y][x+right-1].piece)?right:0
+        // right+=1
+        right &&= this.isEmptySquare(this.grid[y][x+right-1].piece)?right+1:0
       }
       if (up) {
-        console.log(up)
         this.grid[y-up][x].possible = true;
-        up+=1
-        console.log(up)
-        up &&= this.isEmptySquare(this.grid[y-up+1][x].piece)?up:0
-        console.log(up)
+        // up+=1
+        up &&= this.isEmptySquare(this.grid[y-up+1][x].piece)?up+1:0
       }
       if (down){
         this.grid[y+down][x].possible = true;
-        down+=1
-        down &&= this.isEmptySquare(this.grid[y+down-1][x].piece)?down:0
+        // down+=1
+        down &&= this.isEmptySquare(this.grid[y+down-1][x].piece)?down+1:0
       }
     }
   }
