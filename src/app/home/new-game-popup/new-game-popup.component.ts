@@ -59,7 +59,13 @@ export class NewGamePopupComponent implements OnInit{
           'Content-Type': "application/json;charset=utf-8"
         },
         body: JSON.stringify(game)
-      }
-    )
+      })
+      .then(resp => {
+        return resp.json()
+      })
+      .then(body => {
+        console.log(body)
+      })
+    
   }
 }
