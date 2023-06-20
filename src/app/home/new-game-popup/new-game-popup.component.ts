@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiPaths } from 'src/app/api-paths';
 import { BoardUtilService } from 'src/app/board/board-util.service';
 import { Game } from 'src/app/game/game.service';
+import { ProfileService } from 'src/app/shared/profile.service';
 import { environment } from 'src/environments/environment';
 
 export interface DialogData {
@@ -15,9 +16,11 @@ export interface DialogData {
   styleUrls: ['./new-game-popup.component.css'],
 })
 export class NewGamePopupComponent implements OnInit{
-  constructor(private boardUtil: BoardUtilService) {}
+  constructor(private boardUtil: BoardUtilService, private profileService: ProfileService) {}
 
   friends: string[] = []
+
+  opponent: string = "Select Opponent"
 
   ngOnInit(): void {
     this.getFriends();
@@ -35,10 +38,18 @@ export class NewGamePopupComponent implements OnInit{
     return this.boardUtil.getVariations();
   }
 
-  createGame(form: {opponent: string, variant: string}): void {
-    // let game: Game = {
-    //   board: this.boardUtil.standard
-    // }
+  createGame(options: {opponent: string, variant?: string}): void {    
+    let game: Game = {
+      board: this.boardUtil.getBoard("standard"),
+      moves: "",
+      turn: 0,
+      whiteTime: 600,
+      blackTime: 600,
+      whitePlayerUsername: this.profileService.getUsername(),
+      blackPlayerUsername: this.opponent,
+      started: false,
+      ended: false,
+    }
     fetch(`${environment.baseUrl}/${ApiPaths.Game}/new`, 
       {
         credentials: 'include',
@@ -47,7 +58,7 @@ export class NewGamePopupComponent implements OnInit{
           'Accept': "application/json, text/plain, */*",
           'Content-Type': "application/json;charset=utf-8"
         },
-        // body: JSON.stringify(game)
+        body: JSON.stringify(game)
       }
     )
   }

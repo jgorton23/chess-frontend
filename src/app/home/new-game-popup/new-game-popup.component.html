@@ -12,16 +12,22 @@
         #newGameForm="ngForm"
         class="mb-4"
         (ngSubmit)="createGame(newGameForm.value)"
+        id="newGameForm"
       >
-        <select class="form-select mb-4" name="opponent" id="opponent">
+        <select
+          class="form-select mb-4"
+          name="opponent"
+          id="opponent"
+          [(ngModel)]="opponent"
+        >
           <option selected>Select Opponent</option>
-          <option *ngFor="let friend of friends" [value]="friend">
+          <option *ngFor="let friend of friends" [ngValue]="friend">
             {{ friend }}
           </option>
         </select>
         <select class="form-select mb-4" name="variant" id="variant">
           <option selected>Select Variation</option>
-          <option *ngFor="let mode of getModes()" [value]="mode">
+          <option *ngFor="let mode of getModes()" [ngValue]="mode">
             {{ mode }}
           </option>
         </select>
