@@ -127,11 +127,15 @@ export class BoardComponent implements OnInit {
 
   searchDiagonal(x: number, y: number){
     var lu = 1, ru = 1, ld = 1, rd = 1
+    var origin = this.grid[y][x].piece
+
     while (lu || ru || ld || rd) {
-      lu &&= (this.isInBounds(x-lu, y-lu) && !this.areSameColor(this.grid[y-lu][x-lu].piece, origin))?lu:0
+      lu &&= (this.isInBounds(x-lu, y-lu) && !this.areSameColor(this.grid[y-lu][x-lu].piece, origin))?lu:0      
       ru &&= (this.isInBounds(x+ru, y-ru) && !this.areSameColor(this.grid[y-ru][x+ru].piece, origin))?ru:0
       ld &&= (this.isInBounds(x-ld, y+ld) && !this.areSameColor(this.grid[y+ld][x-ld].piece, origin))?ld:0
       rd &&= (this.isInBounds(x+rd, y+rd) && !this.areSameColor(this.grid[y+rd][x+rd].piece, origin))?rd:0
+      console.log(lu, ru, ld, rd);
+      
       if (lu) {
         this.grid[y-lu][x-lu].possible = true;
         lu &&= this.isEmptySquare(this.grid[y-lu][x-lu].piece)?lu+1:0
@@ -165,23 +169,19 @@ export class BoardComponent implements OnInit {
       down &&= (this.isInBounds(x, y+down) && !this.areSameColor(this.grid[y+down][x].piece, origin))?down:0
       if(left){
         this.grid[y][x-left].possible = true;
-        // left+=1
-        left &&= this.isEmptySquare(this.grid[y][x-left+1].piece)?left+1:0
+        left &&= this.isEmptySquare(this.grid[y][x-left].piece)?left+1:0
       }
       if(right) {
         this.grid[y][x+right].possible = true;
-        // right+=1
-        right &&= this.isEmptySquare(this.grid[y][x+right-1].piece)?right+1:0
+        right &&= this.isEmptySquare(this.grid[y][x+right].piece)?right+1:0
       }
       if (up) {
         this.grid[y-up][x].possible = true;
-        // up+=1
-        up &&= this.isEmptySquare(this.grid[y-up+1][x].piece)?up+1:0
+        up &&= this.isEmptySquare(this.grid[y-up][x].piece)?up+1:0
       }
       if (down){
         this.grid[y+down][x].possible = true;
-        // down+=1
-        down &&= this.isEmptySquare(this.grid[y+down-1][x].piece)?down+1:0
+        down &&= this.isEmptySquare(this.grid[y+down][x].piece)?down+1:0
       }
     }
   }
@@ -198,7 +198,9 @@ export class BoardComponent implements OnInit {
     return "pqkbnr".indexOf(c) >= 0
   }
 
-  areSameColor(c1: string, c2: string) {        
+  areSameColor(c1: string, c2: string) {  
+    console.log(c1, c2);
+          
     return ("PQKBNR".indexOf(c1) >= 0 && "PQKBNR".indexOf(c2) >= 0) || ("pqkbnr".indexOf(c1) >= 0 && "pqkbnr".indexOf(c2) >= 0)
   }
 
