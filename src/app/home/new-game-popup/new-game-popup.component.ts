@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ApiPaths } from 'src/app/api-paths';
 import { BoardUtilService } from 'src/app/board/board-util.service';
 import { Game } from 'src/app/game/game.service';
@@ -16,7 +17,10 @@ export interface DialogData {
   styleUrls: ['./new-game-popup.component.css'],
 })
 export class NewGamePopupComponent implements OnInit{
-  constructor(private boardUtil: BoardUtilService, private profileService: ProfileService) {}
+  constructor(
+    private boardUtil: BoardUtilService,
+    private profileService: ProfileService,
+    private router: Router) {}
 
   friends: string[] = []
 
@@ -65,6 +69,7 @@ export class NewGamePopupComponent implements OnInit{
       })
       .then(body => {
         console.log(body)
+        this.router.navigate(['play', {id: body.gameId}])
       })
     
   }

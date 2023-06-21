@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { SideMenuComponent } from './home/side-menu/side-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NewGamePopupComponent } from './home/new-game-popup/new-game-popup.component';
+import { GameComponent } from './game/game/game.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { NewGamePopupComponent } from './home/new-game-popup/new-game-popup.comp
     HomeComponent,
     SideMenuComponent,
     NewGamePopupComponent,
+    GameComponent,
   ],
   imports: [
     BrowserModule,
