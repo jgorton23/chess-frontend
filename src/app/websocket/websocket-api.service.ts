@@ -30,8 +30,8 @@ export class WebsocketAPIService {
     }
   }
 
-  _send(gameId: string, message: any) {
-    this.stompClient.send(this.topic + '/' + gameId, {}, JSON.stringify(message));
+  _send(message: any) {
+    this.stompClient.send(this.topic + '/' + this.gameId, {}, JSON.stringify(message));
   }
 
   _error(error: Error) {
