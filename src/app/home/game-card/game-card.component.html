@@ -1,1 +1,16 @@
-{{ gameInfo?.whiteUsername }} vs {{ gameInfo?.blackUsername }}
+<div class="container" style="outline: 2px solid black">
+  <div class="row align-items-center">
+    <div class="col">
+      <app-board></app-board>
+    </div>
+    <div class="col">
+      <div class="row">
+        {{ gameInfo?.whiteUsername }}
+      </div>
+      vs
+      <div class="row">
+        {{ gameInfo?.blackUsername }}
+      </div>
+    </div>
+  </div>
+</div>
