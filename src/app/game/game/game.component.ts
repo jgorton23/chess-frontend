@@ -13,4 +13,8 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  handleMove(move: string) {
+
+  }
+
 }
