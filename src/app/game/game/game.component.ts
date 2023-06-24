@@ -9,29 +9,30 @@ import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
 export class GameComponent implements OnInit {
 
   webSocketAPI: WebsocketAPIService | null = null;
-  // moves: string[] = [];
+  moves: string[] = [];
 
   constructor() { }
 
   
   ngOnInit(): void {
     this.webSocketAPI = new WebsocketAPIService(this, '123');
+    this.connect()
   }
 
   connect() {
-    // this.webSocketAPI._connect();
+    this.webSocketAPI!._connect();
   }
 
   disconnect() {
-    // this.webSocketAPI._disconnect();
+    this.webSocketAPI!._disconnect();
   }
 
   sendMove() {
-    // this.webSocketAPI._send("test");
+    this.webSocketAPI!._send("test");
   }
 
   handleMove(move: string) {
-    // this.moves.push(move);
+    this.moves.push(move);
   }
 
 }

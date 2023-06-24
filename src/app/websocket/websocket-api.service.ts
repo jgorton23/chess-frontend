@@ -37,7 +37,7 @@ export class WebsocketAPIService {
   _error(error: Error) {
     console.log("errorCallBack -> " + error)
     setTimeout(() => {
-        this._connect();
+        this._connect()
     }, 5000);
   }
 
