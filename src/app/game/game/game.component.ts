@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import * as SockJS from 'sockjs-client';
 
 @Component({
   selector: 'app-game',
@@ -12,7 +11,6 @@ export class GameComponent implements OnInit {
 
   
   ngOnInit(): void {
-    // var sock  = new SockJS("http://localhost:8080/websocket");
   }
 
 }
