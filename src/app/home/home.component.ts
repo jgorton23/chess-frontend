@@ -39,7 +39,6 @@ export class HomeComponent implements OnInit {
       .then(response => response.json())
       .then(body => {
         this.pastGames = body.games
-        console.log(this.pastGames);
       });
   }
 }
