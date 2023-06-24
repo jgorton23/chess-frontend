@@ -58,7 +58,8 @@
   </div>
   <div *ngFor="let game of pastGames" class="row">
     <div class="col d-flex justify-content-center m-3">
-      <app-board></app-board>
+      <!-- <app-board></app-board> -->
+      <app-game-card [gameInfo]="game"></app-game-card>
     </div>
   </div>
 </div>

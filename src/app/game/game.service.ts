@@ -9,8 +9,8 @@ export type Game = {
   blackTime: number,
   whitePlayerId?: string,
   blackPlayerId?: string,
-  whitePlayerUsername: string,
-  blackPlayerUsername: string,
+  whiteUsername: string,
+  blackUsername: string,
   started: boolean,
   ended: boolean,
   winner?: string

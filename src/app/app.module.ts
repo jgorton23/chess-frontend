@@ -14,6 +14,7 @@ import { SideMenuComponent } from './home/side-menu/side-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NewGamePopupComponent } from './home/new-game-popup/new-game-popup.component';
 import { GameComponent } from './game/game/game.component';
+import { GameCardComponent } from './home/game-card/game-card.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { GameComponent } from './game/game/game.component';
     SideMenuComponent,
     NewGamePopupComponent,
     GameComponent,
+    GameCardComponent,
   ],
   imports: [
     BrowserModule,
