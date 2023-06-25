@@ -26,7 +26,7 @@ export class SideMenuComponent implements OnInit {
   constructor(public profileService: ProfileService) { }
 
   ngOnInit(): void {
-    this.profileService.updateProfile()
+    this.profileService.getProfile()
   }
 
   @Input()
@@ -42,37 +42,15 @@ export class SideMenuComponent implements OnInit {
   
   editingPassword: boolean = false;
 
-  addFriend(): void{
-    fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
-      {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify({username: this.friendUsername}),
-        headers: {
-          'Accept': "application/json, text/plain, */*",
-          'Content-Type': "application/json;charset=utf-8"
-        },
-      }
-    ).then(response => response.json()
-    ).then(body => {
-      console.log(body);
-      if(body.status === 200){
-        // this.numFriends = body.friends;
-        return body;
-        // add success message?
-      }else{
-        // console.log(body);
-        // add error message
-      }
-    }) 
-  }
+  viewingFriends: boolean = false;
 
   changeEmail(): void {
     this.editingEmail = !this.editingEmail;
   }
 
   saveEmail(): void {
-    this.saveProfile({email: this.profileService.email})
+    this.profileService.saveProfile({email: this.profileService.email})
+    this.editingEmail = false;
   }
 
   changePassword(): void {
@@ -80,31 +58,14 @@ export class SideMenuComponent implements OnInit {
   }
 
   savePassword(): void {
-    this.saveProfile({password: this.newPassword, confirm: this.confirmNewPassword})
+    this.profileService.saveProfile({password: this.newPassword, confirm: this.confirmNewPassword})
+    this.editingPassword = false;
   }
 
-  saveProfile(credentials: {email?: string, password?: string, confirm?: string}): void {
-    fetch(`${environment.baseUrl}/${ApiPaths.Profile}`,
-      {
-        method: 'PUT',
-        credentials: 'include',
-        body: JSON.stringify(credentials),
-        headers: {
-          'Accept': "application/json, text/plain, */*",
-          'Content-Type': "application/json;charset=utf-8"
-        },
-      })
-    .then(Response => Response.json())
-    .then(body => {
-      console.log(body);
-      this.editingEmail = false;
-      this.editingPassword = false;
-      if(body.status === 200) {
-        // add success message
-        return body
-      }else{
-        // add error message
-      }
-    })
+  viewFriends(): void {
+    if (!this.viewingFriends) {
+      this.profileService.getFriends()
+    }
+    this.viewingFriends = !this.viewingFriends;
   }
 }
