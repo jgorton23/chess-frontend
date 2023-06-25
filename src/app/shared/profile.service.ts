@@ -56,7 +56,7 @@ export class ProfileService {
   }
 
   addFriend(username: string): void{
-    fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
+    fetch(`${environment.baseUrl}/${ApiPaths.Friends}?`, 
       {
         method: 'POST',
         credentials: 'include',
@@ -79,7 +79,7 @@ export class ProfileService {
   }
 
   getFriends(): void {
-    fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, { credentials: 'include' })
+    fetch(`${environment.baseUrl}/${ApiPaths.Friends}?` + new URLSearchParams({pending: 'true'}), { credentials: 'include' })
       .then(body => body.json())
       .then(resp => { this.friends = resp.friends; console.log(this.friends) })
   }
