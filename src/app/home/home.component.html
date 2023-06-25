@@ -1,4 +1,4 @@
-<div class="body container g-0">
+<div class="body container g-0 d-flex justify-content-center">
   <nav class="navbar fixed-top navbar-dark bg-dark">
     <button class="navbar-toggler ms-2" (click)="toggleSideMenu()">
       <span class="navbar-toggler-icon"></span>
@@ -19,47 +19,49 @@
   >
     <app-new-game-popup></app-new-game-popup>
   </div>
-  <div class="row">
-    <div class="col d-flex">
-      <h2 class="m-3">
-        <strong> New Game </strong>
-      </h2>
+  <div class="col col-md-8 col-lg-6">
+    <div class="row">
+      <div class="col d-flex">
+        <h2 class="m-3">
+          <strong> New Game </strong>
+        </h2>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col m-3 d-flex justify-content-center">
-      <button
-        type="button"
-        class="btn btn-secondary w-50"
-        (click)="togglePopup()"
-      >
-        Play a friend
-      </button>
+    <div class="row">
+      <div class="col m-3 d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-secondary w-50"
+          (click)="togglePopup()"
+        >
+          Play a friend
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col m-3 d-flex justify-content-center">
-      <button
-        type="button"
-        class="btn btn-secondary w-50"
-        (click)="print('play com')"
-      >
-        Play a computer
-      </button>
+    <div class="row">
+      <div class="col m-3 d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-secondary w-50"
+          (click)="print('play com')"
+        >
+          Play a computer
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col d-flex">
-      <h2 class="m-3">
-        <strong> Past Games </strong>
-      </h2>
+    <div class="row">
+      <div class="col d-flex">
+        <h2 class="m-3">
+          <strong> Past Games </strong>
+        </h2>
+      </div>
     </div>
-  </div>
-  <div *ngFor="let game of pastGames" class="row">
-    <div class="col d-flex justify-content-center m-3">
-      <!-- <app-board></app-board> -->
-      <app-game-card [gameInfo]="game"></app-game-card>
+    <div *ngFor="let game of pastGames" class="row">
+      <div class="col d-flex justify-content-center m-3">
+        <!-- <app-board></app-board> -->
+        <app-game-card [gameInfo]="game" style="width: 100%"></app-game-card>
+      </div>
     </div>
   </div>
 </div>

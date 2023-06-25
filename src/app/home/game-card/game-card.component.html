@@ -1,16 +1,20 @@
-<div class="container" style="outline: 2px solid black">
+<div class="container p-0" (click)="navigateToGame()">
   <div class="row align-items-center">
     <div class="col">
-      <app-board></app-board>
+      <div
+        class="m-3"
+        style="width: 100px; background-color: tan; aspect-ratio: 1/1"
+      ></div>
     </div>
     <div class="col">
-      <div class="row">
+      <div class="row d-flex justify-content-center">
         {{ gameInfo?.whiteUsername }}
       </div>
-      vs
-      <div class="row">
+      <div class="row d-flex justify-content-center">vs</div>
+      <div class="row d-flex justify-content-center">
         {{ gameInfo?.blackUsername }}
       </div>
     </div>
+    <div class="col d-flex justify-content-center">Winner?</div>
   </div>
 </div>
