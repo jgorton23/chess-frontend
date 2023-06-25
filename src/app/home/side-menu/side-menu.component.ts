@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { ApiPaths } from 'src/app/api-paths';
+import { ProfileService } from 'src/app/shared/profile.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -22,20 +23,14 @@ import { environment } from 'src/environments/environment';
 })
 export class SideMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(public profileService: ProfileService) { }
 
   ngOnInit(): void {
-    this.updateProfile()
+    this.profileService.updateProfile()
   }
 
   @Input()
   isOpen: boolean = false;
-
-  numFriends: number = 0;
-
-  username: string = "";
-
-  email: string = "";
 
   newPassword: string = "";
 
@@ -46,27 +41,6 @@ export class SideMenuComponent implements OnInit {
   editingEmail: boolean = false;
   
   editingPassword: boolean = false;
-
-  print(msg: string){
-    console.log(msg)
-  }
-
-  async getProfile(): Promise<{friends: number, username: string, email: string} | null> {
-    const response = await fetch(`${environment.baseUrl}/${ApiPaths.Profile}`, {credentials: 'include'})
-    if(response.status === 200) {
-      return response.json();
-    }else{
-      console.log(response.json());
-      return null;
-    }
-  }
-
-  async updateProfile(): Promise<void> {
-    const profile = await this.getProfile()
-    this.numFriends = profile?.friends || 0
-    this.username = profile?.username || ""
-    this.email = profile?.email || ""
-  }
 
   addFriend(): void{
     fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
@@ -83,7 +57,7 @@ export class SideMenuComponent implements OnInit {
     ).then(body => {
       console.log(body);
       if(body.status === 200){
-        this.numFriends = body.friends;
+        // this.numFriends = body.friends;
         return body;
         // add success message?
       }else{
@@ -98,7 +72,7 @@ export class SideMenuComponent implements OnInit {
   }
 
   saveEmail(): void {
-    this.saveProfile({email: this.email})
+    this.saveProfile({email: this.profileService.email})
   }
 
   changePassword(): void {
