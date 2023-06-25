@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ApiPaths } from '../api-paths';
 
+export type friend = {
+  username: string,
+  pending?: boolean,
+  invitation?: boolean
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +23,9 @@ export class ProfileService {
 
   email: string = ""
 
-  friends: {username: string}[] = []
+  friends: friend[] = []
+
+  invitations: friend[] = []
 
   getUsername(){
     return this.username;
@@ -81,6 +89,11 @@ export class ProfileService {
   getFriends(): void {
     fetch(`${environment.baseUrl}/${ApiPaths.Friends}?` + new URLSearchParams({pending: 'true'}), { credentials: 'include' })
       .then(body => body.json())
-      .then(resp => { this.friends = resp.friends; console.log(this.friends) })
+      .then(resp => { 
+        this.invitations = resp.friends.filter((f: friend) => f.invitation).map((f: friend) => {return {username: f.username}})
+        this.friends = resp.friends.filter((f: friend) => !f.invitation).map((f: friend) => {return {username: f.username, pending: f.pending}});
+        console.log(this.invitations);
+        console.log(this.friends);
+      })
   }
 }
