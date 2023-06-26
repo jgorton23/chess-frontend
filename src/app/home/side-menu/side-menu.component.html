@@ -131,19 +131,27 @@
     </div>
   </div>
   <div class="ms-3" *ngIf="viewingFriends">
-    <div class="row">
+    <div class="row" *ngIf="profileService.invitations.length > 0">
       <h5>Invitations</h5>
     </div>
     <div class="mb-3">
       <div class="row ms-3" *ngFor="let friend of profileService.invitations">
-        {{ friend.username }}
+        <app-friend-card
+          class="p-0 col-10"
+          [invitation]="true"
+          [username]="friend.username"
+        ></app-friend-card>
       </div>
     </div>
     <div class="row">
       <h5>Friends</h5>
     </div>
     <div class="row ms-3" *ngFor="let friend of profileService.friends">
-      {{ friend.username }}
+      <app-friend-card
+        class="p-0 col-10"
+        [pending]="friend.pending"
+        [username]="friend.username"
+      ></app-friend-card>
     </div>
   </div>
 </div>
