@@ -4,9 +4,15 @@
       <div class="col g-0">
         {{ username }}
       </div>
-      <p class="col g-0 mb-0 d-flex justify-content-end" *ngIf="pending">
-        (pending)
-      </p>
+      <div class="col g-0 mb-0 d-flex justify-content-end align-items-center">
+        <span
+          *ngIf="pending"
+          class="badge bg-secondary rounded-pill d-flex align-items-center"
+          style="height: 80%"
+        >
+          Pending
+        </span>
+      </div>
     </div>
   </div>
 </div>
