@@ -13,6 +13,25 @@
           Pending
         </span>
       </div>
+      <div
+        *ngIf="invitation"
+        class="col g-0 mb-0 d-flex justify-content-end align-items-center"
+      >
+        <span
+          class="badge bg-danger rounded-pill d-flex align-items-center me-2 pill-btn"
+          style="height: 80%"
+          (click)="rejectFriendRequest()"
+        >
+          Delete
+        </span>
+        <span
+          class="badge bg-primary rounded-pill d-flex align-items-center pill-btn"
+          style="height: 80%"
+          (click)="approveFriendRequest()"
+        >
+          Add
+        </span>
+      </div>
     </div>
   </div>
 </div>

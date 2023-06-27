@@ -21,6 +21,14 @@ export class FriendCardComponent implements OnInit {
   @Input()
   username: string = "";
 
+  rejectFriendRequest(): void {
+    console.log("reject");
+    
+  }
   
+  approveFriendRequest(): void {
+    console.log("approve");
+
+  }
 
 }
