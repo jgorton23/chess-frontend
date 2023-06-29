@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ProfileService } from 'src/app/shared/profile.service';
 
 @Component({
   selector: 'app-friend-card',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class FriendCardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private profileService: ProfileService) { }
 
   ngOnInit(): void {
   }
@@ -22,13 +23,11 @@ export class FriendCardComponent implements OnInit {
   username: string = "";
 
   rejectFriendRequest(): void {
-    console.log("reject");
-    
+    this.profileService.removeFriends(this.username);
   }
   
   approveFriendRequest(): void {
-    console.log("approve");
-
+    this.profileService.addFriend(this.username);
   }
 
 }

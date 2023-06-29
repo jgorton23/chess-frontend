@@ -64,7 +64,7 @@ export class ProfileService {
   }
 
   addFriend(username: string): void{
-    fetch(`${environment.baseUrl}/${ApiPaths.Friends}?`, 
+    fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
       {
         method: 'POST',
         credentials: 'include',
@@ -77,9 +77,33 @@ export class ProfileService {
     ).then(response => response.json()
     ).then(body => {
       console.log(body);
+      this.getFriends();
       if(body.status === 200){
         this.numFriends = body.friends;
         // add success message?
+      }else{
+        // add error message
+      }
+    }) 
+  }
+
+  removeFriends(username: string): void {
+    fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
+      {
+        method: 'DELETE',
+        credentials: 'include',
+        body: JSON.stringify({username: username}),
+        headers: {
+          'Accept': "application/json, text/plain, */*",
+          'Content-Type': "application/json;charset=utf-8"
+        },
+      }
+    ).then(response => response.json()
+    ).then(body => {
+      console.log(body);
+      this.getFriends();
+      if(body.status === 200){
+        this.numFriends = body.friends;
       }else{
         // add error message
       }
@@ -91,9 +115,7 @@ export class ProfileService {
       .then(body => body.json())
       .then(resp => { 
         this.invitations = resp.friends.filter((f: friend) => f.invitation).map((f: friend) => {return {username: f.username}})
-        this.friends = resp.friends.filter((f: friend) => !f.invitation).map((f: friend) => {return {username: f.username, pending: f.pending}});
-        console.log(this.invitations);
-        console.log(this.friends);
+        this.friends = resp.friends.filter((f: friend) => !f.invitation).toSorted((a: friend, b: friend) => Number(a.pending) - Number(b.pending)).map((f: friend) => {return {username: f.username, pending: f.pending}});
       })
   }
 }
