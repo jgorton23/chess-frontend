@@ -11,12 +11,12 @@ export type Game = {
   blackTime: number,
   whitePlayerId?: string,
   blackPlayerId?: string,
-  whiteUsername: string,
-  blackUsername: string,
+  whitePlayerUsername: string,
+  blackPlayerUsername: string,
   started: boolean,
   ended: boolean,
   winner?: string,
-  date: Date,
+  date?: Date,
 }
 
 @Injectable({
@@ -34,6 +34,7 @@ export class GameService {
     fetch(`${environment.baseUrl}/${ApiPaths.Games}`, {credentials: 'include'})
       .then(response => response.json())
       .then(body => {
+        console.log(body);
         this.pastGames = body.games
           .filter((game: Game) => game.ended)
         this.currentGames = body.games

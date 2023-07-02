@@ -49,8 +49,8 @@ export class NewGamePopupComponent implements OnInit{
       turn: 0,
       whiteTime: 600,
       blackTime: 600,
-      whiteUsername: this.profileService.getUsername(),
-      blackUsername: this.opponent,
+      whitePlayerUsername: this.profileService.getUsername(),
+      blackPlayerUsername: this.opponent,
       started: false,
       ended: false,
     }

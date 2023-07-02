@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
 
 @Component({
@@ -11,11 +12,12 @@ export class GameComponent implements OnInit {
   webSocketAPI: WebsocketAPIService | null = null;
   moves: string[] = [];
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   
   ngOnInit(): void {
-    this.webSocketAPI = new WebsocketAPIService(this, '123');
+    var gameId = this.route.snapshot.paramMap.get("id")
+    this.webSocketAPI = new WebsocketAPIService(this, gameId!);
     this.connect()
   }
 
