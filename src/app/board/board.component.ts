@@ -16,10 +16,10 @@ export class BoardComponent implements OnInit {
   }
 
   @Input()
-  grid!: tile[][]
+  grid: tile[][] = this.boardUtil.standard()
   
   @Input()
-  playerColor!: string;
+  playerColor: string = 'w';
 
   @Output()
   moveEmitter: EventEmitter<any> = new EventEmitter();

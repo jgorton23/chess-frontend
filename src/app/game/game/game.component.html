@@ -5,7 +5,6 @@
 <p *ngFor="let msg of moves">{{ msg }}</p> -->
 <app-board
   *ngIf="game"
-  [grid]="boardUtil.FENToTileArr(game.board)"
   [playerColor]="playerColor"
   (moveEmitter)="updateGameState()"
 ></app-board>
