@@ -1,1 +1,11 @@
-
+.container {
+  height: 100vh;
+  max-width: 100%;
+  background: -webkit-linear-gradient(
+    bottom,
+    rgb(133, 133, 133),
+    rgb(61, 61, 61)
+  );
+  color: white;
+  position: fixed;
+}

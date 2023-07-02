@@ -1,11 +1,5 @@
 .body {
-  background: -webkit-linear-gradient(
-    bottom,
-    rgb(133, 133, 133),
-    rgb(61, 61, 61)
-  );
-  max-width: none;
-  height: calc(100vh - 56px);
+  height: calc(100% - 56px);
   margin-top: 56px;
   color: #ffffff;
   overflow: scroll;
@@ -21,8 +15,8 @@
 
 .popup {
   position: absolute;
-  height: calc(100vh - 56px);
-  width: 100vw;
+  height: calc(100% - 56px);
+  width: 100%;
   background: rgba(0, 0, 0, 0.65);
 }
 
