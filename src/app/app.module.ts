@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NewGamePopupComponent } from './home/new-game-popup/new-game-popup.component';
 import { GameComponent } from './game/game/game.component';
 import { GameCardComponent } from './home/game-card/game-card.component';
-import { FriendCardComponent } from './side-menu/friend-card/friend-card.component';
+import { FriendCardComponent } from './home/side-menu/friend-card/friend-card.component';
 
 @NgModule({
   declarations: [

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
+import { Game, GameService } from '../game.service';
 
 @Component({
   selector: 'app-game',
@@ -15,12 +16,29 @@ export class GameComponent implements OnInit {
 
   move: string = ""
 
-  constructor(private route: ActivatedRoute) { }
+  game!: Game;
+
+  constructor(private router: Router, private route: ActivatedRoute, private gameService: GameService) { }
   
   ngOnInit(): void {
-    var gameId = this.route.snapshot.paramMap.get("id")
+    let gameId = this.route.snapshot.paramMap.get("id")
+    if (gameId === null) {
+      // reroute to 404 page?
+      // this.router.navigate([""])
+      return
+    }
+    
     this.webSocketAPI = new WebsocketAPIService(this, gameId!);
     this.connect()
+    
+    let game = this.gameService.getGame(gameId)
+    if (game === undefined) {
+      // reroute to 404 page
+      // this.router.navigate([""])
+      return
+    }
+
+    this.game = game;
   }
 
   connect() {

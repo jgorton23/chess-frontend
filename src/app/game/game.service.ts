@@ -42,4 +42,7 @@ export class GameService {
       });
   }
 
+  getGame(id: string): Game | undefined {
+    return this.pastGames.find(g => g.id === id) || this.currentGames.find(g => g.id === id)
+  }
 }
