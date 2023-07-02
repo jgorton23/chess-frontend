@@ -40,11 +40,7 @@
     </div>
     <div class="row">
       <div class="col m-3 d-flex justify-content-center">
-        <button
-          type="button"
-          class="btn btn-secondary w-50"
-          (click)="print('play com')"
-        >
+        <button type="button" class="btn btn-secondary w-50">
           Play a computer
         </button>
       </div>
@@ -53,13 +49,24 @@
     <div class="row">
       <div class="col d-flex">
         <h2 class="m-3">
+          <strong> Current Games </strong>
+        </h2>
+      </div>
+    </div>
+    <div *ngFor="let game of gameService.currentGames" class="row">
+      <div class="col d-flex justify-content-center m-3">
+        <app-game-card [gameInfo]="game" style="width: 100%"></app-game-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col d-flex">
+        <h2 class="m-3">
           <strong> Past Games </strong>
         </h2>
       </div>
     </div>
-    <div *ngFor="let game of pastGames" class="row">
+    <div *ngFor="let game of gameService.pastGames" class="row">
       <div class="col d-flex justify-content-center m-3">
-        <!-- <app-board></app-board> -->
         <app-game-card [gameInfo]="game" style="width: 100%"></app-game-card>
       </div>
     </div>

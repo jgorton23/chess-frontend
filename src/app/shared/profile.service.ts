@@ -114,8 +114,13 @@ export class ProfileService {
     fetch(`${environment.baseUrl}/${ApiPaths.Friends}?` + new URLSearchParams({pending: 'true'}), { credentials: 'include' })
       .then(body => body.json())
       .then(resp => { 
-        this.invitations = resp.friends.filter((f: friend) => f.invitation).map((f: friend) => {return {username: f.username}})
-        this.friends = resp.friends.filter((f: friend) => !f.invitation).toSorted((a: friend, b: friend) => Number(a.pending) - Number(b.pending)).map((f: friend) => {return {username: f.username, pending: f.pending}});
+        this.invitations = resp.friends
+          .filter((f: friend) => f.invitation)
+          .map((f: friend) => {return {username: f.username}})
+        this.friends = resp.friends
+          .filter((f: friend) => !f.invitation)
+          .toSorted((a: friend, b: friend) => Number(a.pending) - Number(b.pending))
+          .map((f: friend) => {return {username: f.username, pending: f.pending}});
       })
   }
 }

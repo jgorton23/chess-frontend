@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Game } from '../game/game.service';
-import { environment } from 'src/environments/environment';
-import { ApiPaths } from '../api-paths';
+import { GameService } from '../game/game.service';
 
 @Component({
   selector: 'app-home',
@@ -10,13 +8,11 @@ import { ApiPaths } from '../api-paths';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(public gameService: GameService) { }
 
   ngOnInit(): void {
-    this.getPastGames();
+    this.gameService.getGames();
   }
-
-  pastGames: Game[] = [];
 
   showSideMenu: boolean = false;
 
@@ -28,18 +24,5 @@ export class HomeComponent implements OnInit {
 
   togglePopup(): void {
     this.showPopup = !this.showPopup;
-  }
-
-  print(msg: string) {
-    console.log(msg);
-  }
-
-  getPastGames(): void {
-    fetch(`${environment.baseUrl}/${ApiPaths.Games}`, {credentials: 'include'})
-      .then(response => response.json())
-      .then(body => {
-        this.pastGames = body.games
-        console.log(this.pastGames);
-      });
   }
 }
