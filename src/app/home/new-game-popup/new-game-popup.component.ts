@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiPaths } from 'src/app/api-paths';
 import { BoardUtilService } from 'src/app/board/board-util.service';
@@ -26,8 +26,15 @@ export class NewGamePopupComponent implements OnInit{
 
   opponent: string = "Select Opponent"
 
+  @Output()
+  closePopup$ = new EventEmitter<boolean>();
+
   ngOnInit(): void {
     this.getFriends();
+  }
+
+  closePopup() {
+    this.closePopup$.emit(true)
   }
 
   getFriends(): void {

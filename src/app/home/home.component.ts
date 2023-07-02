@@ -25,4 +25,8 @@ export class HomeComponent implements OnInit {
   togglePopup(): void {
     this.showPopup = !this.showPopup;
   }
+
+  print(msg: string) {
+    console.log(msg);
+  }
 }

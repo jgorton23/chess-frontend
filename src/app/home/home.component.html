@@ -17,7 +17,7 @@
     *ngIf="showPopup"
     class="popup d-flex justify-content-center align-items-center"
   >
-    <app-new-game-popup></app-new-game-popup>
+    <app-new-game-popup (closePopup$)="togglePopup()"></app-new-game-popup>
   </div>
   <div class="col col-md-8 col-lg-6">
     <div class="row">
