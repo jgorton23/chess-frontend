@@ -42,7 +42,9 @@ export class WebsocketAPIService {
   }
 
   onMessageReceived(message: any) {
-    this.game.handleMove(JSON.stringify(message.body));
+    console.log("socket got message", message.body);
+    
+    this.game.handleMove(message.body);
   }
 }
 

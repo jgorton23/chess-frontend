@@ -10,10 +10,12 @@ import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
 export class GameComponent implements OnInit {
 
   webSocketAPI: WebsocketAPIService | null = null;
-  moves: string[] = [];
+
+  moves: string[] = ["moves"];
+
+  move: string = ""
 
   constructor(private route: ActivatedRoute) { }
-
   
   ngOnInit(): void {
     var gameId = this.route.snapshot.paramMap.get("id")
@@ -29,12 +31,12 @@ export class GameComponent implements OnInit {
     this.webSocketAPI!._disconnect();
   }
 
-  sendMove() {
-    this.webSocketAPI!._send("test");
+  sendMove(move: string) {
+    this.webSocketAPI!._send(move);
   }
 
   handleMove(move: string) {
-    this.moves.push(move);
+    this.moves.push(move.slice(1, move.length-1));        
   }
 
 }

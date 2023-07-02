@@ -1,2 +1,5 @@
+<input type="text" [(ngModel)]="move" />
+<button (click)="sendMove(move)">send</button>
+{{ move }}
 <p>game works!</p>
-{{ moves }}
+<p *ngFor="let msg of moves">{{ msg }}</p>
