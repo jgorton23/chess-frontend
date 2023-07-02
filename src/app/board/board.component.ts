@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BoardUtilService, tile } from './board-util.service';
+import { Game } from '../game/game.service';
 
 @Component({
   selector: 'app-board',
@@ -8,34 +9,44 @@ import { BoardUtilService, tile } from './board-util.service';
 })
 export class BoardComponent implements OnInit {
 
-  constructor(private boardUtil: BoardUtilService) { }
+  constructor(private boardUtil: BoardUtilService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    console.log("init")
   }
 
-  grid: tile[][] = this.boardUtil.standard();
+  @Input()
+  grid!: tile[][]
+  
+  @Input()
+  playerColor!: string;
 
-  selectedPiece: {x: number, y: number} | null = null;
+  @Output()
+  moveEmitter: EventEmitter<any> = new EventEmitter();
 
-  playerColor = 'w';
+  selectedPiece?: {x: number, y: number};
 
   select(event: number[]){
     var x = event[1];
     var y = event[0];
-    if(this.selectedPiece === null && this.isPlayerColor(this.grid[y][x].piece)){
+    if (this.playerColor === '') {
+      return
+    }
+    if(this.selectedPiece === undefined && this.isPlayerColor(this.grid[y][x].piece)){
       this.grid[y][x].selected = true;
       this.selectedPiece = {x: x, y: y};
-    }else if(this.selectedPiece !== null){
+    }else if(this.selectedPiece !== undefined){
       this.grid[this.selectedPiece.y][this.selectedPiece.x].selected = false;
       if(this.grid[y][x].possible){
         this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
         this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = ' ';
         this.playerColor = this.playerColor === 'w' ? 'b' : 'w';
+        this.moveEmitter.emit(null)
       }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
       }else{
-        this.selectedPiece = null;
+        this.selectedPiece = undefined;
       }
     }
     if(this.selectedPiece){
@@ -43,6 +54,7 @@ export class BoardComponent implements OnInit {
     }
     
     this.updatePossible();
+    // this.changeDetector.detectChanges()
   }
 
   updatePossible(){
@@ -51,12 +63,14 @@ export class BoardComponent implements OnInit {
         this.grid[y][x].possible = false;
       }
     }
-    if(this.selectedPiece !== null){
+    if(this.selectedPiece){
       this.findReachable(this.selectedPiece.x, this.selectedPiece.y);
     }
   }
 
   findReachable(x: number, y: number){
+    console.log("searching");
+    
     switch(this.grid[y][x].piece){
       case 'p':
       case 'P':
@@ -123,6 +137,8 @@ export class BoardComponent implements OnInit {
       default:
         return;
     }
+    console.log(this.grid[5][0].possible);
+    
   }
 
   searchDiagonal(x: number, y: number){

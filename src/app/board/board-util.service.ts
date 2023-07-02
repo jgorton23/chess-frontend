@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 export type tile = {
   piece: string,
-  selected: Boolean,
-  possible: Boolean
+  selected: boolean,
+  possible: boolean
 }
 
 export enum variations {
@@ -19,6 +19,10 @@ export class BoardUtilService {
 
   standard(): tile[][] {
     var FEN = this.getBoard(variations.Standard);
+    return this.FENToTileArr(FEN)
+  }
+
+  FENToTileArr(FEN: string): tile[][] {
     [...Array(9).keys()].forEach(x => FEN=FEN.replace(new RegExp(String(x), "g"), " ".repeat(x)))
     // console.log(FEN)
     var board = FEN.split("/").map(row => row.split(""));

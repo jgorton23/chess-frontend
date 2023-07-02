@@ -30,8 +30,8 @@ export class GameService {
 
   currentGames: Game[] = [];
 
-  getGames(): void {
-    fetch(`${environment.baseUrl}/${ApiPaths.Games}`, {credentials: 'include'})
+  getGames(): Promise<void> {
+    return fetch(`${environment.baseUrl}/${ApiPaths.Games}`, {credentials: 'include'})
       .then(response => response.json())
       .then(body => {
         console.log(body);
@@ -42,7 +42,10 @@ export class GameService {
       });
   }
 
-  getGame(id: string): Game | undefined {
+  async getGame(id: string): Promise<Game | undefined> {
+    if (this.pastGames.length === 0 && this.currentGames.length === 0){
+      await this.getGames()
+    }
     return this.pastGames.find(g => g.id === id) || this.currentGames.find(g => g.id === id)
   }
 }

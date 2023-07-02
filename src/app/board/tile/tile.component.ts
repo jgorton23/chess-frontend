@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BoardComponent } from '../board.component';
 import { tile } from '../board-util.service';
 
@@ -9,10 +9,10 @@ import { tile } from '../board-util.service';
 })
 export class TileComponent implements OnInit {
 
-  constructor() { }
+  constructor(public changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-
+    this.press.subscribe(() => this.changeDetector.detectChanges())
   }
 
   @Input()
@@ -32,5 +32,10 @@ export class TileComponent implements OnInit {
 
   isPossible(){
     return this.tile.possible;
+  }
+
+  print(msg: string | boolean) {
+    console.log("selected", msg);
+    
   }
 }
