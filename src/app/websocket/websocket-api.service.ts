@@ -8,7 +8,7 @@ import * as SockJS from 'sockjs-client';
 })
 export class WebsocketAPIService {
   wsEndpoint: string = 'http://localhost:8080/websocket'
-  topic: string = '/game'
+  topic: string = '/topic/test'
   stompClient: any;
 
   constructor(private game: GameComponent, @Inject(String) private gameId: string) { }
@@ -31,7 +31,7 @@ export class WebsocketAPIService {
   }
 
   _send(message: any) {
-    this.stompClient.send(this.topic + '/' + this.gameId, {}, JSON.stringify(message));
+    this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify(message)); //this.topic + 
   }
 
   _error(error: Error) {

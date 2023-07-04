@@ -69,6 +69,7 @@ export class GameComponent implements OnInit {
 
   sendMove(gameState: Game) {
     if (this.webSocketAPI){
+      gameState.date = undefined
       this.webSocketAPI._send(gameState);
     }
   }
