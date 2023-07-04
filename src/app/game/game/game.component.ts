@@ -47,7 +47,6 @@ export class GameComponent implements OnInit {
     }
 
     this.game = game;
-    this.fen = game.board
 
     let playerUsername = this.profileService.getUsername()
     if (playerUsername === this.game.whitePlayerUsername) {
@@ -58,7 +57,7 @@ export class GameComponent implements OnInit {
   }
 
   getFen(): string {
-    return this.fen
+    return this.game?.board || ""
   }
 
   connect() {
@@ -75,7 +74,8 @@ export class GameComponent implements OnInit {
 
   handleMove(gameState: string) {
     let newGameState = JSON.parse(gameState)
-    this.fen = newGameState.board
+    console.log(newGameState);
+    this.game!.board = newGameState.board
   }
 
   updateGameState(grid: tile[][]) {

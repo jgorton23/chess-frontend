@@ -1,6 +1,6 @@
 <app-board
   *ngIf="game"
-  [fen]="getFen()"
+  [fen]="this.game.board"
   [playerColor]="playerColor"
   (moveEmitter)="updateGameState($event)"
 ></app-board>
