@@ -1,6 +1,11 @@
-<app-board
-  *ngIf="game"
-  [fen]="this.game.board"
-  [playerColor]="playerColor"
-  (moveEmitter)="updateGameState($event)"
-></app-board>
+<h2>{{ game?.blackPlayerUsername }}</h2>
+<div style="max-width: 80vh">
+  <app-board
+    *ngIf="game"
+    [fen]="this.game.board"
+    [playerColor]="playerColor"
+    [currentPlayer]="game.turn"
+    (moveEmitter)="updateGameState($event)"
+  ></app-board>
+</div>
+<h2>{{ game?.whitePlayerUsername }}</h2>

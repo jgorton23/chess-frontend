@@ -12,11 +12,9 @@ import { ProfileService } from 'src/app/shared/profile.service';
 })
 export class GameComponent implements OnInit {
 
-  webSocketAPI: WebsocketAPIService | null = null;
+  webSocketAPI?: WebsocketAPIService;
 
   game?: Game;
-
-  fen: string = "";
 
   playerColor: string = '';
 
@@ -36,7 +34,7 @@ export class GameComponent implements OnInit {
       return
     }
     
-    this.webSocketAPI = new WebsocketAPIService(this, gameId!);
+    this.webSocketAPI = new WebsocketAPIService(this, gameId);
     this.connect()
         
     let game = await this.gameService.getGame(gameId)    
@@ -56,26 +54,34 @@ export class GameComponent implements OnInit {
     }
   }
 
-  getFen(): string {
-    return this.game?.board || ""
-  }
-
   connect() {
-    this.webSocketAPI!._connect();
+    if (!this.webSocketAPI) {
+      this.webSocketAPI = new WebsocketAPIService(this, this.game!.id!)
+    }
+    this.webSocketAPI._connect();
   }
 
   disconnect() {
-    this.webSocketAPI!._disconnect();
+    if (this.webSocketAPI){
+      this.webSocketAPI._disconnect();
+    }
   }
 
   sendMove(gameState: Game) {
-    this.webSocketAPI!._send(gameState);
+    if (this.webSocketAPI){
+      this.webSocketAPI._send(gameState);
+    }
   }
 
   handleMove(gameState: string) {
     let newGameState = JSON.parse(gameState)
     console.log(newGameState);
-    this.game!.board = newGameState.board
+    if (!this.game) {
+      this.game = newGameState
+    } else{
+      this.game.board = newGameState.board
+      this.game.turn = newGameState.turn
+    }
   }
 
   updateGameState(grid: tile[][]) {

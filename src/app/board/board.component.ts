@@ -21,7 +21,7 @@ export class BoardComponent implements OnInit, OnChanges {
   playerColor: string = 'w';
 
   @Input()
-  currentPlauer: number = 0
+  currentPlayer: number = 0
   
   @Output()
   moveEmitter: EventEmitter<tile[][]> = new EventEmitter();
@@ -46,7 +46,7 @@ export class BoardComponent implements OnInit, OnChanges {
   select(event: number[]){
     var x = event[1];
     var y = event[0];
-    if (this.playerColor === '' || (this.currentPlauer === 1 ? 'b' : 'w' != this.playerColor)) {
+    if (this.playerColor === '' || ((this.currentPlayer === 1 ? 'b' : 'w') !== this.playerColor)) {
       return
     }
     if(this.selectedPiece === undefined && this.isPlayerColor(this.grid[y][x].piece)){
@@ -57,7 +57,6 @@ export class BoardComponent implements OnInit, OnChanges {
       if(this.grid[y][x].possible){
         this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
         this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = ' ';
-        // this.playerColor = this.playerColor === 'w' ? 'b' : 'w';
         this.moveEmitter.emit(this.grid)
       }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
@@ -66,10 +65,6 @@ export class BoardComponent implements OnInit, OnChanges {
         this.selectedPiece = undefined;
       }
     }
-    if(this.selectedPiece){
-      console.log(this.grid[this.selectedPiece.y][this.selectedPiece.x]);
-    }
-    
     this.updatePossible();
   }
 

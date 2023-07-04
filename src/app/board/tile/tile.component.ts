@@ -8,7 +8,7 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
   templateUrl: './tile.component.html',
   styleUrls: ['./tile.component.css']
 })
-export class TileComponent implements OnInit, DoCheck {
+export class TileComponent implements OnInit {
   
   @Input()
   tile: tile = {piece: '', selected: false, possible: false};
