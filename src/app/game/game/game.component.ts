@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
 import { Game, GameService } from '../game.service';
-import { BoardUtilService } from 'src/app/board/board-util.service';
+import { BoardUtilService, tile } from 'src/app/board/board-util.service';
 import { ProfileService } from 'src/app/shared/profile.service';
 
 @Component({
@@ -15,6 +15,8 @@ export class GameComponent implements OnInit {
   webSocketAPI: WebsocketAPIService | null = null;
 
   game?: Game;
+
+  fen: string = "";
 
   playerColor: string = '';
 
@@ -45,6 +47,7 @@ export class GameComponent implements OnInit {
     }
 
     this.game = game;
+    this.fen = game.board
 
     let playerUsername = this.profileService.getUsername()
     if (playerUsername === this.game.whitePlayerUsername) {
@@ -52,6 +55,10 @@ export class GameComponent implements OnInit {
     }else if (playerUsername === this.game.blackPlayerUsername) {
       this.playerColor = 'b'
     }
+  }
+
+  getFen(): string {
+    return this.fen
   }
 
   connect() {
@@ -66,12 +73,20 @@ export class GameComponent implements OnInit {
     this.webSocketAPI!._send(gameState);
   }
 
-  handleMove(gameState: Game) {
-
+  handleMove(gameState: string) {
+    let newGameState = JSON.parse(gameState)
+    this.fen = newGameState.board
   }
 
-  updateGameState() {
-    console.log(this.game);
-    
+  updateGameState(grid: tile[][]) {
+    let currentGame = this.game!
+    let gameState: Game = {
+      ...currentGame,
+      board: this.boardUtil.TileArrToFEN(grid),
+      turn: (currentGame.turn + 1) % 2,
+      whiteTime: currentGame.whiteTime - 0,
+      blackTime: currentGame.blackTime - 0,
+    }
+    this.sendMove(gameState)
   }
 }

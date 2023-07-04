@@ -1,13 +1,12 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BoardUtilService, tile } from './board-util.service';
-import { Game } from '../game/game.service';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
+import { BoardUtilService, tile, variations } from './board-util.service';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnChanges {
 
   constructor(private boardUtil: BoardUtilService, private changeDetector: ChangeDetectorRef) { }
 
@@ -16,15 +15,33 @@ export class BoardComponent implements OnInit {
   }
 
   @Input()
-  grid: tile[][] = this.boardUtil.standard()
+  fen: string = this.boardUtil.getBoard(variations.Standard);
   
   @Input()
   playerColor: string = 'w';
 
+  @Input()
+  currentPlauer: number = 0
+  
   @Output()
-  moveEmitter: EventEmitter<any> = new EventEmitter();
-
+  moveEmitter: EventEmitter<tile[][]> = new EventEmitter();
+  
+  grid: tile[][] = this.boardUtil.FENToTileArr(this.fen)
+  
   selectedPiece?: {x: number, y: number};
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['fen']) {
+      let newGrid = this.boardUtil.FENToTileArr(this.fen)
+      for(let x = 0; x < this.grid[0].length; x++){
+        for(let y = 0; y < this.grid.length; y++){
+          this.grid[y][x].possible = false;
+          this.grid[y][x].selected = false;
+          this.grid[y][x].piece = newGrid[y][x].piece
+        }
+      }
+    }    
+  }
 
   select(event: number[]){
     var x = event[1];
@@ -33,15 +50,15 @@ export class BoardComponent implements OnInit {
       return
     }
     if(this.selectedPiece === undefined && this.isPlayerColor(this.grid[y][x].piece)){
-      this.grid[y][x].selected = true;
       this.selectedPiece = {x: x, y: y};
+      this.grid[y][x].selected = true
     }else if(this.selectedPiece !== undefined){
       this.grid[this.selectedPiece.y][this.selectedPiece.x].selected = false;
       if(this.grid[y][x].possible){
         this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
         this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = ' ';
-        this.playerColor = this.playerColor === 'w' ? 'b' : 'w';
-        this.moveEmitter.emit(null)
+        // this.playerColor = this.playerColor === 'w' ? 'b' : 'w';
+        this.moveEmitter.emit(this.grid)
       }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
@@ -54,7 +71,6 @@ export class BoardComponent implements OnInit {
     }
     
     this.updatePossible();
-    // this.changeDetector.detectChanges()
   }
 
   updatePossible(){
@@ -68,9 +84,7 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  findReachable(x: number, y: number){
-    console.log("searching");
-    
+  findReachable(x: number, y: number){    
     switch(this.grid[y][x].piece){
       case 'p':
       case 'P':

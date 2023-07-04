@@ -1,10 +1,6 @@
-<!-- <input type="text" [(ngModel)]="move" />
-<button (click)="sendMove(move)">send</button>
-{{ move }}
-<p>game works!</p>
-<p *ngFor="let msg of moves">{{ msg }}</p> -->
 <app-board
   *ngIf="game"
+  [fen]="getFen()"
   [playerColor]="playerColor"
-  (moveEmitter)="updateGameState()"
+  (moveEmitter)="updateGameState($event)"
 ></app-board>

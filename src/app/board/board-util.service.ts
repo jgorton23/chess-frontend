@@ -32,6 +32,30 @@ export class BoardUtilService {
       )});
   }
 
+  TileArrToFEN(grid: tile[][]): string {
+    let res = ""
+    let count = 0
+    for(let row of grid) {
+      for(let tile of row) {
+        if (tile.piece !== ' '){
+          if(count > 0){
+            res += count
+            count = 0
+          }
+          res += tile.piece
+        } else {
+          count += 1
+        }
+      }
+      if(count > 0){
+        res += count
+        count = 0
+      }
+      res += "/"
+    }
+    return res
+  }
+
   getBoard(variation: string): string {
     switch(variation){
       case variations.Standard:

@@ -6,7 +6,7 @@
     active: isSelected(),
     possible: isPossible()
   }"
-  (click)="press.emit([row, col]); print(isSelected())"
+  (click)="press.emit([row, col])"
 >
   <!-- <strong>{{ tile.piece }}</strong> -->
   <!-- <img alt="pawn" /> -->
