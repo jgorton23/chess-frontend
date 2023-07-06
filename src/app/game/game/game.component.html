@@ -1,11 +1,21 @@
-<h2>{{ game?.blackPlayerUsername }}</h2>
-<div style="max-width: 80vh">
-  <app-board
-    *ngIf="game"
-    [fen]="this.game.board"
-    [playerColor]="playerColor"
-    [currentPlayer]="game.turn"
-    (moveEmitter)="updateGameState($event)"
-  ></app-board>
+<div class="container" style="max-width: 80vh">
+  <div class="row">
+    <h2>{{ game?.blackPlayerUsername }}</h2>
+  </div>
+  <div class="row">
+    <div class="col d-flex justify-content-center">
+      <div style="width: 100%">
+        <app-board
+          *ngIf="game"
+          [fen]="this.game.board"
+          [playerColor]="playerColor"
+          [currentPlayer]="game.turn"
+          (moveEmitter)="updateGameState($event)"
+        ></app-board>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <h2>{{ game?.whitePlayerUsername }}</h2>
+  </div>
 </div>
-<h2>{{ game?.whitePlayerUsername }}</h2>
