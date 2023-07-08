@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ApiPaths } from '../api-paths';
+import { Router } from '@angular/router';
 
 export type Game = {
   id?: string,
@@ -24,7 +25,7 @@ export type Game = {
 })
 export class GameService {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   pastGames: Game[] = [];
 
@@ -32,14 +33,25 @@ export class GameService {
 
   getGames(): Promise<void> {
     return fetch(`${environment.baseUrl}/${ApiPaths.Games}`, {credentials: 'include'})
-      .then(response => response.json())
-      .then(body => {
-        console.log(body);
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(response)
+        } else {
+          return response.json()
+        }
+      }).then(body => {
         this.pastGames = body.games
           .filter((game: Game) => game.ended)
+
         this.currentGames = body.games
           .filter((game: Game) => !game.ended)
-      });
+      }).catch(error => {
+        if(error.status === 401) {
+          this.router.navigate(['login'])
+        } else {
+          error.json().then((e: any) => console.error(e));
+        }
+      })
   }
 
   async getGame(id: string): Promise<Game | undefined> {

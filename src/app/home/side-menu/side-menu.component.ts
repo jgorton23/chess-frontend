@@ -49,7 +49,7 @@ export class SideMenuComponent implements OnInit {
   }
 
   saveEmail(): void {
-    this.profileService.saveProfile({email: this.profileService.email})
+    this.profileService.saveProfile({username: this.profileService.email.split("@")[0], email: this.profileService.email})
     this.editingEmail = false;
   }
 

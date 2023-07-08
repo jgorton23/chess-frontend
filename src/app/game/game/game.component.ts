@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
 import { Game, GameService } from '../game.service';
@@ -10,7 +10,7 @@ import { ProfileService } from 'src/app/shared/profile.service';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
   webSocketAPI?: WebsocketAPIService;
 
@@ -52,6 +52,10 @@ export class GameComponent implements OnInit {
     }else if (playerUsername === this.game.blackPlayerUsername) {
       this.playerColor = 'b'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.disconnect()
   }
 
   connect() {

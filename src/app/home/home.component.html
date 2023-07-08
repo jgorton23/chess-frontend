@@ -10,6 +10,7 @@
   <div
     class="slideout"
     [ngStyle]="{ 'pointer-events': showSideMenu ? 'auto' : 'none' }"
+    *ngIf="showSideMenu"
   >
     <app-side-menu [isOpen]="showSideMenu"></app-side-menu>
   </div>
