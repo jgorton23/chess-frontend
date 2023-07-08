@@ -131,7 +131,13 @@
     </div>
     <div class="row g-0">
       <div class="col m-3">
-        <button class="btn btn-danger w-100">Log Out</button>
+        <button
+          type="button"
+          class="btn btn-danger w-100"
+          (click)="authService.logout()"
+        >
+          Log Out
+        </button>
       </div>
     </div>
   </div>

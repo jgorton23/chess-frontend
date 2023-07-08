@@ -1,8 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
-import { ApiPaths } from 'src/app/api-paths';
+import { AuthService } from 'src/app/shared/auth.service';
 import { ProfileService } from 'src/app/shared/profile.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-side-menu',
@@ -23,7 +22,7 @@ import { environment } from 'src/environments/environment';
 })
 export class SideMenuComponent implements OnInit {
 
-  constructor(public profileService: ProfileService) { }
+  constructor(public profileService: ProfileService, public authService: AuthService) { }
 
   ngOnInit(): void {
     this.profileService.getProfile()

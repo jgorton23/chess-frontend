@@ -58,4 +58,19 @@ export class AuthService {
       console.log(e);
     }
   }
+
+  logout() {
+    fetch(`${environment.baseUrl}/${ApiPaths.Logout}`, {method: 'DELETE', credentials: 'include'})
+      .then(response => {
+        if (!response.ok){
+          return Promise.reject(response)
+        } else {
+          return response.json()
+        }
+      }).then(_ => {
+        this.router.navigate(['login'])
+      }).catch(error => {
+        error.json().then((e: any) => console.log(e))
+      })
+  }
 }
