@@ -1,17 +1,17 @@
 <div class="open-close-container" [@openClose]="isOpen ? 'right' : 'left'">
-  <div class="row">
+  <div class="row g-0">
     <div class="col d-flex justify-content-start">
       <h5 class="mt-3 ms-3">
         <strong> Profile </strong>
       </h5>
     </div>
   </div>
-  <div class="row">
+  <div class="row g-0">
     <div class="col">
       <h3 class="mt-3 ms-3">{{ profileService.username }}</h3>
     </div>
   </div>
-  <div class="row">
+  <div class="row g-0">
     <div class="col">
       <p class="ms-3">
         {{ profileService.numFriends }} friends
@@ -22,7 +22,7 @@
     </div>
   </div>
   <div *ngIf="!viewingFriends">
-    <div class="row">
+    <div class="row g-0">
       <div class="col m-3">
         <label for="friends" class="form-label"> Add Friends </label>
         <div class="input-group">
@@ -43,14 +43,14 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row g-0">
       <div class="col d-flex justify-content-start">
         <h5 class="mt-3 ms-3">
           <strong> Account </strong>
         </h5>
       </div>
     </div>
-    <div class="row">
+    <div class="row g-0">
       <div class="col m-3">
         <label for="email" class="form-label">
           Email
@@ -76,7 +76,7 @@
         />
       </div>
     </div>
-    <div class="row">
+    <div class="row g-0">
       <div class="col m-3">
         <label for="pass" class="form-label">
           Password
@@ -129,7 +129,7 @@
         </form>
       </div>
     </div>
-    <div class="row">
+    <div class="row g-0">
       <div class="col m-3">
         <button class="btn btn-danger w-100">Log Out</button>
       </div>
