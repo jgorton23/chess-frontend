@@ -10,7 +10,7 @@
       <form
         #loginForm="ngForm"
         class="mb-4"
-        (ngSubmit)="login(loginForm.value)"
+        (ngSubmit)="authService.login(loginForm.value)"
       >
         <div class="form-floating mb-4">
           <input

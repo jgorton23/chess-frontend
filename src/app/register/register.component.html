@@ -10,7 +10,7 @@
       <form
         #registerForm="ngForm"
         class="mb-4"
-        (ngSubmit)="register(registerForm.value)"
+        (ngSubmit)="authService.register(registerForm.value)"
       >
         <div class="form-floating mb-4">
           <input
