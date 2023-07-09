@@ -26,24 +26,29 @@ export class GameComponent implements OnInit, OnDestroy {
     private profileService: ProfileService) { }
   
   async ngOnInit(): Promise<void> {
-
+    console.log("Init GAME component");
+    
     let gameId = this.route.snapshot.paramMap.get("id")
-    if (gameId === null) {      
+    if (gameId === null) {   
+      console.log("null GameId");
+         
       // reroute to 404 page?
+      // this.router.navigate([""])
+      return
+    }
+    
+    let game = await this.gameService.getGame(gameId)    
+    if (game === undefined) { 
+      console.log("undefined Game");
+      
+      // reroute to 404 page
       // this.router.navigate([""])
       return
     }
     
     this.webSocketAPI = new WebsocketAPIService(this, gameId);
     this.connect()
-        
-    let game = await this.gameService.getGame(gameId)    
-    if (game === undefined) {      
-      // reroute to 404 page
-      // this.router.navigate([""])
-      return
-    }
-
+    
     this.game = game;
 
     let playerUsername = this.profileService.getUsername()

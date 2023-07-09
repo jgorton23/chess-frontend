@@ -6,13 +6,9 @@ import { BoardUtilService, tile, variations } from './board-util.service';
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit, OnChanges {
+export class BoardComponent implements OnChanges {
 
   constructor(private boardUtil: BoardUtilService, private changeDetector: ChangeDetectorRef) { }
-
-  ngOnInit(): void {
-    console.log("init")
-  }
 
   @Input()
   fen: string = this.boardUtil.getBoard(variations.Standard);

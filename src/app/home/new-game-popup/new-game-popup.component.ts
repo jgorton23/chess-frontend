@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiPaths } from 'src/app/api-paths';
 import { BoardUtilService } from 'src/app/board/board-util.service';
-import { Game } from 'src/app/game/game.service';
+import { Game, GameService } from 'src/app/game/game.service';
 import { ProfileService } from 'src/app/shared/profile.service';
 import { environment } from 'src/environments/environment';
 
@@ -20,7 +20,7 @@ export class NewGamePopupComponent implements OnInit{
   constructor(
     private boardUtil: BoardUtilService,
     private profileService: ProfileService,
-    private router: Router) {}
+    private gameService: GameService) {}
 
   friends: string[] = []
 
@@ -62,23 +62,7 @@ export class NewGamePopupComponent implements OnInit{
       started: false,
       ended: false,
     }
-    fetch(`${environment.baseUrl}/${ApiPaths.Game}/new`, 
-      {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          'Accept': "application/json, text/plain, */*",
-          'Content-Type': "application/json;charset=utf-8"
-        },
-        body: JSON.stringify(game)
-      })
-      .then(resp => {
-        return resp.json()
-      })
-      .then(body => {
-        console.log(body)
-        this.router.navigate(['play', {id: body.gameId}])
-      })
     
+    this.gameService.createGame(game)
   }
 }
