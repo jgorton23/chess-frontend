@@ -28,7 +28,10 @@ export class ProfileService {
 
   invitations: friend[] = []
 
-  getUsername(){
+  async getUsername(): Promise<string> {
+    if (!this.username){
+      await this.getProfile()
+    }
     return this.username;
   }
   

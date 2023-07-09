@@ -18,8 +18,7 @@ div.active {
 }
 
 div.possible {
-  outline: solid black;
-  outline-offset: -3px;
+  border: 0.2em solid black;
 }
 
 div.white {

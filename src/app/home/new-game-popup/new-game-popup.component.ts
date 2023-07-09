@@ -50,14 +50,14 @@ export class NewGamePopupComponent implements OnInit{
     return this.boardUtil.getVariations();
   }
 
-  createGame(options: {opponent: string, variant?: string}): void {    
+  async createGame(options: {opponent: string, variant?: string}): Promise<void> {
     let game: Game = {
       board: this.boardUtil.getBoard("standard"),
       moves: "",
       turn: 0,
       whiteTime: 600,
       blackTime: 600,
-      whitePlayerUsername: this.profileService.getUsername(),
+      whitePlayerUsername: await this.profileService.getUsername(),
       blackPlayerUsername: this.opponent,
       started: false,
       ended: false,

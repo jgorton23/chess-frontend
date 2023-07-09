@@ -3,12 +3,10 @@
   [ngClass]="{
     even: (row + col) % 2 === 0,
     odd: (row + col) % 2 === 1,
-    active: isSelected(),
+    active: tile.selected,
     possible: isPossible()
   }"
-  (click)="press.emit([row, col])"
+  (click)="select()"
 >
-  <!-- <strong>{{ tile.piece }}</strong> -->
-  <!-- <img alt="pawn" /> -->
   <span [class]="tile.piece"></span>
 </div>

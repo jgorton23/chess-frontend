@@ -8,7 +8,7 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
   templateUrl: './tile.component.html',
   styleUrls: ['./tile.component.css']
 })
-export class TileComponent implements OnInit {
+export class TileComponent {
   
   @Input()
   tile: tile = {piece: '', selected: false, possible: false};
@@ -21,22 +21,7 @@ export class TileComponent implements OnInit {
 
   @Output() press: EventEmitter<number[]> = new EventEmitter<number[]>();
 
-  differ?: KeyValueDiffer<any, any>
-
-  constructor(private changeDetector: ChangeDetectorRef, private kvDiffers: KeyValueDiffers) { }
-
-  ngOnInit(): void {
-    this.differ = this.kvDiffers.find(this.tile).create()
-  }
-
-  ngDoCheck(): void {
-    
-    let changes = this.differ?.diff(this.tile)
-    if (changes) {
-      this.differ = this.kvDiffers.find(this.tile).create()
-      // console.log(this.tile);
-    }
-  }
+  constructor() { }
 
   isSelected(){
     return this.tile.selected;
@@ -46,8 +31,8 @@ export class TileComponent implements OnInit {
     return this.tile.possible;
   }
 
-  print(msg: string | boolean) {
-    console.log("selected", msg);
-    
+  select() {
+    console.log("Tile select", this.row, this.col);
+    this.press.emit([this.row, this.col])
   }
 }

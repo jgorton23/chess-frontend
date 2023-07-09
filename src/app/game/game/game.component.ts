@@ -51,7 +51,9 @@ export class GameComponent implements OnInit, OnDestroy {
     
     this.game = game;
 
-    let playerUsername = this.profileService.getUsername()
+    let playerUsername = await this.profileService.getUsername()
+    console.log("Get Username", playerUsername, game);
+    
     if (playerUsername === this.game.whitePlayerUsername) {
       this.playerColor = 'w'
     }else if (playerUsername === this.game.blackPlayerUsername) {

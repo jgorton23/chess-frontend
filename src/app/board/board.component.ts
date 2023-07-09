@@ -8,7 +8,7 @@ import { BoardUtilService, tile, variations } from './board-util.service';
 })
 export class BoardComponent implements OnChanges {
 
-  constructor(private boardUtil: BoardUtilService, private changeDetector: ChangeDetectorRef) { }
+  constructor(private boardUtil: BoardUtilService) { }
 
   @Input()
   fen: string = this.boardUtil.getBoard(variations.Standard);
@@ -40,6 +40,8 @@ export class BoardComponent implements OnChanges {
   }
 
   select(event: number[]){
+    console.log("Board select", event[0], event[1], this.playerColor);
+    
     var x = event[1];
     var y = event[0];
     if (this.playerColor === '' || ((this.currentPlayer === 1 ? 'b' : 'w') !== this.playerColor)) {
@@ -76,6 +78,7 @@ export class BoardComponent implements OnChanges {
   }
 
   findReachable(x: number, y: number){    
+    console.log("Board search");
     switch(this.grid[y][x].piece){
       case 'p':
       case 'P':
@@ -142,11 +145,10 @@ export class BoardComponent implements OnChanges {
       default:
         return;
     }
-    console.log(this.grid[5][0].possible);
-    
   }
 
   searchDiagonal(x: number, y: number){
+
     var lu = 1, ru = 1, ld = 1, rd = 1
     var origin = this.grid[y][x].piece
 
