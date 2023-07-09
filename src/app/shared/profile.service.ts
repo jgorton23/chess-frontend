@@ -32,11 +32,12 @@ export class ProfileService {
     if (!this.username){
       await this.getProfile()
     }
+    console.log("Got Username", this.username);
     return this.username;
   }
   
-  getProfile(): void {
-    fetch(`${environment.baseUrl}/${ApiPaths.Profile}`, {credentials: 'include'})
+  async getProfile(): Promise<void> {
+    await fetch(`${environment.baseUrl}/${ApiPaths.Profile}`, {credentials: 'include'})
       .then(response => {
         if (response.status === 401) {
           return Promise.reject(response)
@@ -45,6 +46,8 @@ export class ProfileService {
         }
       })
       .then(profile => {
+        console.log("Get profile: ", profile?.username);
+        
         this.numFriends = profile?.friends || 0
         this.username = profile?.username || ""
         this.email = profile?.email || ""

@@ -4,7 +4,7 @@
     even: (row + col) % 2 === 0,
     odd: (row + col) % 2 === 1,
     active: tile.selected,
-    possible: isPossible()
+    possible: tile.possible
   }"
   (click)="select()"
 >
