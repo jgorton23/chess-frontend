@@ -7,12 +7,32 @@ import * as SockJS from 'sockjs-client';
   providedIn: 'root'
 })
 export class WebsocketAPIService {
+
+  /**
+   * The path of the ws endpoint of the socket to connect to 
+   */
   wsEndpoint: string = 'http://localhost:8080/websocket'
+
+  /**
+   * the base path of the topic to subscribe to
+   */
   topic: string = '/topic/game'
+
+  /**
+   * the client to send/recieve messages
+   */
   stompClient: any;
 
+  /**
+   * Create a new WSService instance
+   * @param game the game component that this ws should allow to handle messages received
+   * @param gameId the id of the game to be used in the WS subscription path
+   */
   constructor(private game: GameComponent, @Inject(String) private gameId: string) { }
 
+  /**
+   * Subscribe to the ws endpoint based on this objects gameId
+   */
   _connect() {
     let ws = new SockJS(this.wsEndpoint);
     this.stompClient = Stomp.over(ws);
@@ -24,16 +44,27 @@ export class WebsocketAPIService {
     }, this._error);
   }
 
+  /**
+   * disconnect from the ws
+   */
   _disconnect() {
     if (this.stompClient !== null) {
       this.stompClient.disconnect();
     }
   }
 
+  /**
+   * send a message over the socket
+   * @param message the message to send
+   */
   _send(message: any) {
     this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify(message));
   }
 
+  /**
+   * On ws error, log error and attempt to reconnect
+   * @param error 
+   */
   _error(error: Error) {
     console.log("errorCallBack -> " + error)
     setTimeout(() => {
@@ -41,6 +72,10 @@ export class WebsocketAPIService {
     }, 5000);
   }
 
+  /**
+   * On ws message, pass the message body to the game component for handling
+   * @param message 
+   */
   onMessageReceived(message: any) {
     console.log("socket got message", message.body);
     
