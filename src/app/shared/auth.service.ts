@@ -8,9 +8,18 @@ import { ApiPaths } from '../api-paths';
 })
 export class AuthService {
 
+  /**
+   * Creates a new Auth Service instance 
+   * @param router the router to user for navigation
+   */
   constructor(private router: Router) { }
 
+  /**
+   * attempts to log in to the app with the given credentials
+   * @param formData the username or email and password to use to log in
+   */
   async login(formData: {email: string, password: string}) {
+    //TODO: change from async function to using callbacks
     try {
       const response = await fetch(`${environment.baseUrl}/${ApiPaths.Login}`, {
         method: 'POST',
@@ -35,7 +44,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * attemps to register a new user of the app using the given credentials
+   * @param formData the email, password, and password confirmation to use to register
+   */
   async register(formData: {email: string, password: string, confirm: string}) {
+    //TODO: change from async to callback
     try {
       const params = {
         headers: {
@@ -59,6 +73,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * logs the current user out of the app
+   */
   logout() {
     fetch(`${environment.baseUrl}/${ApiPaths.Logout}`, {method: 'DELETE', credentials: 'include'})
       .then(response => {
