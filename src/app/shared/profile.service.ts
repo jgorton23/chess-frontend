@@ -14,20 +14,43 @@ export type friend = {
 })
 export class ProfileService {
 
+  /**
+   * Create a new Profile Service instance
+   * @param router the router to use for navigation
+   */
   constructor(private router: Router) {
     this.getProfile()
   }
 
+  /**
+   * the number of confirmed friends the current user has
+   */
   numFriends: number = 0
 
+  /**
+   * the username of the current user
+   */
   username: string = ""
 
+  /**
+   * the email of the current user
+   */
   email: string = ""
 
+  /**
+   * the confirmed/pending friend list of the current user
+   */
   friends: friend[] = []
 
+  /**
+   * the users who have sent the current user unresolved friend invitations
+   */
   invitations: friend[] = []
 
+  /**
+   * Gets the username of the current user, locally if it is already stored, else via the API
+   * @returns A promise of the username
+   */
   async getUsername(): Promise<string> {
     if (!this.username){
       await this.getProfile()
@@ -36,6 +59,9 @@ export class ProfileService {
     return this.username;
   }
   
+  /**
+   * Updates the profile of the current user with the latest values received via the API
+   */
   async getProfile(): Promise<void> {
     await fetch(`${environment.baseUrl}/${ApiPaths.Profile}`, {credentials: 'include'})
       .then(response => {
@@ -60,6 +86,10 @@ export class ProfileService {
       })
   }
 
+  /**
+   * Persists the latest credentials provided by the current user in the database, via the API
+   * @param credentials 
+   */
   saveProfile(credentials: {username?: string, email?: string, password?: string, confirm?: string}): void {    
     fetch(`${environment.baseUrl}/${ApiPaths.Profile}`,
       {
@@ -88,6 +118,10 @@ export class ProfileService {
     })
   }
 
+  /**
+   * Adds or Confirms the given user as a friend of the current user
+   * @param username the username of the user to add as a friend of the current user
+   */
   addFriend(username: string): void{
     fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
       {
@@ -116,6 +150,10 @@ export class ProfileService {
     })
   }
 
+  /**
+   * Removes the given user as a friend of the current user
+   * @param username the username of the user to remove as a friend
+   */
   removeFriends(username: string): void {
     fetch(`${environment.baseUrl}/${ApiPaths.Friends}`, 
       {
@@ -144,6 +182,9 @@ export class ProfileService {
     })
   }
 
+  /**
+   * Updates the friend list of the current user with the latest results provided by the API
+   */
   getFriends(): void {
     fetch(`${environment.baseUrl}/${ApiPaths.Friends}?` + new URLSearchParams({pending: 'true'}), { credentials: 'include' })
       .then(response => {
