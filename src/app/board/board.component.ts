@@ -20,7 +20,7 @@ export class BoardComponent implements OnChanges {
   currentPlayer: number = 0
   
   @Output()
-  moveEmitter: EventEmitter<tile[][]> = new EventEmitter();
+  moveEmitter: EventEmitter<{move: number[][], FEN: string}> = new EventEmitter();
   
   grid: tile[][] = this.boardUtil.FENToTileArr(this.fen)
   
@@ -55,7 +55,9 @@ export class BoardComponent implements OnChanges {
       if(this.grid[y][x].possible){
         this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
         this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = ' ';
-        this.moveEmitter.emit(this.grid)
+        let move = [[this.selectedPiece.x, this.selectedPiece.y], [x, y]]
+        let FEN = this.boardUtil.TileArrToFEN(this.grid)
+        this.moveEmitter.emit({move: move, FEN: FEN})
       }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;

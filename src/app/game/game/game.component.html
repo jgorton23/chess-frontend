@@ -10,7 +10,7 @@
           [fen]="this.game.FEN"
           [playerColor]="playerColor"
           [currentPlayer]="game.moves.split('.')[-1].split(' ').length - 1"
-          (moveEmitter)="updateGameState($event)"
+          (moveEmitter)="performMove($event)"
         ></app-board>
       </div>
     </div>
