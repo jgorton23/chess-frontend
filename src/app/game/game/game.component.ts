@@ -91,19 +91,18 @@ export class GameComponent implements OnInit, OnDestroy {
     if (!this.game) {
       this.game = newGameState
     } else{
-      this.game.board = newGameState.board
-      this.game.turn = newGameState.turn
+      // TODO update necessary states
+      this.game.FEN = newGameState.FEN
     }
   }
 
+  // TODO rename this method - update implies persistence
   updateGameState(grid: tile[][]) {
     let currentGame = this.game!
     let gameState: Game = {
       ...currentGame,
-      board: this.boardUtil.TileArrToFEN(grid),
-      turn: (currentGame.turn + 1) % 2,
-      whiteTime: currentGame.whiteTime - 0,
-      blackTime: currentGame.blackTime - 0,
+      // TODO update necessary states
+      FEN: this.boardUtil.TileArrToFEN(grid)
     }
     this.sendMove(gameState)
   }

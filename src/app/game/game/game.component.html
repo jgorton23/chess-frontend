@@ -7,9 +7,9 @@
       <div style="width: 100%">
         <app-board
           *ngIf="game"
-          [fen]="this.game.board"
+          [fen]="this.game.FEN"
           [playerColor]="playerColor"
-          [currentPlayer]="game.turn"
+          [currentPlayer]="game.moves.split('.')[-1].split(' ').length - 1"
           (moveEmitter)="updateGameState($event)"
         ></app-board>
       </div>
