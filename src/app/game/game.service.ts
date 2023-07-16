@@ -5,19 +5,16 @@ import { Router } from '@angular/router';
 
 export type Game = {
   id?: string,
+  date?: Date,
+  FEN: string,
   moves: string,
-  board: string,
-  turn: number,
-  whiteTime: number,
-  blackTime: number,
+  moveTimes: string,
+  timeControl: string,
+  result: string,
   whitePlayerId?: string,
   blackPlayerId?: string,
   whitePlayerUsername: string,
-  blackPlayerUsername: string,
-  started: boolean,
-  ended: boolean,
-  winner?: string,
-  date?: Date,
+  blackPlayerUsername: string
 }
 
 @Injectable({
@@ -40,8 +37,8 @@ export class GameService {
           return response.json()
         }
       }).then(body => {
-        this.pastGames = body.games.filter((game: Game) => game.ended).toSorted((g: Game) => g.date).toReversed()
-        this.currentGames = body.games.filter((game: Game) => !game.ended).toSorted((g: Game) => g.date).toReversed()
+        this.pastGames = body.games.filter((game: Game) => game.result !== "*").toSorted((g: Game) => g.date).toReversed()
+        this.currentGames = body.games.filter((game: Game) => game.result === "*").toSorted((g: Game) => g.date).toReversed()
         return body.games
       }).catch(error => {
         if(error.status === 401) {

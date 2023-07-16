@@ -52,15 +52,13 @@ export class NewGamePopupComponent implements OnInit{
 
   async createGame(options: {opponent: string, variant?: string}): Promise<void> {
     let game: Game = {
-      board: this.boardUtil.getBoard("standard"),
+      FEN: this.boardUtil.getBoard("standard"),
       moves: "",
-      turn: 0,
-      whiteTime: 600,
-      blackTime: 600,
+      moveTimes: "",
+      timeControl: "10/0",
+      result: "*",
       whitePlayerUsername: await this.profileService.getUsername(),
-      blackPlayerUsername: this.opponent,
-      started: false,
-      ended: false,
+      blackPlayerUsername: this.opponent
     }
     
     this.gameService.createGame(game)
