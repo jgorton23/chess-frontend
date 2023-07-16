@@ -2,3 +2,7 @@ div.container {
   min-width: 200px;
   width: 100%;
 }
+
+.rotate {
+  transform: rotate(180deg);
+}
