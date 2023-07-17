@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 export type Game = {
   id?: string,
   date?: Date,
-  FEN: string,
+  fen: string,
   moves: string,
   moveTimes: string,
   timeControl: string,

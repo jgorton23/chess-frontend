@@ -23,6 +23,9 @@ export class BoardUtilService {
   }
 
   FENToTileArr(FEN: string): tile[][] {
+    if (!FEN) {
+      return [];
+    }
     [...Array(9).keys()].forEach(x => FEN=FEN.replace(new RegExp(String(x), "g"), " ".repeat(x)))
     // console.log(FEN)
     var board = FEN.split("/").map(row => row.split(""));

@@ -13,7 +13,7 @@
       <div style="width: 100%">
         <app-board
           *ngIf="game"
-          [fen]="this.game.FEN"
+          [fen]="this.game.fen"
           [playerColor]="playerColor"
           [currentPlayer]="(game.moves.split(' ').length - 1) % 3"
           (moveEmitter)="performMove($event)"

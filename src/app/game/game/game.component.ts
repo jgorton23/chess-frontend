@@ -86,14 +86,14 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   handleMove(gameState: string) {
-    let newGameState = JSON.parse(gameState)
+    let newGameState: Game = JSON.parse(gameState)
     console.log(newGameState);
     if (!this.game) {
       this.game = newGameState
     } else{
       // TODO update necessary states
       this.game.moves = newGameState.moves
-      this.game.FEN = newGameState.FEN
+      this.game.fen = newGameState.fen
     }
   }
 
@@ -104,7 +104,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
     let gameState: Game = {
       ...this.game,
-      FEN: moveData.FEN,
+      fen: moveData.FEN,
       moves: this.game.moves + ""
     }
     this.sendMove(gameState)
