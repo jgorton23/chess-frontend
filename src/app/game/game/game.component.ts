@@ -92,6 +92,9 @@ export class GameComponent implements OnInit, OnDestroy {
       this.game = newGameState
     } else{
       // TODO update necessary states
+      console.log(this.gameService.getGame(this.game!.id!));
+      console.log(this.game);
+      
       this.game.moves = newGameState.moves
       this.game.fen = newGameState.fen
     }
@@ -105,7 +108,7 @@ export class GameComponent implements OnInit, OnDestroy {
     let gameState: Game = {
       ...this.game,
       fen: moveData.FEN,
-      moves: this.game.moves + ""
+      moves: this.game.moves
     }
     this.sendMove(gameState)
   }
