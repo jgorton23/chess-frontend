@@ -13,7 +13,6 @@ const routes: Routes = [
   { path: 'home', title: 'Jacob\'s Chess', component: HomeComponent},
   { path: 'board', component: BoardComponent},
   { path: 'play/:gameId', component: GameComponent},
-  { path: 'play', component: GameComponent},
   { path: 'notfound', component: NotFoundComponent},
   { path: '**', redirectTo: 'login'}
 ];

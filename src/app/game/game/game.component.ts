@@ -32,8 +32,8 @@ export class GameComponent implements OnInit, OnDestroy {
     if (gameId === null) {   
       console.log("null GameId");
          
-      // reroute to 404 page?
-      // this.router.navigate([""])
+      // reroute to 404 page
+      this.router.navigate(["notfound"])
       return
     }
     
@@ -42,7 +42,7 @@ export class GameComponent implements OnInit, OnDestroy {
       console.log("undefined Game");
       
       // reroute to 404 page
-      // this.router.navigate([""])
+      this.router.navigate(["notfound"])
       return
     }
     
