@@ -16,6 +16,7 @@ import { NewGamePopupComponent } from './home/new-game-popup/new-game-popup.comp
 import { GameComponent } from './game/game/game.component';
 import { GameCardComponent } from './home/game-card/game-card.component';
 import { FriendCardComponent } from './home/side-menu/friend-card/friend-card.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { FriendCardComponent } from './home/side-menu/friend-card/friend-card.co
     GameComponent,
     GameCardComponent,
     FriendCardComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
