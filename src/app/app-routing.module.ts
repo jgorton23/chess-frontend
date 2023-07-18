@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { BoardComponent } from './board/board.component';
 import { HomeComponent } from './home/home.component';
 import { GameComponent } from './game/game/game.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 const routes: Routes = [
   { path: 'login', title: 'Chess Login' ,component: LoginComponent},
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'board', component: BoardComponent},
   { path: 'play/:gameId', component: GameComponent},
   { path: 'play', component: GameComponent},
+  { path: 'notfound', component: NotFoundComponent},
   { path: '**', redirectTo: 'login'}
 ];
 
