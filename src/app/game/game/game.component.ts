@@ -26,39 +26,47 @@ export class GameComponent implements OnInit, OnDestroy {
     private profileService: ProfileService) { }
   
   async ngOnInit(): Promise<void> {
-    console.log("Init GAME component");
     
     let gameId = this.route.snapshot.paramMap.get("id")
     if (gameId === null) {   
-      console.log("null GameId");
-         
-      // reroute to 404 page
       this.router.navigate(["notfound"])
       return
     }
     
-    let game = await this.gameService.getGame(gameId)    
-    if (game === undefined) { 
-      console.log("undefined Game");
-      
-      // reroute to 404 page
-      this.router.navigate(["notfound"])
-      return
-    }
+    this.gameService.getGame(gameId)
+      .then(game => {
+        if (game === undefined) {
+          this.router.navigate(["notfound"])
+          return Promise.reject(game)
+        } else {
+          this.game = game
+          return this.profileService.getUsername()
+        }
+      }).then(username => {
+        if (username === undefined) {
+          this.router.navigate(['login'])
+          Promise.reject(username)
+        } else {
+          switch(username){
+            case this.game?.whitePlayerUsername:
+              this.playerColor = 'w'
+              break
+            case this.game?.blackPlayerUsername:
+              this.playerColor = 'b'
+              break
+          }
+        }
+      }).catch(error => {
+        if (error.status === 401) {
+          this.router.navigate(['login'])
+        } else {
+          error.json().then((e: any) => console.error(e))
+        }
+      })
     
     this.webSocketAPI = new WebsocketAPIService(this, gameId);
     this.connect()
     
-    this.game = game;
-
-    let playerUsername = await this.profileService.getUsername()
-    console.log("Get Username", playerUsername, game);
-    
-    if (playerUsername === this.game.whitePlayerUsername) {
-      this.playerColor = 'w'
-    }else if (playerUsername === this.game.blackPlayerUsername) {
-      this.playerColor = 'b'
-    }
   }
 
   ngOnDestroy(): void {
@@ -87,14 +95,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
   handleMove(gameState: string) {
     let newGameState: Game = JSON.parse(gameState)
-    console.log(newGameState);
     if (!this.game) {
       this.game = newGameState
     } else{
-      // TODO update necessary states
-      console.log(this.gameService.getGame(this.game!.id!));
-      console.log(this.game);
-      
       this.game.moves = newGameState.moves
       this.game.fen = newGameState.fen
     }
