@@ -29,6 +29,7 @@ export class GameService {
   currentGames: Game[] = [];
 
   getGames(): Promise<Game[]> {
+    
     return fetch(`${environment.baseUrl}/${ApiPaths.Games}`, {credentials: 'include'})
       .then(response => {
         if (!response.ok) {
@@ -47,10 +48,33 @@ export class GameService {
           error.json().then((e: any) => console.error(e));
         }
       })
+
+  }
+  
+  getGame(id: string): Promise<Game> {
+    
+    return fetch(`${environment.baseUrl}/${ApiPaths.Games}/${id}`, {credentials: 'include'})
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(response)
+        } else {
+          return response.json()
+        }
+      }).then(body => {
+        return body.game
+      }).catch(error => {
+        if(error.status === 401){
+          this.router.navigate(['login'])
+        } else {
+          error.json.then((e: any) => console.error(e))
+        }
+      })
+
   }
 
   createGame(game: Game) {
-    fetch(`${environment.baseUrl}/${ApiPaths.Game}/new`, 
+
+    fetch(`${environment.baseUrl}/${ApiPaths.Games}/new`, 
       {
         credentials: 'include',
         method: 'POST',
@@ -72,20 +96,7 @@ export class GameService {
         console.log("ERROR: Failed to Create Game");
         error.json().then((e: any) => console.log(e))
       })
+
   }
-
-  async getGame(id: string): Promise<Game | undefined> {
-    
-    let result: Game | undefined;
-
-    if (this.currentGames && this.currentGames.some((g: Game) => g.id === id)){
-      result = this.currentGames.find((g: Game) => g.id === id)!
-    }else if (this.pastGames && this.pastGames.some((g: Game) => g.id === id)){
-      result = this.pastGames.find((g: Game) => g.id === id)!
-    } else {
-      result = (await this.getGames()).find((g: Game) => g.id === id)
-    }
-
-    return result
-  }
+  
 }
