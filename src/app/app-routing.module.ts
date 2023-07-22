@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'register', title: 'chess Register', component: RegisterComponent},
   { path: 'home', title: 'Jacob\'s Chess', component: HomeComponent},
   { path: 'board', component: BoardComponent},
-  { path: 'play/:gameId', component: GameComponent},
+  { path: 'play', component: GameComponent},
   { path: 'notfound', component: NotFoundComponent},
   { path: '**', redirectTo: 'login'}
 ];

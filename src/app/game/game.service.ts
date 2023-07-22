@@ -65,8 +65,10 @@ export class GameService {
       }).catch(error => {
         if(error.status === 401){
           this.router.navigate(['login'])
+        } else if (error.status === 404) {
+          this.router.navigate(['notfound'])
         } else {
-          error.json.then((e: any) => console.error(e))
+          error.json().then((e: any) => console.error("Error getting Game", e.msg))
         }
       })
 

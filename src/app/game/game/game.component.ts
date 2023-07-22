@@ -25,16 +25,17 @@ export class GameComponent implements OnInit, OnDestroy {
     public boardUtil: BoardUtilService,
     private profileService: ProfileService) { }
   
-  async ngOnInit(): Promise<void> {
-    
+  ngOnInit(): void {
+
     let gameId = this.route.snapshot.paramMap.get("id")
-    if (gameId === null) {   
+    
+    if (gameId === null) {  
       this.router.navigate(["notfound"])
       return
     }
     
     this.gameService.getGame(gameId)
-      .then(game => {
+      .then(game => {        
         if (game === undefined) {
           this.router.navigate(["notfound"])
           return Promise.reject(game)
@@ -57,11 +58,7 @@ export class GameComponent implements OnInit, OnDestroy {
           }
         }
       }).catch(error => {
-        if (error.status === 401) {
-          this.router.navigate(['login'])
-        } else {
-          error.json().then((e: any) => console.error(e))
-        }
+        console.error(error)
       })
     
     this.webSocketAPI = new WebsocketAPIService(this, gameId);
