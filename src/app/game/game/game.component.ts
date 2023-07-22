@@ -16,7 +16,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
   game?: Game;
 
-  playerColor: string = '';
+  playerColor: string = ' ';
+
+  loading = true
 
   constructor(
     private router: Router,
@@ -36,11 +38,13 @@ export class GameComponent implements OnInit, OnDestroy {
     
     this.gameService.getGame(gameId)
       .then(game => {        
-        if (game === undefined) {
+        if (game === undefined || game.id === undefined) {
           this.router.navigate(["notfound"])
           return Promise.reject(game)
         } else {
           this.game = game
+          this.webSocketAPI = new WebsocketAPIService(this, game.id);
+          this.connect()
           return this.profileService.getUsername()
         }
       }).then(username => {
@@ -54,15 +58,13 @@ export class GameComponent implements OnInit, OnDestroy {
               break
             case this.game?.blackPlayerUsername:
               this.playerColor = 'b'
-              break
+              break              
           }
+          this.loading = false
         }
       }).catch(error => {
         console.error(error)
       })
-    
-    this.webSocketAPI = new WebsocketAPIService(this, gameId);
-    this.connect()
     
   }
 

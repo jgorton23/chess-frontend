@@ -6,7 +6,7 @@ import { BoardUtilService, tile, variations } from './board-util.service';
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnChanges {
+export class BoardComponent implements OnInit, OnChanges {
 
   constructor(private boardUtil: BoardUtilService) { }
 
@@ -14,7 +14,7 @@ export class BoardComponent implements OnChanges {
   fen: string = this.boardUtil.getBoard(variations.Standard);
   
   @Input()
-  playerColor: string = 'w';
+  playerColor: string = ' ';
 
   @Input()
   currentPlayer: number = 0
@@ -23,14 +23,23 @@ export class BoardComponent implements OnChanges {
   moveEmitter: EventEmitter<{move: number[][], FEN: string}> = new EventEmitter();
   
   grid: tile[][] = this.boardUtil.FENToTileArr(this.fen)
+
+  validMoves: string[] = []
   
   selectedPiece?: {x: number, y: number};
+
+  ngOnInit(): void {
+      
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['fen']) {
       let newGrid = this.boardUtil.FENToTileArr(this.fen)
-      for(let x = 0; x < this.grid[0].length; x++){
-        for(let y = 0; y < this.grid.length; y++){
+      if (!newGrid || newGrid.length < this.grid.length) {
+        return
+      }
+      for(let y = 0; y < this.grid.length; y++){
+        for(let x = 0; x < this.grid[0].length; x++){
           this.grid[y][x].possible = false;
           this.grid[y][x].selected = false;
           this.grid[y][x].piece = newGrid[y][x].piece
@@ -39,9 +48,7 @@ export class BoardComponent implements OnChanges {
     }    
   }
 
-  select(event: number[]){
-    console.log("Board select", event[0], event[1], this.playerColor);
-    
+  select(event: number[]){    
     var x = event[1];
     var y = event[0];
     if (this.playerColor === '' || ((this.currentPlayer === 1 ? 'b' : 'w') !== this.playerColor)) {
@@ -80,7 +87,6 @@ export class BoardComponent implements OnChanges {
   }
 
   findReachable(x: number, y: number){    
-    console.log("Board search");
     switch(this.grid[y][x].piece){
       case 'p':
       case 'P':
