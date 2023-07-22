@@ -20,6 +20,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   validMoves: string[] = []
 
+  currentPlayer: string = 'w'
+
   loading = true
 
   constructor(
@@ -45,6 +47,7 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject(game)
         } else {
           this.game = game
+          this.currentPlayer = game.moves.split(" ").length % 3 === 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
           return this.profileService.getUsername()
@@ -62,7 +65,7 @@ export class GameComponent implements OnInit, OnDestroy {
               this.playerColor = 'b'
               break              
           }
-          if ("bw".includes(this.playerColor)){
+          if (this.playerColor === this.currentPlayer){
             return this.gameService.getValidMoves(this.game!, this.playerColor)
           } else {
             return Promise.reject(username)
