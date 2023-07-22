@@ -44,7 +44,7 @@ export class GameComponent implements OnInit, OnDestroy {
       .then(game => {        
         if (game === undefined || game.id === undefined) {
           this.router.navigate(["notfound"])
-          return Promise.reject(game)
+          return Promise.reject("Game is undefined or has no id: " + game)
         } else {
           this.game = game
           this.currentPlayer = game.moves.split(" ").length % 3 === 1 ? 'w' : 'b'
@@ -68,7 +68,7 @@ export class GameComponent implements OnInit, OnDestroy {
           if (this.playerColor === this.currentPlayer){
             return this.gameService.getValidMoves(this.game!, this.playerColor)
           } else {
-            return Promise.reject(username)
+            return []
           }
         }
       }).then(validMoves => {

@@ -16,6 +16,7 @@
           [fen]="this.game.fen"
           [playerColor]="playerColor"
           [currentPlayer]="currentPlayer"
+          [validMoves]="validMoves"
           (moveEmitter)="performMove($event)"
         ></app-board>
       </div>

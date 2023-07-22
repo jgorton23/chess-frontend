@@ -18,13 +18,14 @@ export class BoardComponent implements OnInit, OnChanges {
 
   @Input()
   currentPlayer: string = 'w';
+
+  @Input()
+  validMoves: string[] = [];
   
   @Output()
   moveEmitter: EventEmitter<{move: number[][], FEN: string}> = new EventEmitter();
   
   grid: Tile[][] = this.boardUtil.FENToTileArr(this.fen)
-
-  validMoves: string[] = []
   
   selectedPiece?: {x: number, y: number};
 
@@ -82,7 +83,18 @@ export class BoardComponent implements OnInit, OnChanges {
       }
     }
     if(this.selectedPiece){
-      this.findReachable(this.selectedPiece.x, this.selectedPiece.y);
+      // this.findReachable(this.selectedPiece.x, this.selectedPiece.y);
+      let start = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece + String.fromCharCode(97+this.selectedPiece.x) + Math.abs(this.selectedPiece.y-8)
+      this.validMoves.filter(move => move.startsWith(start)).forEach(move => {
+        console.log(move);
+        
+        if (move.length < 5) {
+          return
+        }
+        let x = move.charCodeAt(3) - 97
+        let y = (parseInt(move.charAt(4)) + 9) % 8
+        this.grid[y][x].possible = true;
+      })
     }
   }
 

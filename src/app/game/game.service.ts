@@ -41,7 +41,7 @@ export class GameService {
         this.pastGames = body.games.filter((game: Game) => game.result !== "*").toSorted((g: Game) => g.date).toReversed()
         this.currentGames = body.games.filter((game: Game) => game.result === "*").toSorted((g: Game) => g.date).toReversed()
         return body.games
-      }).catch(error => {
+      }).catch((error: Response) => {
         if(error.status === 401) {
           this.router.navigate(['login'])
         } else {
@@ -61,7 +61,7 @@ export class GameService {
         }
       }).then(body => {
         return body.game
-      }).catch(error => {
+      }).catch((error: Response) => {
         if(error.status === 401){
           this.router.navigate(['login'])
         } else if (error.status === 404) {
