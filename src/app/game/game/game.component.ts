@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
 import { Game, GameService } from '../game.service';
-import { BoardUtilService, tile } from 'src/app/board/board-util.service';
+import { BoardUtilService } from 'src/app/board/board-util.service';
 import { ProfileService } from 'src/app/shared/profile.service';
 
 @Component({
@@ -17,6 +17,8 @@ export class GameComponent implements OnInit, OnDestroy {
   game?: Game;
 
   playerColor: string = ' ';
+
+  validMoves: string[] = []
 
   loading = true
 
@@ -50,7 +52,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }).then(username => {
         if (username === undefined) {
           this.router.navigate(['login'])
-          Promise.reject(username)
+          return Promise.reject(username)
         } else {
           switch(username){
             case this.game?.whitePlayerUsername:
@@ -60,8 +62,16 @@ export class GameComponent implements OnInit, OnDestroy {
               this.playerColor = 'b'
               break              
           }
-          this.loading = false
+          if ("bw".includes(this.playerColor)){
+            return this.gameService.getValidMoves(this.game!, this.playerColor)
+          } else {
+            return Promise.reject(username)
+          }
         }
+      }).then(validMoves => {
+        this.validMoves = validMoves
+        console.log("VALID MOVES", validMoves);
+        this.loading = false
       }).catch(error => {
         console.error(error)
       })

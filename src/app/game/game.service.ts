@@ -48,7 +48,6 @@ export class GameService {
           error.json().then((e: any) => console.error(e));
         }
       })
-
   }
   
   getGame(id: string): Promise<Game> {
@@ -70,8 +69,8 @@ export class GameService {
         } else {
           error.json().then((e: any) => console.error("Error getting Game", e.msg))
         }
+        return undefined
       })
-
   }
 
   createGame(game: Game) {
@@ -92,13 +91,25 @@ export class GameService {
           return response.json()
         }
       }).then(body => {
-        console.log("SUCCESS: Game Created", body)
         this.router.navigate(['play', {id: body.gameId}])
-      }).catch (error => {
-        console.log("ERROR: Failed to Create Game");
-        error.json().then((e: any) => console.log(e))
+      }).catch ((error: Response) => {
+        error.json().then(e => console.error(e))
       })
+  }
 
+  getValidMoves(game: Game, playerColor: string) {
+    return fetch(`${environment.baseUrl}/${ApiPaths.Games}/${game.id}/validMoves?` + new URLSearchParams({playerColor: playerColor}), { credentials: 'include' })
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(response)
+        } else {
+          return response.json()
+        }
+      }).then(body => {
+        return body.validMoves
+      }).catch((error: Response) => {
+        error.json().then(e => console.error(e))
+      })
   }
   
 }

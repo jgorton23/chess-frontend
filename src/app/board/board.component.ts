@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
-import { BoardUtilService, tile, variations } from './board-util.service';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { BoardUtilService, Tile, variations } from './board-util.service';
 
 @Component({
   selector: 'app-board',
@@ -22,7 +22,7 @@ export class BoardComponent implements OnInit, OnChanges {
   @Output()
   moveEmitter: EventEmitter<{move: number[][], FEN: string}> = new EventEmitter();
   
-  grid: tile[][] = this.boardUtil.FENToTileArr(this.fen)
+  grid: Tile[][] = this.boardUtil.FENToTileArr(this.fen)
 
   validMoves: string[] = []
   

@@ -1,7 +1,5 @@
-import { ChangeDetectorRef, Component, DoCheck, EventEmitter, Input, KeyValueDiffer, KeyValueDiffers, OnInit, Output } from '@angular/core';
-import { BoardComponent } from '../board.component';
-import { tile } from '../board-util.service';
-import { getLocaleFirstDayOfWeek } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Tile } from '../board-util.service';
 
 @Component({
   selector: 'app-tile',
@@ -11,7 +9,7 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
 export class TileComponent {
   
   @Input()
-  tile: tile = {piece: '', selected: false, possible: false};
+  tile: Tile = {piece: '', selected: false, possible: false};
   
   @Input()
   row = 0
