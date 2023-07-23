@@ -30,7 +30,6 @@ export class TileComponent {
   }
 
   select() {
-    console.log("Tile select", this.row, this.col);
     this.press.emit([this.row, this.col])
   }
 }

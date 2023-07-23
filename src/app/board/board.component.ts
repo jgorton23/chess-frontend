@@ -99,11 +99,8 @@ export class BoardComponent implements OnInit, OnChanges {
       }
     }
     if(this.selectedPiece){
-      // this.findReachable(this.selectedPiece.x, this.selectedPiece.y);
       let start = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece + String.fromCharCode(97+this.selectedPiece.x) + Math.abs(this.selectedPiece.y-8)
-      this.validMoves.filter(move => move.startsWith(start)).forEach(move => {
-        console.log(move);
-        
+      this.validMoves.filter(move => move.startsWith(start)).forEach(move => {        
         if (move.length < 5) {
           return
         }

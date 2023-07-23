@@ -139,14 +139,14 @@ export class GameService {
         },
         body: JSON.stringify(move)
       }).then(response => {
-        if (!response.ok) {
+        if (!response.ok) {          
           return Promise.reject(response)
         } else {
           return response.json()
         }
-      }).then(body => {
+      }).then(body => {        
         console.log(body);
-      }).catch((error: Response) => {
+      }).catch((error: Response) => {        
         if (error.status === 401) {
           this.router.navigate(['login'])
         } else if (error.status === 404) {
