@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
 import { Game, GameService } from '../game.service';
-import { BoardUtilService, tile } from 'src/app/board/board-util.service';
+import { BoardUtilService } from 'src/app/board/board-util.service';
 import { ProfileService } from 'src/app/shared/profile.service';
+import { Move } from 'src/app/board/board.component';
 
 @Component({
   selector: 'app-game',
@@ -16,7 +17,13 @@ export class GameComponent implements OnInit, OnDestroy {
 
   game?: Game;
 
-  playerColor: string = '';
+  playerColor: string = ' ';
+
+  validMoves: string[] = []
+
+  currentPlayer: string = 'w'
+
+  loading = true
 
   constructor(
     private router: Router,
@@ -25,40 +32,55 @@ export class GameComponent implements OnInit, OnDestroy {
     public boardUtil: BoardUtilService,
     private profileService: ProfileService) { }
   
-  async ngOnInit(): Promise<void> {
-    console.log("Init GAME component");
-    
-    let gameId = this.route.snapshot.paramMap.get("id")
-    if (gameId === null) {   
-      console.log("null GameId");
-         
-      // reroute to 404 page
-      this.router.navigate(["notfound"])
-      return
-    }
-    
-    let game = await this.gameService.getGame(gameId)    
-    if (game === undefined) { 
-      console.log("undefined Game");
-      
-      // reroute to 404 page
-      this.router.navigate(["notfound"])
-      return
-    }
-    
-    this.webSocketAPI = new WebsocketAPIService(this, gameId);
-    this.connect()
-    
-    this.game = game;
+  ngOnInit(): void {
 
-    let playerUsername = await this.profileService.getUsername()
-    console.log("Get Username", playerUsername, game);
+    let gameId = this.route.snapshot.paramMap.get("id")
     
-    if (playerUsername === this.game.whitePlayerUsername) {
-      this.playerColor = 'w'
-    }else if (playerUsername === this.game.blackPlayerUsername) {
-      this.playerColor = 'b'
+    if (gameId === null) {  
+      this.router.navigate(["notfound"])
+      return
     }
+    
+    this.gameService.getGame(gameId)
+      .then(game => {        
+        if (game === undefined || game.id === undefined) {
+          this.router.navigate(["notfound"])
+          return Promise.reject("Game is undefined or has no id: " + game)
+        } else {
+          this.game = game
+          console.log(game)
+          this.currentPlayer = game.moves.split(" ").length % 3 === 1 ? 'w' : 'b'
+          this.webSocketAPI = new WebsocketAPIService(this, game.id);
+          this.connect()
+          return this.profileService.getUsername()
+        }
+      }).then(username => {
+        if (username === undefined) {
+          this.router.navigate(['login'])
+          return Promise.reject("Username is undefined: " + username)
+        } else {
+          switch(username){
+            case this.game?.whitePlayerUsername:
+              this.playerColor = 'w'
+              break
+            case this.game?.blackPlayerUsername:
+              this.playerColor = 'b'
+              break              
+          }
+          if (this.playerColor === this.currentPlayer){
+            return this.gameService.getValidMoves(this.game!.id!, this.playerColor)
+          } else {
+            return []
+          }
+        }
+      }).then(validMoves => {
+        this.validMoves = validMoves
+        console.log("VALID MOVES", validMoves);
+        this.loading = false
+      }).catch(error => {
+        console.error(error)
+      })
+    
   }
 
   ngOnDestroy(): void {
@@ -78,38 +100,34 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendMove(gameState: Game) {
+  sendMove(move: Move) {
     if (this.webSocketAPI){
-      gameState.date = undefined
-      this.webSocketAPI._send(gameState);
+      this.webSocketAPI._send(move);
     }
   }
 
-  handleMove(gameState: string) {
-    let newGameState: Game = JSON.parse(gameState)
-    console.log(newGameState);
-    if (!this.game) {
-      this.game = newGameState
-    } else{
-      // TODO update necessary states
-      console.log(this.gameService.getGame(this.game!.id!));
-      console.log(this.game);
-      
-      this.game.moves = newGameState.moves
-      this.game.fen = newGameState.fen
+  handleMove(moveData: string) {
+    let move: Move = JSON.parse(moveData)
+    
+    this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+    if (this.currentPlayer === this.playerColor) {
+      this.gameService.getValidMoves(this.game!.id!, this.playerColor)
+        .then(validMoves => {
+          this.validMoves = validMoves
+        })
+    } else {
+      this.validMoves = []
     }
+
+    this.gameService.getGame(this.game!.id!)
+      .then(game => {this.game = game})
   }
 
-  performMove(moveData: {move: number[][], FEN: string}) {
-    if (!this.game) {
+  performMove(moveData: Move) {
+    if (!this.game || !this.game.id) {
       return
     }
-
-    let gameState: Game = {
-      ...this.game,
-      fen: moveData.FEN,
-      moves: this.game.moves
-    }
-    this.sendMove(gameState)
+    this.validMoves = []
+    this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
   }
 }

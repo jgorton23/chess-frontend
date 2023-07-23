@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export type tile = {
+export type Tile = {
   piece: string,
   selected: boolean,
   possible: boolean
@@ -17,17 +17,16 @@ export class BoardUtilService {
 
   constructor() { }
 
-  standard(): tile[][] {
+  standard(): Tile[][] {
     var FEN = this.getBoard(variations.Standard);
     return this.FENToTileArr(FEN)
   }
 
-  FENToTileArr(FEN: string): tile[][] {
+  FENToTileArr(FEN: string): Tile[][] {
     if (!FEN) {
       return [];
     }
     [...Array(9).keys()].forEach(x => FEN=FEN.replace(new RegExp(String(x), "g"), " ".repeat(x)))
-    // console.log(FEN)
     var board = FEN.split("/").map(row => row.split(""));
     return board.map((row) => {
       return row.map(
@@ -35,7 +34,7 @@ export class BoardUtilService {
       )});
   }
 
-  TileArrToFEN(grid: tile[][]): string {
+  TileArrToFEN(grid: Tile[][]): string {
     let res = ""
     let count = 0
     for(let row of grid) {

@@ -4,6 +4,5 @@ export enum ApiPaths {
     Register = 'auth/register',
     Profile = 'user/profile',
     Friends = 'user/friends',
-    Games = 'user/games',
-    Game = 'game'
+    Games = 'games',
 }

@@ -51,19 +51,15 @@ export class ProfileService {
    * Gets the username of the current user, locally if it is already stored, else via the API
    * @returns A promise of the username
    */
-  async getUsername(): Promise<string> {
-    if (!this.username){
-      await this.getProfile()
-    }
-    console.log("Got Username", this.username);
-    return this.username;
+  getUsername(): Promise<string> {
+    return this.getProfile().then(() => this.username)
   }
   
   /**
    * Updates the profile of the current user with the latest values received via the API
    */
-  async getProfile(): Promise<void> {
-    await fetch(`${environment.baseUrl}/${ApiPaths.Profile}`, {credentials: 'include'})
+  getProfile(): Promise<void> {
+    return fetch(`${environment.baseUrl}/${ApiPaths.Profile}`, {credentials: 'include'})
       .then(response => {
         if (response.status === 401) {
           return Promise.reject(response)
@@ -71,9 +67,7 @@ export class ProfileService {
           return response.json()
         }
       })
-      .then(profile => {
-        console.log("Get profile: ", profile?.username);
-        
+      .then(profile => {        
         this.numFriends = profile?.friends || 0
         this.username = profile?.username || ""
         this.email = profile?.email || ""
