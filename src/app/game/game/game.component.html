@@ -13,7 +13,7 @@
       <div style="width: 100%">
         <app-board
           *ngIf="!loading && game"
-          [fen]="this.game.fen"
+          [fen]="this.game.FEN"
           [playerColor]="playerColor"
           [currentPlayer]="currentPlayer"
           [validMoves]="validMoves"

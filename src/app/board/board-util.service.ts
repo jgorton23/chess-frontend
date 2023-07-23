@@ -27,7 +27,6 @@ export class BoardUtilService {
       return [];
     }
     [...Array(9).keys()].forEach(x => FEN=FEN.replace(new RegExp(String(x), "g"), " ".repeat(x)))
-    // console.log(FEN)
     var board = FEN.split("/").map(row => row.split(""));
     return board.map((row) => {
       return row.map(

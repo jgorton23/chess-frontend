@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ApiPaths } from '../api-paths';
 import { Router } from '@angular/router';
+import { Move } from '../board/board.component';
 
 export type Game = {
   id?: string,
   date?: Date,
-  fen: string,
+  FEN: string,
   moves: string,
   moveTimes: string,
   timeControl: string,
@@ -42,10 +43,12 @@ export class GameService {
         this.currentGames = body.games.filter((game: Game) => game.result === "*").toSorted((g: Game) => g.date).toReversed()
         return body.games
       }).catch((error: Response) => {
-        if(error.status === 401) {
+        if (error.status === 401) {
           this.router.navigate(['login'])
+        } else if (error.status === 404) {
+          this.router.navigate(['notfound'])
         } else {
-          error.json().then((e: any) => console.error(e));
+          error.json().then(e => console.error(e))
         }
       })
   }
@@ -63,13 +66,14 @@ export class GameService {
         return body.game
       }).catch((error: Response) => {
         if(error.status === 401){
+          console.error("Unauthorized")
           this.router.navigate(['login'])
         } else if (error.status === 404) {
+          console.error("Game not found")
           this.router.navigate(['notfound'])
         } else {
           error.json().then((e: any) => console.error("Error getting Game", e.msg))
         }
-        return undefined
       })
   }
 
@@ -93,12 +97,18 @@ export class GameService {
       }).then(body => {
         this.router.navigate(['play', {id: body.gameId}])
       }).catch ((error: Response) => {
-        error.json().then(e => console.error(e))
+        if (error.status === 401) {
+          this.router.navigate(['login'])
+        } else if (error.status === 404) {
+          this.router.navigate(['notfound'])
+        } else {
+          error.json().then(e => console.error(e))
+        }
       })
   }
 
-  getValidMoves(game: Game, playerColor: string) {
-    return fetch(`${environment.baseUrl}/${ApiPaths.Games}/${game.id}/validMoves?` + new URLSearchParams({playerColor: playerColor}), { credentials: 'include' })
+  getValidMoves(gameId: string, playerColor: string) {
+    return fetch(`${environment.baseUrl}/${ApiPaths.Games}/${gameId}/validMoves?` + new URLSearchParams({playerColor: playerColor}), { credentials: 'include' })
       .then(response => {
         if (!response.ok) {
           return Promise.reject(response)
@@ -108,7 +118,42 @@ export class GameService {
       }).then(body => {
         return body.validMoves
       }).catch((error: Response) => {
-        error.json().then(e => console.error(e))
+        if (error.status === 401) {
+          this.router.navigate(['login'])
+        } else if (error.status === 404) {
+          this.router.navigate(['notfound'])
+        } else {
+          error.json().then(e => console.error(e))
+        }
+      })
+  }
+
+  doMove(move: Move, gameId: string) {
+    return fetch(`${environment.baseUrl}/${ApiPaths.Games}/${gameId}/move`, 
+      {
+        credentials: 'include',
+        method: 'PUT',
+        headers: {
+          'Accept': "application/json, text/plain, */*",
+          'Content-Type': "application/json;charset=utf-8"
+        },
+        body: JSON.stringify(move)
+      }).then(response => {
+        if (!response.ok) {
+          return Promise.reject(response)
+        } else {
+          return response.json()
+        }
+      }).then(body => {
+        console.log(body);
+      }).catch((error: Response) => {
+        if (error.status === 401) {
+          this.router.navigate(['login'])
+        } else if (error.status === 404) {
+          this.router.navigate(['notfound'])
+        } else {
+          error.json().then(e => console.error(e))
+        }
       })
   }
   

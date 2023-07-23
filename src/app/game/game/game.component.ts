@@ -4,6 +4,7 @@ import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
 import { Game, GameService } from '../game.service';
 import { BoardUtilService } from 'src/app/board/board-util.service';
 import { ProfileService } from 'src/app/shared/profile.service';
+import { Move } from 'src/app/board/board.component';
 
 @Component({
   selector: 'app-game',
@@ -47,6 +48,7 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
           this.game = game
+          console.log(game)
           this.currentPlayer = game.moves.split(" ").length % 3 === 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
@@ -55,7 +57,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }).then(username => {
         if (username === undefined) {
           this.router.navigate(['login'])
-          return Promise.reject(username)
+          return Promise.reject("Username is undefined: " + username)
         } else {
           switch(username){
             case this.game?.whitePlayerUsername:
@@ -66,7 +68,7 @@ export class GameComponent implements OnInit, OnDestroy {
               break              
           }
           if (this.playerColor === this.currentPlayer){
-            return this.gameService.getValidMoves(this.game!, this.playerColor)
+            return this.gameService.getValidMoves(this.game!.id!, this.playerColor)
           } else {
             return []
           }
@@ -98,33 +100,34 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendMove(gameState: Game) {
+  sendMove(move: Move) {
     if (this.webSocketAPI){
-      gameState.date = undefined
-      this.webSocketAPI._send(gameState);
+      this.webSocketAPI._send(move);
     }
   }
 
-  handleMove(gameState: string) {
-    let newGameState: Game = JSON.parse(gameState)
-    if (!this.game) {
-      this.game = newGameState
-    } else{
-      this.game.moves = newGameState.moves
-      this.game.fen = newGameState.fen
+  handleMove(moveData: string) {
+    let move: Move = JSON.parse(moveData)
+    
+    this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+    if (this.currentPlayer === this.playerColor) {
+      this.gameService.getValidMoves(this.game!.id!, this.playerColor)
+        .then(validMoves => {
+          this.validMoves = validMoves
+        })
+    } else {
+      this.validMoves = []
     }
+
+    this.gameService.getGame(this.game!.id!)
+      .then(game => {this.game = game})
   }
 
-  performMove(moveData: {move: number[][], FEN: string}) {
-    if (!this.game) {
+  performMove(moveData: Move) {
+    if (!this.game || !this.game.id) {
       return
     }
-
-    let gameState: Game = {
-      ...this.game,
-      fen: moveData.FEN,
-      moves: this.game.moves
-    }
-    this.sendMove(gameState)
+    this.validMoves = []
+    this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
   }
 }

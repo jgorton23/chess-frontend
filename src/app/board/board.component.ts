@@ -1,6 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BoardUtilService, Tile, variations } from './board-util.service';
 
+export type Move = {
+  startSquare: number[],
+  destSquare: number[],
+  piece: string,
+  isCheck: boolean,
+  isMate: boolean,
+  isCapture: boolean,
+  miliseconds?: number
+}
+
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -23,14 +33,14 @@ export class BoardComponent implements OnInit, OnChanges {
   validMoves: string[] = [];
   
   @Output()
-  moveEmitter: EventEmitter<{move: number[][], FEN: string}> = new EventEmitter();
+  moveEmitter: EventEmitter<Move> = new EventEmitter();
   
   grid: Tile[][] = this.boardUtil.FENToTileArr(this.fen)
   
   selectedPiece?: {x: number, y: number};
 
   ngOnInit(): void {
-      
+      console.log("FEN", this.fen);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -61,11 +71,17 @@ export class BoardComponent implements OnInit, OnChanges {
     }else if(this.selectedPiece !== undefined){
       this.grid[this.selectedPiece.y][this.selectedPiece.x].selected = false;
       if(this.grid[y][x].possible){
-        this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
-        this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = ' ';
-        let move = [[this.selectedPiece.x, this.selectedPiece.y], [x, y]]
-        let FEN = this.boardUtil.TileArrToFEN(this.grid)
-        this.moveEmitter.emit({move: move, FEN: FEN})
+        // this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
+        // this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = ' ';
+        let move = {
+          startSquare: [this.selectedPiece.x, this.selectedPiece.y],
+          destSquare: [x, y],
+          isCapture: false,
+          isCheck: false,
+          isMate: false,
+          piece: this.grid[this.selectedPiece.y][this.selectedPiece.x].piece
+        }
+        this.moveEmitter.emit(move)
       }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
@@ -92,7 +108,7 @@ export class BoardComponent implements OnInit, OnChanges {
           return
         }
         let x = move.charCodeAt(3) - 97
-        let y = (parseInt(move.charAt(4)) + 9) % 8
+        let y = Math.abs(parseInt(move.charAt(4)) - 8)
         this.grid[y][x].possible = true;
       })
     }
