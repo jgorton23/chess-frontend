@@ -17,17 +17,15 @@ export class TileComponent {
   @Input()
   col = 0
 
+  @Input()
+  rank = '1'
+
+  @Input()
+  file = 'a'
+
   @Output() press: EventEmitter<number[]> = new EventEmitter<number[]>();
 
   constructor() { }
-
-  isSelected(){
-    return this.tile.selected;
-  }
-
-  isPossible(){
-    return this.tile.possible;
-  }
 
   select() {
     this.press.emit([this.row, this.col])
