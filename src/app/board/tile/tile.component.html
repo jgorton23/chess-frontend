@@ -1,5 +1,6 @@
 <div
   class="d-flex justify-content-center align-items-center"
+  style="position: relative"
   [ngClass]="{
     even: (row + col) % 2 === 0,
     odd: (row + col) % 2 === 1,
@@ -9,4 +10,5 @@
   (click)="select()"
 >
   <span [class]="tile.piece"></span>
+  <div style="position: absolute; left: 80%; top: 60%; font-size: 80%">1</div>
 </div>
