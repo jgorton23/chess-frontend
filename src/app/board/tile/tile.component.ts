@@ -18,10 +18,10 @@ export class TileComponent {
   col = 0
 
   @Input()
-  rank = '1'
+  rank = ''
 
   @Input()
-  file = 'a'
+  file = ''
 
   @Output() press: EventEmitter<number[]> = new EventEmitter<number[]>();
 
