@@ -9,16 +9,6 @@
         [tile]="col"
         [row]="y"
         [col]="x"
-        [rank]="
-          (playerColor === 'b' && x === 0) || (playerColor === 'w' && x === 7)
-            ? '' + abs(y - 8)
-            : ''
-        "
-        [file]="
-          (playerColor === 'b' && y === 0) || (playerColor === 'w' && y === 7)
-            ? '' + char(x)
-            : ''
-        "
         (press)="select($event)"
       ></app-tile>
     </div>

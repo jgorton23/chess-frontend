@@ -17,12 +17,6 @@ export class TileComponent {
   @Input()
   col = 0
 
-  @Input()
-  rank = ''
-
-  @Input()
-  file = ''
-
   @Output() press: EventEmitter<number[]> = new EventEmitter<number[]>();
 
   constructor() { }
