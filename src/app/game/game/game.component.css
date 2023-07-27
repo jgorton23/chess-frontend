@@ -4,3 +4,14 @@
   color: #ffffff;
   overflow: scroll;
 }
+
+.rank {
+  height: 12.5%;
+  display: flex;
+  align-items: end;
+}
+
+.file {
+  display: flex;
+  justify-content: end;
+}

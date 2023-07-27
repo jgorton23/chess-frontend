@@ -21,14 +21,6 @@ export class TileComponent {
 
   constructor() { }
 
-  isSelected(){
-    return this.tile.selected;
-  }
-
-  isPossible(){
-    return this.tile.possible;
-  }
-
   select() {
     this.press.emit([this.row, this.col])
   }

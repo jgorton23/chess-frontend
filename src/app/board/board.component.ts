@@ -43,6 +43,14 @@ export class BoardComponent implements OnInit, OnChanges {
       console.log("FEN", this.fen);
   }
 
+  abs(n: number) {
+    return Math.abs(n)
+  }
+
+  char(n: number) {
+    return String.fromCharCode(n+97)
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['fen']) {
       let newGrid = this.boardUtil.FENToTileArr(this.fen)
