@@ -21,6 +21,9 @@ export class BoardComponent implements OnInit, OnChanges {
   constructor(private boardUtil: BoardUtilService) { }
 
   @Input()
+  isIcon: boolean = false
+
+  @Input()
   fen: string = this.boardUtil.getBoard(variations.Standard);
   
   @Input()

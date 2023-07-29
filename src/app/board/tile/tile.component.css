@@ -5,6 +5,10 @@ div {
   margin: 0;
 }
 
+div.icon {
+  min-width: 5px;
+}
+
 div.even {
   background-color: tan;
 }

@@ -12,7 +12,7 @@ export class GameCardComponent implements OnInit {
   constructor(private router: Router) { }
 
   @Input()
-  gameInfo?: Game;
+  gameInfo!: Game;
 
   ngOnInit(): void {    
   }

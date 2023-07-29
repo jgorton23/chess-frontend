@@ -1,20 +1,28 @@
 <div class="container p-0" (click)="navigateToGame()">
   <div class="row align-items-center">
-    <div class="col">
+    <div class="col-4">
       <div
         class="m-3"
         style="width: 100px; background-color: tan; aspect-ratio: 1/1"
-      ></div>
+      >
+        <app-board [fen]="gameInfo.FEN" [isIcon]="true"></app-board>
+      </div>
     </div>
     <div class="col">
-      <div class="row d-flex justify-content-center">
-        {{ gameInfo?.whitePlayerUsername }}
+      <h3 class="row d-flex justify-content-start">
+        {{ gameInfo.whitePlayerUsername }} vs.
+        {{ gameInfo.blackPlayerUsername }}
+      </h3>
+      <div class="row" *ngIf="gameInfo.result !== '*'">
+        {{
+          gameInfo.result === "1/2-1/2"
+            ? "TIE"
+            : "WINNER: " + (gameInfo.result === "1-0" ? "WHITE" : "BLACK")
+        }}
       </div>
-      <div class="row d-flex justify-content-center">vs</div>
-      <div class="row d-flex justify-content-center">
-        {{ gameInfo?.blackPlayerUsername }}
+      <div class="row">
+        {{ gameInfo.date }}
       </div>
     </div>
-    <div class="col d-flex justify-content-center">Winner?</div>
   </div>
 </div>
