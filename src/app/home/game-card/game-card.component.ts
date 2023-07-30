@@ -20,5 +20,4 @@ export class GameCardComponent implements OnInit {
   navigateToGame() {
     this.router.navigate(['play', {id: this.gameInfo?.id}])
   }
-
 }

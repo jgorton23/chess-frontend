@@ -52,6 +52,7 @@ export class NewGamePopupComponent implements OnInit{
 
   async createGame(options: {opponent: string, variant?: string}): Promise<void> {
     let game: Game = {
+      date: new Date(),
       FEN: this.boardUtil.getBoard("standard"),
       moves: "",
       moveTimes: "",

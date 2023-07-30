@@ -20,8 +20,12 @@
             : "WINNER: " + (gameInfo.result === "1-0" ? "WHITE" : "BLACK")
         }}
       </div>
-      <div class="row">
-        {{ gameInfo.date }}
+      <div class="row" *ngIf="gameInfo.date">
+        {{
+          gameInfo.date.toDateString() +
+            " - " +
+            gameInfo.date.toLocaleTimeString()
+        }}
       </div>
     </div>
   </div>
