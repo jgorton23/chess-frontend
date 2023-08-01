@@ -1,4 +1,7 @@
-<div class="container" [ngClass]="{ rotate: playerColor === 'b' }">
+<div
+  class="container"
+  [ngClass]="{ rotate: playerColor === 'b', icon: isIcon }"
+>
   <div class="row" *ngFor="let row of grid; index as y">
     <div
       class="col g-0"
@@ -6,6 +9,7 @@
       [ngClass]="{ rotate: playerColor === 'b' }"
     >
       <app-tile
+        [isIcon]="isIcon"
         [tile]="col"
         [row]="y"
         [col]="x"

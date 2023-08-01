@@ -3,6 +3,10 @@ div.container {
   width: 100%;
 }
 
+div.container.icon {
+  min-width: 40px;
+}
+
 .rotate {
   transform: rotate(180deg);
 }

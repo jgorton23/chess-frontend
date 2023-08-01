@@ -9,6 +9,9 @@ import { Tile } from '../board-util.service';
 export class TileComponent {
   
   @Input()
+  isIcon: boolean = false
+
+  @Input()
   tile: Tile = {piece: '', selected: false, possible: false};
   
   @Input()
@@ -22,6 +25,8 @@ export class TileComponent {
   constructor() { }
 
   select() {
-    this.press.emit([this.row, this.col])
+    if (!this.isIcon){
+      this.press.emit([this.row, this.col])
+    }
   }
 }
