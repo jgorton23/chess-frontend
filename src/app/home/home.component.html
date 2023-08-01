@@ -9,6 +9,7 @@
   </nav>
   <div
     class="slideout"
+    style="z-index: 2"
     [ngStyle]="{ 'pointer-events': showSideMenu ? 'auto' : 'none' }"
     *ngIf="showSideMenu"
   >
@@ -54,9 +55,17 @@
         </h2>
       </div>
     </div>
-    <div *ngFor="let game of gameService.currentGames" class="row">
-      <div class="col d-flex justify-content-center m-3">
-        <app-game-card [gameInfo]="game" style="width: 100%"></app-game-card>
+    <div
+      style="z-index: 1"
+      *ngFor="let game of gameService.currentGames"
+      class="row g-0"
+    >
+      <div class="col g-0 d-flex justify-content-center m-3">
+        <app-game-card
+          [gameInfo]="game"
+          class="g-0"
+          style="width: 100%"
+        ></app-game-card>
       </div>
     </div>
     <div class="row">
