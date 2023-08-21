@@ -38,13 +38,13 @@ export class GameService {
         } else {
           return response.json()
         }
-      }).then(body => {        
+      }).then(body => {
         this.pastGames = body.games.filter((game: Game) => game.result !== "*")
-        this.pastGames.sort((a,b) => {return (a.date > b.date) ? -1 : 1})
         this.pastGames.forEach(game => game.date = new Date(game.date))
+        this.pastGames.sort((a,b) => {return (a.date.getTime() > b.date.getTime()) ? -1 : 1})
         this.currentGames = body.games.filter((game: Game) => game.result === "*")
-        this.currentGames.sort((a,b) => {return (a.date > b.date) ? -1 : 1})
         this.currentGames.forEach(game => game.date = new Date(game.date))
+        this.currentGames.sort((a,b) => {return (a.date.getTime() > b.date.getTime()) ? -1 : 1})
         return body.games
       }).catch((error: Response) => {
         if (error.status === 401) {
