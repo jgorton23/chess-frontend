@@ -38,7 +38,7 @@ export class GameService {
         } else {
           return response.json()
         }
-      }).then(body => {
+      }).then(body => {        
         this.pastGames = body.games.filter((game: Game) => game.result !== "*")
         this.pastGames.sort((a,b) => {return (a.date > b.date) ? -1 : 1})
         this.pastGames.forEach(game => game.date = new Date(game.date))
