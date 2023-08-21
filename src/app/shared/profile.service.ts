@@ -67,10 +67,10 @@ export class ProfileService {
           return response.json()
         }
       })
-      .then(profile => {        
-        this.numFriends = profile?.friends || 0
-        this.username = profile?.username || ""
-        this.email = profile?.email || ""
+      .then(body => {        
+        this.numFriends = body.profile?.friends || 0
+        this.username = body.profile?.username || ""
+        this.email = body.profile?.email || ""
       }).catch(error => {
         if (error.status === 401) {
           this.router.navigate(['login'])
@@ -187,11 +187,11 @@ export class ProfileService {
         } else {
           return response.json()
         }
-      }).then(resp => { 
-        this.invitations = resp.friends
+      }).then(body => { 
+        this.invitations = body.friends
           .filter((f: friend) => f.invitation)
           .map((f: friend) => {return {username: f.username}})
-        this.friends = resp.friends
+        this.friends = body.friends
           .filter((f: friend) => !f.invitation)
           .toSorted((a: friend, b: friend) => Number(a.pending) - Number(b.pending))
           .map((f: friend) => {return {username: f.username, pending: f.pending}});
