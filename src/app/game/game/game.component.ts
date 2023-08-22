@@ -23,7 +23,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   currentPlayer: string = 'w'
 
-  isChecked: boolean = false
+  isChecked: string = '';
 
   loading = true
 
@@ -109,7 +109,11 @@ export class GameComponent implements OnInit, OnDestroy {
   handleMove(moveData: string) {
     let move: Move = JSON.parse(moveData)
     
+    this.isChecked = ''
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+    if (move.isCheck) {
+      this.isChecked = this.currentPlayer
+    }
     if (this.currentPlayer === this.playerColor) {
       this.gameService.getValidMoves(this.game!.id!, this.playerColor)
         .then(validMoves => {
@@ -119,7 +123,6 @@ export class GameComponent implements OnInit, OnDestroy {
       this.validMoves = []
     }
 
-    this.isChecked = move.isCheck
 
     this.gameService.getGame(this.game!.id!)
       .then(game => {this.game = game})

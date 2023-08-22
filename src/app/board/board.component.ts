@@ -36,7 +36,7 @@ export class BoardComponent implements OnInit, OnChanges {
   validMoves: string[] = [];
 
   @Input()
-  check: boolean = false;
+  check: string = '';
   
   @Output()
   moveEmitter: EventEmitter<Move> = new EventEmitter();
@@ -138,12 +138,13 @@ export class BoardComponent implements OnInit, OnChanges {
     return "pqkbnr".indexOf(c) >= 0
   }
 
-  isPlayerColor(c: string) {
-    return (this.playerColor === 'w' && this.isWhitePiece(c)) || (this.playerColor === 'b' && this.isBlackPiece(c))
+  isPlayerColor(piece: string, color?: string) {
+    color = color || this.playerColor
+    return (color === 'w' && this.isWhitePiece(piece)) || (color === 'b' && this.isBlackPiece(piece))
   }
 
-  isKing(x: number, y: number) {
-    return this.grid[y][x].piece.toLowerCase() === 'k' && this.isPlayerColor(this.grid[y][x].piece)
+  isKing(playerColor: string, x: number, y: number) {
+    return this.grid[y][x].piece.toLowerCase() === 'k' && this.isPlayerColor(this.grid[y][x].piece, playerColor)
   }
 
 }
