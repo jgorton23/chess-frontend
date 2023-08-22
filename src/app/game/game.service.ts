@@ -120,6 +120,8 @@ export class GameService {
           return response.json()
         }
       }).then(body => {
+        console.log(body);
+          
         return body.validMoves
       }).catch((error: Response) => {
         if (error.status === 401) {

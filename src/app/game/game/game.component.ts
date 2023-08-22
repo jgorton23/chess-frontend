@@ -47,8 +47,8 @@ export class GameComponent implements OnInit, OnDestroy {
           this.router.navigate(["notfound"])
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
-          this.game = game
-          this.currentPlayer = game.moves.split(" ").length % 3 <= 1 ? 'w' : 'b'
+          this.game = game          
+          this.currentPlayer = game.moves.trim().split(" ").length % 3 <= 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
           return this.profileService.getUsername()
@@ -125,7 +125,14 @@ export class GameComponent implements OnInit, OnDestroy {
     if (!this.game || !this.game.id) {
       return
     }
-    this.validMoves = []
-    this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
+    let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
+    let moveString = this.validMoves.find(m => m.startsWith(moveData.piece) && m.includes(dest))
+    if (moveString) {
+      moveData.isCapture = moveString.includes("x")
+      moveData.isCheck = moveString.includes("+")
+      moveData.isMate = moveString.includes("#")
+      this.validMoves = []
+      this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
+    }
   }
 }
