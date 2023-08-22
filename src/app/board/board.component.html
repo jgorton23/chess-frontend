@@ -10,6 +10,7 @@
     >
       <app-tile
         [isIcon]="isIcon"
+        [isCheck]="check && isKing(x, y)"
         [tile]="col"
         [row]="y"
         [col]="x"

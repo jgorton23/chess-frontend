@@ -23,6 +23,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   currentPlayer: string = 'w'
 
+  isChecked: boolean = false
+
   loading = true
 
   constructor(
@@ -116,6 +118,8 @@ export class GameComponent implements OnInit, OnDestroy {
     } else {
       this.validMoves = []
     }
+
+    this.isChecked = move.isCheck
 
     this.gameService.getGame(this.game!.id!)
       .then(game => {this.game = game})

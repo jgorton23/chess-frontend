@@ -20,6 +20,9 @@ export class TileComponent {
   @Input()
   col = 0
 
+  @Input()
+  isCheck: boolean = false;
+
   @Output() press: EventEmitter<number[]> = new EventEmitter<number[]>();
 
   constructor() { }
