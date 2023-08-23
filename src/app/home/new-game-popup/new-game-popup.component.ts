@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiPaths } from 'src/app/api-paths';
 import { BoardUtilService } from 'src/app/board/board-util.service';
-import { Game, GameService } from 'src/app/game/game.service';
+import { Game, GameService } from 'src/app/shared/api/game.service';
 import { ProfileService } from 'src/app/shared/api/profile.service';
 import { environment } from 'src/environments/environment';
 

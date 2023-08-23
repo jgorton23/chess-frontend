@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ApiPaths } from '../api-paths';
+import { ApiPaths } from '../../api-paths';
 import { Router } from '@angular/router';
-import { Move } from '../board/board.component';
+import { Move } from '../../board/board.component';
 
 export type Game = {
   id?: string,
