@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProfileService } from 'src/app/shared/profile.service';
+import { ProfileService } from 'src/app/shared/api/profile.service';
 
 @Component({
   selector: 'app-friend-card',

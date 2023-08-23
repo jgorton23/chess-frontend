@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ApiPaths } from '../api-paths';
+import { ApiPaths } from '../../api-paths';
 import { Router } from '@angular/router';
 
 export type friend = {

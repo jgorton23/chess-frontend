@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { ApiPaths } from '../api-paths';
+import { ApiPaths } from '../../api-paths';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/shared/auth.service';
-import { ProfileService } from 'src/app/shared/profile.service';
+import { AuthService } from 'src/app/shared/api/auth.service';
+import { ProfileService } from 'src/app/shared/api/profile.service';
 
 @Component({
   selector: 'app-side-menu',
