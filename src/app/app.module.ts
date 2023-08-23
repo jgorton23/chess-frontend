@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { SideMenuComponent } from './home/side-menu/side-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NewGamePopupComponent } from './home/new-game-popup/new-game-popup.component';
-import { GameComponent } from './game/game/game.component';
+import { GameComponent } from './game/game.component';
 import { GameCardComponent } from './home/game-card/game-card.component';
 import { FriendCardComponent } from './home/side-menu/friend-card/friend-card.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
