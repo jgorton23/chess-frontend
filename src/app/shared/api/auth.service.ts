@@ -19,7 +19,6 @@ export class AuthService {
    * @param formData the username or email and password to use to log in
    */
   async login(formData: {email: string, password: string}) {
-    //TODO: change from async function to using callbacks
     try {
       const response = await fetch(`${environment.baseUrl}/${ApiPaths.Login}`, {
         method: 'POST',
@@ -31,12 +30,11 @@ export class AuthService {
         body: JSON.stringify({username: formData.email.split("@")[0], password: formData.password})
       })
       
-      const status = response.status
-      if(status === 200){
+      if(response.status === 200){
         this.router.navigate(['home'])
       } else {
+        // TODO show some 'Invalid Credentials' message
         console.log(response.body);
-        
         console.log(await response.json());
       }
     } catch(e) {
@@ -49,7 +47,6 @@ export class AuthService {
    * @param formData the email, password, and password confirmation to use to register
    */
   async register(formData: {email: string, password: string, confirm: string}) {
-    //TODO: change from async to callback
     try {
       const params = {
         headers: {
@@ -64,8 +61,8 @@ export class AuthService {
       if(status === 200){
         this.router.navigate(['login'])
       } else {
+        // TODO show some message to the user
         console.log(response.body);
-        
         console.log(await response.json());
       }
     } catch(e) {
