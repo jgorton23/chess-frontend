@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { GameComponent } from '../game/game/game.component';
+import { GameComponent } from '../../../game/game/game.component';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 
