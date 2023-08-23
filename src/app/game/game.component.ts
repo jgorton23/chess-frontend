@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WebsocketAPIService } from 'src/app/shared/api/websocket/websocket-api.service';
-import { Game, GameService } from '../../shared/api/game.service';
+import { WebsocketAPIService } from 'src/app/shared/api/websocket-api.service';
+import { GameService } from '../shared/api/game.service';
+import { Game } from '../shared/api/game.service';
 import { BoardUtilService } from 'src/app/board/board-util.service';
 import { ProfileService } from 'src/app/shared/api/profile.service';
 import { Move } from 'src/app/board/board.component';
