@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ApiPaths } from '../api-paths';
+import { ApiPaths } from '../../api-paths';
 import { Router } from '@angular/router';
-import { Move } from '../board/board.component';
+import { Move } from '../../board/board.component';
 
 export type Game = {
   id?: string,
   date: Date,
-  FEN: string,
+  fen: string,
   moves: string,
   moveTimes: string,
   timeControl: string,
@@ -40,11 +40,11 @@ export class GameService {
         }
       }).then(body => {
         this.pastGames = body.games.filter((game: Game) => game.result !== "*")
-        this.pastGames.sort((a,b) => {return (a.date > b.date) ? -1 : 1})
         this.pastGames.forEach(game => game.date = new Date(game.date))
+        this.pastGames.sort((a,b) => {return (a.date.getTime() > b.date.getTime()) ? -1 : 1})
         this.currentGames = body.games.filter((game: Game) => game.result === "*")
-        this.currentGames.sort((a,b) => {return (a.date > b.date) ? -1 : 1})
         this.currentGames.forEach(game => game.date = new Date(game.date))
+        this.currentGames.sort((a,b) => {return (a.date.getTime() > b.date.getTime()) ? -1 : 1})
         return body.games
       }).catch((error: Response) => {
         if (error.status === 401) {
@@ -120,6 +120,8 @@ export class GameService {
           return response.json()
         }
       }).then(body => {
+        console.log(body);
+          
         return body.validMoves
       }).catch((error: Response) => {
         if (error.status === 401) {

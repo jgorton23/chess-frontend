@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ApiPaths } from '../api-paths';
+import { ApiPaths } from '../../api-paths';
 import { Router } from '@angular/router';
 
 export type friend = {
@@ -67,15 +67,19 @@ export class ProfileService {
           return response.json()
         }
       })
-      .then(profile => {        
-        this.numFriends = profile?.friends || 0
-        this.username = profile?.username || ""
-        this.email = profile?.email || ""
-      }).catch(error => {
-        if (error.status === 401) {
+      .then(body => {  
+        if (!body) {
           this.router.navigate(['login'])
-        } else {
+        }
+        this.numFriends = body.profile.friends
+        this.username = body.profile.username
+        this.email = body.profile.email
+      }).catch(error => {
+        if (error instanceof Response) {
           error.json().then((e: any) => console.error(e))
+          if (error.status === 401) { this.router.navigate(['login']) }
+        } else {
+          console.error(error);
         }
       })
   }
@@ -104,10 +108,11 @@ export class ProfileService {
     }).then(body => {
       console.log(body);
     }).catch(error => {
-      if (error.status === 401) {
-        this.router.navigate(['login'])
-      } else {
+      if (error instanceof Response) {
         error.json().then((e: any) => console.error(e))
+        if (error.status === 401) { this.router.navigate(['login']) }
+      } else {
+        console.error(error)
       }
     })
   }
@@ -136,10 +141,11 @@ export class ProfileService {
     }).then(_ => {
       this.getFriends();
     }).catch(error => {
-      if (error.status === 401) {
-        this.router.navigate(['login'])
-      } else {
+      if (error instanceof Response) {
         error.json().then((e: any) => console.error(e))
+        if (error.status === 401) { this.router.navigate(['login']) }
+      } else {
+        console.error(error);
       }
     })
   }
@@ -168,10 +174,11 @@ export class ProfileService {
     }).then(_ => {
       this.getFriends();
     }).catch(error => {
-      if (error.status === 401) {
-        this.router.navigate(['login'])
-      } else {
+      if (error instanceof Response) {
         error.json().then((e: any) => console.error(e))
+        if (error.status === 401) { this.router.navigate(['login']) }
+      } else {
+        console.error(error);
       }
     })
   }
@@ -187,19 +194,22 @@ export class ProfileService {
         } else {
           return response.json()
         }
-      }).then(resp => { 
-        this.invitations = resp.friends
+      }).then(body => { 
+        this.invitations = body.friends
           .filter((f: friend) => f.invitation)
           .map((f: friend) => {return {username: f.username}})
-        this.friends = resp.friends
+        this.friends = body.friends
           .filter((f: friend) => !f.invitation)
           .toSorted((a: friend, b: friend) => Number(a.pending) - Number(b.pending))
           .map((f: friend) => {return {username: f.username, pending: f.pending}});
       }).catch(error => {
-        if (error.status === 401){
-          this.router.navigate(['login'])
-        } else {
+        if (error instanceof Response) {
           error.json().then((e: any) => console.error(e))
+          if (error.status === 401){
+            this.router.navigate(['login'])
+          }
+        } else {
+          console.error(error);
         }
       })
   }

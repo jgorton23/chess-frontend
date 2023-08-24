@@ -34,6 +34,9 @@ export class BoardComponent implements OnInit, OnChanges {
 
   @Input()
   validMoves: string[] = [];
+
+  @Input()
+  check: string = '';
   
   @Output()
   moveEmitter: EventEmitter<Move> = new EventEmitter();
@@ -82,8 +85,6 @@ export class BoardComponent implements OnInit, OnChanges {
     }else if(this.selectedPiece !== undefined){
       this.grid[this.selectedPiece.y][this.selectedPiece.x].selected = false;
       if(this.grid[y][x].possible){
-        // this.grid[y][x].piece = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece;
-        // this.grid[this.selectedPiece.y][this.selectedPiece.x].piece = ' ';
         let move = {
           startSquare: [this.selectedPiece.x, this.selectedPiece.y],
           destSquare: [x, y],
@@ -115,8 +116,15 @@ export class BoardComponent implements OnInit, OnChanges {
         if (move.length < 5) {
           return
         }
-        let x = move.charCodeAt(3) - 97
-        let y = Math.abs(parseInt(move.charAt(4)) - 8)
+        let x = 0
+        let y = 0
+        if (move.charAt(3) == 'x') {
+          x = move.charCodeAt(4) - 97
+          y = Math.abs(parseInt(move.charAt(5)) - 8)
+        } else {
+          x = move.charCodeAt(3) - 97
+          y = Math.abs(parseInt(move.charAt(4)) - 8)
+        }
         this.grid[y][x].possible = true;
       })
     }
@@ -130,7 +138,13 @@ export class BoardComponent implements OnInit, OnChanges {
     return "pqkbnr".indexOf(c) >= 0
   }
 
-  isPlayerColor(c: string) {
-    return (this.playerColor === 'w' && this.isWhitePiece(c)) || (this.playerColor === 'b' && this.isBlackPiece(c))
+  isPlayerColor(piece: string, color?: string) {
+    color = color || this.playerColor
+    return (color === 'w' && this.isWhitePiece(piece)) || (color === 'b' && this.isBlackPiece(piece))
   }
+
+  isKing(playerColor: string, x: number, y: number) {
+    return this.grid[y][x].piece.toLowerCase() === 'k' && this.isPlayerColor(this.grid[y][x].piece, playerColor)
+  }
+
 }

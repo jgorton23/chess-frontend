@@ -25,6 +25,10 @@ div.possible {
   border: 0.2em solid black;
 }
 
+div.checked {
+  border: 0.2em solid red;
+}
+
 div.white {
   color: white;
   content: icon;

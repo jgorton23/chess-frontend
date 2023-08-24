@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiPaths } from 'src/app/api-paths';
 import { BoardUtilService } from 'src/app/board/board-util.service';
-import { Game, GameService } from 'src/app/game/game.service';
-import { ProfileService } from 'src/app/shared/profile.service';
+import { Game, GameService } from 'src/app/shared/api/game.service';
+import { ProfileService } from 'src/app/shared/api/profile.service';
 import { environment } from 'src/environments/environment';
 
 export interface DialogData {
@@ -53,7 +53,7 @@ export class NewGamePopupComponent implements OnInit{
   async createGame(options: {opponent: string, variant?: string}): Promise<void> {
     let game: Game = {
       date: new Date(),
-      FEN: this.boardUtil.getBoard("standard"),
+      fen: this.boardUtil.getBoard("standard"),
       moves: "",
       moveTimes: "",
       timeControl: "10/0",

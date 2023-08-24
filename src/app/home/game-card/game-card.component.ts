@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Game } from 'src/app/game/game.service';
+import { Game } from 'src/app/shared/api/game.service';
 
 @Component({
   selector: 'app-game-card',

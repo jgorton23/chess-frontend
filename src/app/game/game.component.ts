@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WebsocketAPIService } from 'src/app/websocket/websocket-api.service';
-import { Game, GameService } from '../game.service';
+import { WebsocketAPIService } from 'src/app/shared/api/websocket.service';
+import { GameService } from '../shared/api/game.service';
+import { Game } from '../shared/api/game.service';
 import { BoardUtilService } from 'src/app/board/board-util.service';
-import { ProfileService } from 'src/app/shared/profile.service';
+import { ProfileService } from 'src/app/shared/api/profile.service';
 import { Move } from 'src/app/board/board.component';
 
 @Component({
@@ -22,6 +23,8 @@ export class GameComponent implements OnInit, OnDestroy {
   validMoves: string[] = []
 
   currentPlayer: string = 'w'
+
+  isChecked: string = '';
 
   loading = true
 
@@ -47,8 +50,8 @@ export class GameComponent implements OnInit, OnDestroy {
           this.router.navigate(["notfound"])
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
-          this.game = game
-          this.currentPlayer = game.moves.split(" ").length % 3 <= 1 ? 'w' : 'b'
+          this.game = game          
+          this.currentPlayer = game.moves.trim().split(" ").length % 3 <= 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
           return this.profileService.getUsername()
@@ -107,7 +110,11 @@ export class GameComponent implements OnInit, OnDestroy {
   handleMove(moveData: string) {
     let move: Move = JSON.parse(moveData)
     
+    this.isChecked = ''
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+    if (move.isCheck) {
+      this.isChecked = this.currentPlayer
+    }
     if (this.currentPlayer === this.playerColor) {
       this.gameService.getValidMoves(this.game!.id!, this.playerColor)
         .then(validMoves => {
@@ -117,6 +124,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.validMoves = []
     }
 
+
     this.gameService.getGame(this.game!.id!)
       .then(game => {this.game = game})
   }
@@ -125,7 +133,14 @@ export class GameComponent implements OnInit, OnDestroy {
     if (!this.game || !this.game.id) {
       return
     }
-    this.validMoves = []
-    this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
+    let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
+    let moveString = this.validMoves.find(m => m.startsWith(moveData.piece) && m.includes(dest))
+    if (moveString) {
+      moveData.isCapture = moveString.includes("x")
+      moveData.isCheck = moveString.includes("+")
+      moveData.isMate = moveString.includes("#")
+      this.validMoves = []
+      this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
+    }
   }
 }

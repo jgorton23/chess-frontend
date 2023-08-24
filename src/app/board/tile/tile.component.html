@@ -6,6 +6,7 @@
     odd: (row + col) % 2 === 1,
     active: tile.selected,
     possible: tile.possible,
+    checked: this.isCheck,
     icon: isIcon
   }"
   (click)="select()"

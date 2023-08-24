@@ -14,10 +14,11 @@
       <div class="col-10 g-0 ms-3 d-flex justify-content-center">
         <div style="width: 100%">
           <app-board
-            [fen]="this.game.FEN"
+            [fen]="this.game.fen"
             [playerColor]="playerColor"
             [currentPlayer]="currentPlayer"
             [validMoves]="validMoves"
+            [check]="isChecked"
             (moveEmitter)="performMove($event)"
           ></app-board>
         </div>
