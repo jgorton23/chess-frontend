@@ -1,19 +1,19 @@
 <div
-  class="container"
+  class="container p-4"
   [ngClass]="{ rotate: playerColor === 'b', icon: isIcon }"
 >
-  <div class="row" *ngFor="let row of grid; index as y">
+  <div class="row g-0" *ngFor="let row of expandedGrid(); index as y">
     <div
       class="col g-0"
       *ngFor="let col of row; index as x"
-      [ngClass]="{ rotate: playerColor === 'b' }"
+      [ngClass]="{ rotate: playerColor === 'b' && !isCorner(x, y) }"
     >
       <app-tile
         [isIcon]="isIcon"
         [isCheck]="check.trim().length > 0 && isKing(check, x, y)"
         [tile]="col"
-        [row]="y"
-        [col]="x"
+        [row]="y - 1"
+        [col]="x - 1"
         (press)="select($event)"
       ></app-tile>
     </div>

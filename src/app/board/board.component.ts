@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { BoardUtilService, Tile, variations } from './board-util.service';
+import { BoardUtilService, BorderTile, Tile, variations } from './board-util.service';
 
 export type Move = {
   startSquare: number[],
@@ -47,6 +47,31 @@ export class BoardComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
       console.log("FEN", this.fen);
+  }
+
+  expandedGrid(): (Tile | BorderTile)[][] {
+    let firstRow: BorderTile[] = [...[0,1,2,3,4,5,6,7,8,9].map(ind => ({x: ind, y: 0}))];
+    let lastRow: BorderTile[] = [...[0,1,2,3,4,5,6,7,8,9].map(ind => ({x: ind, y: 9}))];
+    return [
+      firstRow,
+      ...this.grid.map((row, ind) => [{x: 0, y: ind}, ...row, {x: 9, y: ind}]),
+      lastRow]
+  }
+
+  isCorner(x: number, y: number): boolean {
+    if (x === 0 && y === 0) {
+      return true
+    }
+    if (x === 9 && y === 0) {
+      return true
+    }
+    if (x === 9 && y === 9) {
+      return true
+    }
+    if (x === 0 && y === 9) {
+      return true
+    }
+    return false
   }
 
   abs(n: number) {

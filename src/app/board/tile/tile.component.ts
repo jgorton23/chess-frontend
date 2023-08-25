@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Tile } from '../board-util.service';
+import { BorderTile, Tile } from '../board-util.service';
 
 @Component({
   selector: 'app-tile',
@@ -12,7 +12,7 @@ export class TileComponent {
   isIcon: boolean = false
 
   @Input()
-  tile: Tile = {piece: '', selected: false, possible: false};
+  tile: Tile | BorderTile = {piece: '', selected: false, possible: false};
   
   @Input()
   row = 0
@@ -31,5 +31,34 @@ export class TileComponent {
     if (!this.isIcon){
       this.press.emit([this.row, this.col])
     }
+  }
+
+  selected(): boolean {
+    return 'selected' in this.tile && this.tile.selected
+  }
+
+  possible(): boolean {
+    return 'possible' in this.tile && this.tile.possible
+  }
+
+  piece(): string {
+    return 'piece' in this.tile ? this.tile.piece : ''
+  }
+
+  rankOrFile(): string {
+    if ((this.row === -1 || this.row === 8) && (this.col === -1 || this.col === 8)) {
+      return ''
+    }
+    if (this.col === -1 || this.col === 8) {
+      return '' + (Math.abs(8-this.row))
+    }
+    if (this.row === -1 || this.row === 8) {
+      return String.fromCharCode(97+this.col)
+    }
+    return ''
+  }
+
+  isBoardSquare(): boolean {
+    return 'piece' in this.tile
   }
 }

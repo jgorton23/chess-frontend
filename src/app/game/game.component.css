@@ -7,8 +7,10 @@
 
 .board-container {
   width: 100%;
-  background-color: lightgray;
-  border-radius: 5%;
+  /* background-color: lightgray; */
+  /* border-radius: 5%; */
+  /* padding: 10%; */
+  /* min-width: 240px; */
 }
 
 .rank {

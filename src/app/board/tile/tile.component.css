@@ -5,15 +5,36 @@ div {
   margin: 0;
 }
 
-div.icon {
-  min-width: 5px;
+div.rankAndFile {
+  background-color: gray;
 }
 
-div.even {
+div.br {
+  border-radius: 0% 0% 100% 0%;
+}
+
+div.bl {
+  border-radius: 0% 0% 0% 100%;
+}
+
+div.tl {
+  border-radius: 100% 0% 0% 0%;
+}
+
+div.tr {
+  border-radius: 0% 100% 0% 0%;
+}
+
+div.icon {
+  min-width: 5px;
+  text-size-adjust: 5px;
+}
+
+div.even:not(.rankAndFile) {
   background-color: tan;
 }
 
-div.odd {
+div.odd:not(.rankAndFile) {
   background-color: brown;
 }
 

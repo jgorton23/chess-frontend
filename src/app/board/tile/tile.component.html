@@ -4,12 +4,18 @@
   [ngClass]="{
     even: (row + col) % 2 === 0,
     odd: (row + col) % 2 === 1,
-    active: tile.selected,
-    possible: tile.possible,
+    active: selected(),
+    possible: possible(),
+    rankAndFile: !isBoardSquare(),
+    tl: col === -1 && row === -1,
+    br: col === 8 && row === 8,
+    tr: col === 8 && row === -1,
+    bl: col === -1 && row === 8,
     checked: this.isCheck,
     icon: isIcon
   }"
   (click)="select()"
 >
-  <span [class]="tile.piece"></span>
+  <span *ngIf="isBoardSquare()" [class]="piece()"></span>
+  <span *ngIf="!isBoardSquare()">{{ rankOrFile() }}</span>
 </div>
