@@ -1,9 +1,9 @@
 <div
-  class="d-flex justify-content-center align-items-center odd"
+  class="d-flex justify-content-center align-items-center test"
   style="position: relative"
   [ngClass]="{
     even: (row + col) % 2 === 0,
-    odd: (row + col) % 2 === 1,
+    odd: (row + col) % 2 !== 0,
     active: selected(),
     possible: possible(),
     rankAndFile: !isIcon && !isBoardSquare(),

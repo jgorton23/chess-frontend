@@ -27,7 +27,7 @@ export class TileComponent {
 
   constructor() { }
 
-  select() {
+  select() {    
     if (!this.isIcon){
       this.press.emit([this.row, this.col])
     }
