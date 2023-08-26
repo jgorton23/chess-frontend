@@ -1,16 +1,16 @@
 <div
-  class="d-flex justify-content-center align-items-center"
+  class="d-flex justify-content-center align-items-center odd"
   style="position: relative"
   [ngClass]="{
     even: (row + col) % 2 === 0,
     odd: (row + col) % 2 === 1,
     active: selected(),
     possible: possible(),
-    rankAndFile: !isBoardSquare(),
-    tl: col === -1 && row === -1,
-    br: col === 8 && row === 8,
-    tr: col === 8 && row === -1,
-    bl: col === -1 && row === 8,
+    rankAndFile: !isIcon && !isBoardSquare(),
+    tl: !isIcon && col === -1 && row === -1,
+    br: !isIcon && col === 8 && row === 8,
+    tr: !isIcon && col === 8 && row === -1,
+    bl: !isIcon && col === -1 && row === 8,
     checked: this.isCheck,
     icon: isIcon
   }"

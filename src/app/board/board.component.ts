@@ -50,6 +50,9 @@ export class BoardComponent implements OnInit, OnChanges {
   }
 
   expandedGrid(): (Tile | BorderTile)[][] {
+    if (this.isIcon) {
+      return this.grid
+    }
     let firstRow: BorderTile[] = [...[0,1,2,3,4,5,6,7,8,9].map(ind => ({x: ind, y: 0}))];
     let lastRow: BorderTile[] = [...[0,1,2,3,4,5,6,7,8,9].map(ind => ({x: ind, y: 9}))];
     return [
@@ -72,6 +75,10 @@ export class BoardComponent implements OnInit, OnChanges {
       return true
     }
     return false
+  }
+
+  isBorder(x: number, y: number): boolean {
+    return (x === 0 || x === 9 || y === 0 || y === 9)
   }
 
   abs(n: number) {
