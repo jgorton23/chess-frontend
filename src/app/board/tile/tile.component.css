@@ -6,7 +6,9 @@ div {
 }
 
 div.rankAndFile {
-  background-color: gray;
+  background-color: rgb(34, 37, 41);
+  font-size: x-large;
+  font-weight: bold;
 }
 
 div.br {
