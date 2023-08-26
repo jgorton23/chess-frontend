@@ -1,21 +1,6 @@
 .body {
-  height: calc(100% - 56px);
+  height: calc(100% - 112px);
   margin-top: 56px;
   color: #ffffff;
   overflow: scroll;
-}
-
-.board-container {
-  width: 100%;
-}
-
-.rank {
-  height: 12.5%;
-  display: flex;
-  align-items: flex-end;
-}
-
-.file {
-  display: flex;
-  justify-content: flex-end;
 }
