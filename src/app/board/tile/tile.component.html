@@ -1,15 +1,21 @@
 <div
-  class="d-flex justify-content-center align-items-center"
+  class="d-flex justify-content-center align-items-center test"
   style="position: relative"
   [ngClass]="{
     even: (row + col) % 2 === 0,
-    odd: (row + col) % 2 === 1,
-    active: tile.selected,
-    possible: tile.possible,
+    odd: (row + col) % 2 !== 0,
+    active: selected(),
+    possible: possible(),
+    rankAndFile: !isIcon && !isBoardSquare(),
+    tl: !isIcon && col === -1 && row === -1,
+    br: !isIcon && col === 8 && row === 8,
+    tr: !isIcon && col === 8 && row === -1,
+    bl: !isIcon && col === -1 && row === 8,
     checked: this.isCheck,
     icon: isIcon
   }"
   (click)="select()"
 >
-  <span [class]="tile.piece"></span>
+  <span *ngIf="isBoardSquare()" [class]="piece()"></span>
+  <span *ngIf="!isBoardSquare()">{{ rankOrFile() }}</span>
 </div>

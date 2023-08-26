@@ -6,6 +6,11 @@ export type Tile = {
   possible: boolean
 }
 
+export type BorderTile = {
+  x: number,
+  y: number
+}
+
 export enum variations {
   Standard = 'standard',
 }

@@ -88,6 +88,17 @@ export class GameComponent implements OnInit, OnDestroy {
     this.disconnect()
   }
 
+  playerUsername(): string {
+    return (this.playerColor === "b" ?
+      this.game?.blackPlayerUsername :
+      this.game?.whitePlayerUsername) || ""
+  }
+  opponentUsername(): string {
+    return (this.playerColor === "b" ?
+      this.game?.whitePlayerUsername :
+      this.game?.blackPlayerUsername) || ""
+  }
+
   connect() {
     if (!this.webSocketAPI) {
       this.webSocketAPI = new WebsocketAPIService(this, this.game!.id!)

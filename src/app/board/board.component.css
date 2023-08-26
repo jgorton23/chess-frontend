@@ -1,10 +1,10 @@
 div.container {
-  min-width: 200px;
+  min-width: 250px;
   width: 100%;
 }
 
 div.container.icon {
-  min-width: 40px;
+  min-width: 50px;
 }
 
 .rotate {

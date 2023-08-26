@@ -5,15 +5,37 @@ div {
   margin: 0;
 }
 
+div.rankAndFile {
+  background-color: rgb(34, 37, 41);
+  font-size: x-large;
+  font-weight: bold;
+}
+
+div.br {
+  border-radius: 0% 0% 100% 0%;
+}
+
+div.bl {
+  border-radius: 0% 0% 0% 100%;
+}
+
+div.tl {
+  border-radius: 100% 0% 0% 0%;
+}
+
+div.tr {
+  border-radius: 0% 100% 0% 0%;
+}
+
 div.icon {
   min-width: 5px;
 }
 
-div.even {
+div.even:not(.rankAndFile) {
   background-color: tan;
 }
 
-div.odd {
+div.odd:not(.rankAndFile) {
   background-color: brown;
 }
 
@@ -27,11 +49,6 @@ div.possible {
 
 div.checked {
   border: 0.2em solid red;
-}
-
-div.white {
-  color: white;
-  content: icon;
 }
 
 div span.b {
