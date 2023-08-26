@@ -1,27 +1,29 @@
 <app-navbar></app-navbar>
-<div class="container body" style="max-width: 80vh">
-  <div class="row">
-    <h2>
-      {{ opponentUsername() }}
-    </h2>
-  </div>
-  <div *ngIf="!loading && game" class="row d-flex justify-content-center">
-    <div class="col-9 g-0 ms-3">
-      <div class="board-container">
-        <app-board
-          [fen]="this.game.fen"
-          [playerColor]="playerColor"
-          [currentPlayer]="currentPlayer"
-          [validMoves]="validMoves"
-          [check]="isChecked"
-          (moveEmitter)="performMove($event)"
-        ></app-board>
+<div class="container body d-flex justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="row">
+      <h2>
+        {{ opponentUsername() }}
+      </h2>
+    </div>
+    <div *ngIf="!loading && game" class="row d-flex justify-content-center">
+      <div class="col g-0 board-container">
+        <div class="">
+          <app-board
+            [fen]="this.game.fen"
+            [playerColor]="playerColor"
+            [currentPlayer]="currentPlayer"
+            [validMoves]="validMoves"
+            [check]="isChecked"
+            (moveEmitter)="performMove($event)"
+          ></app-board>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <h2>
-      {{ playerUsername() }}
-    </h2>
+    <div class="row">
+      <h2>
+        {{ playerUsername() }}
+      </h2>
+    </div>
   </div>
 </div>
