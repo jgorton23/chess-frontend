@@ -106,11 +106,31 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   previousMove() {
-    this.selectedMove = Math.min(this.game?.moves.split(" ").length ?? 1 - 1, this.selectedMove + 1)
+    let nextIndex = this.selectedMove + 1
+    if (nextIndex % 3 === 2) {
+      nextIndex += 1
+    }
+    let move = document.getElementById("" + nextIndex)
+    
+    move?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'start'
+    })
+    this.selectedMove = Math.min(this.game?.moves.split(" ").length ?? 1 - 1, nextIndex)
   }
   
   nextMove() {
-    this.selectedMove = Math.max(0, this.selectedMove - 1)
+    let nextIndex = this.selectedMove - 1
+    if (nextIndex % 3 === 2) {
+      nextIndex -= 1
+    }
+    let move = document.getElementById("" + nextIndex)
+
+    move?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'start'
+    })
+    this.selectedMove = Math.max(0, nextIndex)
   }
 
   //#region websocket
