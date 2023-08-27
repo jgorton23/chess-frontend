@@ -1,9 +1,9 @@
 <app-navbar></app-navbar>
 
 <div class="container body d-flex justify-content-center">
-  <div class="row w-100 h-100 d-flex align-items-center">
+  <div class="row w-100 h-100 d-flex align-items-center justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      <h2 class="row">
+      <h2 class="row" style="margin-left: 10%">
         {{ opponentUsername() }}
       </h2>
       <div *ngIf="!loading && game" class="row d-flex justify-content-center">
@@ -16,19 +16,39 @@
           (moveEmitter)="performMove($event)"
         ></app-board>
       </div>
-      <h2 class="row">
+      <h2 class="row" style="margin-left: 10%">
         {{ playerUsername() }}
       </h2>
     </div>
-    <div class="col-6">test</div>
+    <div
+      class="col-md-8 col-lg-6"
+      style="white-space: nowrap; overflow-x: scroll; direction: rtl"
+    >
+      <h3
+        *ngFor="let move of game?.moves?.split(' ')?.reverse(); index as i"
+        class="p-2"
+        [ngClass]=""
+        style="display: inline-flex"
+      >
+        {{ move }}
+      </h3>
+    </div>
   </div>
 </div>
 
 <nav class="navbar fixed-bottom navbar-dark bg-dark">
-  <button class="navbar-toggler ms-2">
-    <i class="fa-solid fa-house m-1" style="color: #ffffff"></i>
+  <button class="navbar-toggler ms-2" style="border: none">
+    <i class="fa-solid fa-comment" style="color: #ffffff"></i>
   </button>
-  <div class="navbar-brand">
-    <strong> Jacob's Chess </strong>
+  <div>
+    <button class="navbar-toggler" style="border: none">
+      <i class="fas fa-chevron-left" style="color: #ffffff"></i>
+    </button>
+    <button class="navbar-toggler" style="border: none">
+      <i class="fas fa-chevron-right" style="color: #ffffff"></i>
+    </button>
   </div>
+  <button class="navbar-toggler me-2" style="border: none">
+    <i class="fa-solid fa-flag" style="color: #ffffff"></i>
+  </button>
 </nav>
