@@ -28,6 +28,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   loading = true
 
+  selectedMove: number = (this.game?.moves.split(" ").length ?? 1) - 1
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -99,6 +101,19 @@ export class GameComponent implements OnInit, OnDestroy {
       this.game?.blackPlayerUsername) || ""
   }
 
+  isSelected(i: number) {
+    return i === this.selectedMove
+  }
+
+  previousMove() {
+    this.selectedMove = Math.min(this.game?.moves.split(" ").length ?? 1 - 1, this.selectedMove + 1)
+  }
+  
+  nextMove() {
+    this.selectedMove = Math.max(0, this.selectedMove - 1)
+  }
+
+  //#region websocket
   connect() {
     if (!this.webSocketAPI) {
       this.webSocketAPI = new WebsocketAPIService(this, this.game!.id!)
@@ -154,4 +169,6 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
     }
   }
+
+  //#endregion
 }

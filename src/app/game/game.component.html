@@ -27,7 +27,9 @@
       <h3
         *ngFor="let move of game?.moves?.split(' ')?.reverse(); index as i"
         class="p-2"
-        [ngClass]=""
+        [ngClass]="{
+          'rounded-pill': isSelected(i)
+        }"
         style="display: inline-flex"
       >
         {{ move }}
@@ -41,10 +43,14 @@
     <i class="fa-solid fa-comment" style="color: #ffffff"></i>
   </button>
   <div>
-    <button class="navbar-toggler" style="border: none">
+    <button
+      class="navbar-toggler"
+      style="border: none"
+      (click)="previousMove()"
+    >
       <i class="fas fa-chevron-left" style="color: #ffffff"></i>
     </button>
-    <button class="navbar-toggler" style="border: none">
+    <button class="navbar-toggler" style="border: none" (click)="nextMove()">
       <i class="fas fa-chevron-right" style="color: #ffffff"></i>
     </button>
   </div>

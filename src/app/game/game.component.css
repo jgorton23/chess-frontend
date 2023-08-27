@@ -4,3 +4,7 @@
   color: #ffffff;
   overflow: scroll;
 }
+
+.rounded-pill {
+  background-color: rgb(34, 37, 41);
+}
