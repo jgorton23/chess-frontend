@@ -133,6 +133,10 @@ export class GameComponent implements OnInit, OnDestroy {
     this.selectedMove = Math.max(0, nextIndex)
   }
 
+  select(i: number) {
+    this.selectedMove = i
+  }
+
   //#region websocket
   connect() {
     if (!this.webSocketAPI) {
