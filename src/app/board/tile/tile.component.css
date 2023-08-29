@@ -34,8 +34,16 @@ div.even:not(.rankAndFile) {
   background-color: tan;
 }
 
+div.even.lastMove:not(.rankAndFile) {
+  background-color: rgb(221, 141, 29);
+}
+
 div.odd:not(.rankAndFile) {
   background-color: brown;
+}
+
+div.odd.lastMove:not(.rankAndFile) {
+  background-color: rgb(229, 167, 22);
 }
 
 div.active {
@@ -47,7 +55,7 @@ div.possible {
 }
 
 div.checked {
-  border: 0.2em solid red;
+  background-color: red;
 }
 
 div span.b {

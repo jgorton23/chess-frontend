@@ -81,6 +81,11 @@ export class BoardComponent implements OnInit, OnChanges {
     return (x === 0 || x === 9 || y === 0 || y === 9)
   }
 
+  isLastMove(x: number, y: number): boolean {
+    let coordinate = "" + String.fromCharCode(97+x) + Math.abs(y-8)
+    return (this.fen.split(" ").at(-1) ?? "").includes(coordinate)
+  }
+
   abs(n: number) {
     return Math.abs(n)
   }

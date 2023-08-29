@@ -29,6 +29,10 @@ export class GameService {
 
   currentGames: Game[] = [];
 
+  currentGame?: Game;
+
+  //#region API
+
   getGames(): Promise<Game[]> {
     
     return fetch(`${environment.baseUrl}/${ApiPaths.Games}`, {credentials: 'include'})
@@ -163,4 +167,18 @@ export class GameService {
       })
   }
   
+  //#endregion
+
+  //#region logic
+
+  isInCheck(playerColor: string): boolean {
+    return (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("+")
+  }
+
+  isInLastMove(coordinate: string): boolean {
+    return (this.currentGame?.moves.split(" ").at(-1) ?? "").includes(coordinate)
+  }
+
+  //#endregion
+
 }
