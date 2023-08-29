@@ -16,8 +16,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
   webSocketAPI?: WebsocketAPIService;
 
-  game?: Game;
-
   playerColor: string = ' ';
 
   validMoves: string[] = []
@@ -28,7 +26,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   loading = true
 
-  selectedMove: number = (this.game?.moves.split(" ").length ?? 1) - 1
+  selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
 
   constructor(
     private router: Router,
@@ -52,7 +50,7 @@ export class GameComponent implements OnInit, OnDestroy {
           this.router.navigate(["notfound"])
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
-          this.game = game          
+          this.gameService.currentGame = game
           this.currentPlayer = game.moves.trim().split(" ").length % 3 <= 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
@@ -64,15 +62,15 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Username is undefined: " + username)
         } else {
           switch(username){
-            case this.game?.whitePlayerUsername:
+            case this.gameService.currentGame?.whitePlayerUsername:
               this.playerColor = 'w'
               break
-            case this.game?.blackPlayerUsername:
+            case this.gameService.currentGame?.blackPlayerUsername:
               this.playerColor = 'b'
               break              
           }
           if (this.playerColor === this.currentPlayer){
-            return this.gameService.getValidMoves(this.game!.id!, this.playerColor)
+            return this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
           } else {
             return []
           }
@@ -92,13 +90,22 @@ export class GameComponent implements OnInit, OnDestroy {
 
   playerUsername(): string {
     return (this.playerColor === "b" ?
-      this.game?.blackPlayerUsername :
-      this.game?.whitePlayerUsername) || ""
+      this.gameService.currentGame?.blackPlayerUsername :
+      this.gameService.currentGame?.whitePlayerUsername) || ""
   }
+
   opponentUsername(): string {
     return (this.playerColor === "b" ?
-      this.game?.whitePlayerUsername :
-      this.game?.blackPlayerUsername) || ""
+      this.gameService.currentGame?.whitePlayerUsername :
+      this.gameService.currentGame?.blackPlayerUsername) || ""
+  }
+
+  fen(): string {
+    return this.gameService.currentGame?.fen ?? ""
+  }
+
+  moves(): string[] {
+    return this.gameService.currentGame?.moves.split(" ") ?? []
   }
 
   isSelected(i: number) {
@@ -116,7 +123,7 @@ export class GameComponent implements OnInit, OnDestroy {
       behavior: 'smooth',
       inline: 'start'
     })
-    this.selectedMove = Math.min(this.game?.moves.split(" ").length ?? 1 - 1, nextIndex)
+    this.selectedMove = Math.min(this.gameService.currentGame?.moves.split(" ").length ?? 1 - 1, nextIndex)
   }
   
   nextMove() {
@@ -140,7 +147,7 @@ export class GameComponent implements OnInit, OnDestroy {
   //#region websocket
   connect() {
     if (!this.webSocketAPI) {
-      this.webSocketAPI = new WebsocketAPIService(this, this.game!.id!)
+      this.webSocketAPI = new WebsocketAPIService(this, this.gameService.currentGame!.id!)
     }
     this.webSocketAPI._connect();
   }
@@ -166,7 +173,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.isChecked = this.currentPlayer
     }
     if (this.currentPlayer === this.playerColor) {
-      this.gameService.getValidMoves(this.game!.id!, this.playerColor)
+      this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
         .then(validMoves => {
           this.validMoves = validMoves
         })
@@ -175,12 +182,12 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
 
-    this.gameService.getGame(this.game!.id!)
-      .then(game => {this.game = game})
+    this.gameService.getGame(this.gameService.currentGame!.id!)
+      .then(game => {this.gameService.currentGame = game})
   }
 
   performMove(moveData: Move) {
-    if (!this.game || !this.game.id) {
+    if (!this.gameService.currentGame || !this.gameService.currentGame.id) {
       return
     }
     let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
@@ -190,7 +197,7 @@ export class GameComponent implements OnInit, OnDestroy {
       moveData.isCheck = moveString.includes("+")
       moveData.isMate = moveString.includes("#")
       this.validMoves = []
-      this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
+      this.gameService.doMove(moveData, this.gameService.currentGame.id).then(() => this.sendMove(moveData))
     }
   }
 

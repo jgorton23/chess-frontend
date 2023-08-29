@@ -6,9 +6,9 @@
       <h2 class="row" style="margin-left: 10%">
         {{ opponentUsername() }}
       </h2>
-      <div *ngIf="!loading && game" class="row d-flex justify-content-center">
+      <div *ngIf="!loading" class="row d-flex justify-content-center">
         <app-board
-          [fen]="this.game.fen"
+          [fen]="fen()"
           [playerColor]="playerColor"
           [currentPlayer]="currentPlayer"
           [validMoves]="validMoves"
@@ -26,7 +26,7 @@
       style="white-space: nowrap; overflow-x: scroll; direction: rtl"
     >
       <h3
-        *ngFor="let move of game?.moves?.split(' ')?.reverse(); index as i"
+        *ngFor="let move of moves().reverse(); index as i"
         class="p-2"
         [ngClass]="{
           'rounded-pill': isSelected(i)
