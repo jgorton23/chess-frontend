@@ -5,11 +5,6 @@ div {
   margin: 0;
 }
 
-div.rankAndFile {
-  background-color: rgb(34, 37, 41);
-  font-weight: bold;
-}
-
 /* round the corners of the board */
 div.br {
   border-radius: 0% 0% 100% 0%;
@@ -31,6 +26,7 @@ div.icon {
   min-width: 5px;
 }
 
+/* color the background based on coordinates, if it is a checked king, and if it was the last move */
 div.even:not(.rankAndFile):not(.lastMove):not(.checked) {
   background-color: tan;
 }
@@ -39,8 +35,17 @@ div.odd:not(.rankAndFile):not(.lastMove):not(.checked) {
   background-color: brown;
 }
 
+div.rankAndFile {
+  background-color: rgb(34, 37, 41);
+  font-weight: bold;
+}
+
 div.lastMove {
   background-color: rgb(229, 167, 22);
+}
+
+div.checked {
+  background-color: red;
 }
 
 div.active {
@@ -49,10 +54,6 @@ div.active {
 
 div.possible {
   border: 0.2em solid black;
-}
-
-div.checked {
-  background-color: red;
 }
 
 /* Below here is for the piece images */
