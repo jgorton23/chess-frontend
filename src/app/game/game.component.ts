@@ -85,6 +85,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.gameService.currentGame = undefined
     this.disconnect()
   }
 
