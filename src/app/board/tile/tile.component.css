@@ -10,6 +10,7 @@ div.rankAndFile {
   font-weight: bold;
 }
 
+/* round the corners of the board */
 div.br {
   border-radius: 0% 0% 100% 0%;
 }
@@ -30,19 +31,15 @@ div.icon {
   min-width: 5px;
 }
 
-div.even:not(.rankAndFile) {
+div.even:not(.rankAndFile):not(.lastMove) {
   background-color: tan;
 }
 
-div.even.lastMove:not(.rankAndFile) {
-  background-color: rgb(221, 141, 29);
-}
-
-div.odd:not(.rankAndFile) {
+div.odd:not(.rankAndFile):not(.lastMove) {
   background-color: brown;
 }
 
-div.odd.lastMove:not(.rankAndFile) {
+div.lastMove {
   background-color: rgb(229, 167, 22);
 }
 
@@ -58,6 +55,7 @@ div.checked {
   background-color: red;
 }
 
+/* Below here is for the piece images */
 div span.b {
   content: url(../../../assets/blackBishop.png);
 }

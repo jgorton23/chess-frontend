@@ -172,7 +172,7 @@ export class GameService {
   //#region logic
 
   isInCheck(playerColor: string): boolean {
-    return (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("+")
+    return (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("+") && playerColor === ((this.currentGame?.moves.split(" ").length === 1) ? 'w' : 'b')
   }
 
   isInLastMove(coordinate: string): boolean {
