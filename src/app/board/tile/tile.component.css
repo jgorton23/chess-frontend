@@ -31,11 +31,11 @@ div.icon {
   min-width: 5px;
 }
 
-div.even:not(.rankAndFile):not(.lastMove) {
+div.even:not(.rankAndFile):not(.lastMove):not(.checked) {
   background-color: tan;
 }
 
-div.odd:not(.rankAndFile):not(.lastMove) {
+div.odd:not(.rankAndFile):not(.lastMove):not(.checked) {
   background-color: brown;
 }
 
