@@ -172,8 +172,10 @@ export class GameService {
   //#region logic
 
   isInCheck(playerColor: string): boolean {
-    let lastMove = this.currentGame?.moves.split(" ").at(-1) ?? ""
-    return (lastMove.includes("+") || lastMove.includes("#")) && playerColor === (((this.currentGame?.moves.split(" ") ?? []).length === 2) ? 'b' : 'w')
+    let moveIsCheck = (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("+")
+    let moveIsMate = (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("#")
+    let moveCount = (this.currentGame?.moves.split(" ") ?? []).length
+    return (moveIsCheck && playerColor === (moveCount % 3 === 2 ? 'b' : 'w')) || (moveIsMate && playerColor === (moveCount % 3 === 2 ? 'b' : 'w'))
   }
 
   isInLastMove(coordinate: string): boolean {

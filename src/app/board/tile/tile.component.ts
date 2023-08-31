@@ -61,7 +61,8 @@ export class TileComponent {
   }
 
   isCheck(): boolean {
-    return 'piece' in this.tile && this.tile.piece.toLowerCase() === 'k' && this.gameService.isInCheck(this.tile.piece === 'K' ? 'w' : 'b')
+    let res = 'piece' in this.tile && this.tile.piece.toLowerCase() === 'k' && this.gameService.isInCheck(this.tile.piece === 'K' ? 'w' : 'b')
+    return res
   }
 
   isLastMove(): boolean {
