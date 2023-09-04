@@ -145,6 +145,10 @@ export class GameComponent implements OnInit, OnDestroy {
     this.selectedMove = i
   }
 
+  resign() {
+    this.gameService.resign()
+  }
+
   //#region websocket
   connect() {
     if (!this.webSocketAPI) {

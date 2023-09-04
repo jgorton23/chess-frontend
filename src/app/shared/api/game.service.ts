@@ -166,6 +166,37 @@ export class GameService {
         }
       })
   }
+
+  resign() {
+    let gameId = this.currentGame?.id
+    if (gameId) {
+      fetch(`${environment.baseUrl}/${ApiPaths.Games}/${gameId}/resign`,
+        {
+          credentials: 'include',
+          method: 'PUT',
+          headers: {
+            'Accept': "application/json, text/plain, */*",
+            'Content-Type': "application/json;charset=utf-8"
+          }
+        }).then(response => {
+          if (!response.ok) {
+            return Promise.reject(response)
+          } else {
+            return response.json()
+          }
+        }).then(body => {
+          console.log(body)
+        }).catch((error: Response) => {
+          if (error.status === 401) {
+            this.router.navigate(['login'])
+          } else if (error.status === 404) {
+            this.router.navigate(['notfound'])
+          } else {
+            error.json().then(e => console.error(e))
+          }
+        })
+    }
+  }
   
   //#endregion
 
