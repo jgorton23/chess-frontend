@@ -5,6 +5,7 @@ export type Move = {
   startSquare: number[],
   destSquare: number[],
   piece: string,
+  promotion?: string,
   isCheck: boolean,
   isMate: boolean,
   isCapture: boolean,
