@@ -8,3 +8,13 @@
 .rounded-pill {
   background-color: rgb(34, 37, 41);
 }
+
+.promotion-popup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: gray;
+  opacity: 60%;
+}

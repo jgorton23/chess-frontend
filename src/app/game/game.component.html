@@ -1,5 +1,7 @@
+<!-- the navbar at the top of the screen - contains home button and logo -->
 <app-navbar></app-navbar>
 
+<!-- The main body of the game - contains board and surrounding info -->
 <div class="container body d-flex justify-content-center">
   <div class="row w-100 h-100 d-flex align-items-center justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
@@ -42,6 +44,7 @@
   </div>
 </div>
 
+<!-- the navbar at the bottom of the screen - contains chat, move selector, and resign button -->
 <nav class="navbar fixed-bottom navbar-dark bg-dark">
   <button class="navbar-toggler ms-2" style="border: none">
     <i class="fa-solid fa-comment" style="color: #ffffff"></i>
@@ -62,3 +65,10 @@
     <i class="fa-solid fa-flag" style="color: #ffffff"></i>
   </button>
 </nav>
+
+<!-- the popup to select which piece to promote to if relevant -->
+<div
+  *ngIf="showPromotionPopup"
+  class="promotion-popup"
+  (click)="promotionPiece.emit('piece')"
+></div>

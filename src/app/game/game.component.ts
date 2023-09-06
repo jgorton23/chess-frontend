@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketAPIService } from 'src/app/shared/api/websocket.service';
 import { GameService } from '../shared/api/game.service';
@@ -6,6 +6,7 @@ import { Game } from '../shared/api/game.service';
 import { BoardUtilService } from 'src/app/board/board-util.service';
 import { ProfileService } from 'src/app/shared/api/profile.service';
 import { Move } from 'src/app/board/board.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -24,7 +25,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
   isChecked: string = '';
 
-  loading = true
+  loading: boolean = true
+
+  showPromotionPopup: boolean = false;
+
+  promotionPiece: EventEmitter<string> = new EventEmitter();
 
   selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
 
@@ -191,10 +196,17 @@ export class GameComponent implements OnInit, OnDestroy {
       .then(game => {this.gameService.currentGame = game})
   }
 
-  performMove(moveData: Move) {
+  async performMove(moveData: Move) {
     if (!this.gameService.currentGame || !this.gameService.currentGame.id) {
       return
     }
+    this.showPromotionPopup = true;
+    console.log("promotion", this.showPromotionPopup);
+    
+    moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
+
+    this.showPromotionPopup = false;
+    
     let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
     let moveString = this.validMoves.find(m => m.startsWith(moveData.piece) && m.includes(dest))
     if (moveString) {

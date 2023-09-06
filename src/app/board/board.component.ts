@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BoardUtilService, BorderTile, Tile, variations } from './board-util.service';
+import { GameService } from '../shared/api/game.service';
 
 export type Move = {
   startSquare: number[],
@@ -19,7 +20,7 @@ export type Move = {
 })
 export class BoardComponent implements OnInit, OnChanges {
 
-  constructor(private boardUtil: BoardUtilService) { }
+  constructor(private boardUtil: BoardUtilService, private gameService: GameService) { }
 
   @Input()
   isIcon: boolean = false
