@@ -24,3 +24,46 @@
   box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.65);
   width: 329px;
 }
+
+span {
+  background-color: gray;
+}
+
+div span.b {
+  content: url(../../assets/blackBishop.png);
+}
+
+div span.B {
+  content: url(../../assets/whiteBishop.png);
+}
+
+div span.r {
+  content: url(../../assets/blackRook.png);
+}
+
+div span.R {
+  content: url(../../assets/whiteRook.png);
+}
+
+div span.N {
+  content: url(../../assets/whiteKnight.png);
+}
+
+div span.n {
+  content: url(../../assets/blackKnight.png);
+}
+
+div span.Q {
+  content: url(../../assets/whiteQueen.png);
+}
+
+div span.q {
+  content: url(../../assets/blackQueen.png);
+}
+
+span {
+  max-height: 60px;
+  max-width: 60px;
+  aspect-ratio: 1 / 1;
+  border-radius: 10%;
+}

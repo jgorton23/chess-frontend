@@ -154,6 +154,10 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameService.resign()
   }
 
+  pieces(): string[] {
+    return ['q', 'r', 'b', 'n'].map((p) => this.currentPlayer === 'w' ? p.toUpperCase() : p)
+  }
+
   //#region websocket
   connect() {
     if (!this.webSocketAPI) {
