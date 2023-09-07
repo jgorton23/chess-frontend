@@ -200,12 +200,12 @@ export class GameComponent implements OnInit, OnDestroy {
     if (!this.gameService.currentGame || !this.gameService.currentGame.id) {
       return
     }
-    this.showPromotionPopup = true;
-    console.log("promotion", this.showPromotionPopup);
-    
-    moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
 
-    this.showPromotionPopup = false;
+    if (moveData.piece.toLowerCase() === 'p' && moveData.destSquare[1] % 7 === 0) {
+      this.showPromotionPopup = true;
+      moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
+      this.showPromotionPopup = false;
+    }
     
     let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
     let moveString = this.validMoves.find(m => m.startsWith(moveData.piece) && m.includes(dest))
