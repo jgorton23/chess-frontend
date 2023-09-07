@@ -136,9 +136,8 @@ export class BoardComponent implements OnInit, OnChanges {
       }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
-      }else{
-        this.selectedPiece = undefined;
       }
+      this.selectedPiece = undefined;
     }
     this.updatePossible();
   }
