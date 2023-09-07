@@ -80,6 +80,7 @@
           class="col g-0 m-2"
           [class]="piece"
           *ngFor="let piece of pieces()"
+          (click)="promotionPiece.emit(piece)"
         >
         </span>
       </div>
