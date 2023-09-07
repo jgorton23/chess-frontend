@@ -205,6 +205,9 @@ export class GameComponent implements OnInit, OnDestroy {
       this.showPromotionPopup = true;
       moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
       this.showPromotionPopup = false;
+      if (!"qbnr".includes(moveData.promotion.toLowerCase())) {
+        return
+      }
     }
     
     let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
