@@ -69,8 +69,8 @@
 <!-- the popup to select which piece to promote to if relevant -->
 <div
   *ngIf="showPromotionPopup"
-  class="promotion-popup"
-  (click)="promotionPiece.emit('piece')"
+  class="popup"
+  (click)="promotionPiece.emit('cancel')"
 >
   <div class="row h-100 d-flex justify-content-center align-items-center">
     <div class="card d-flex align-items-center">
@@ -87,3 +87,6 @@
     </div>
   </div>
 </div>
+
+<!-- the popup to confirm resign -->
+<div *ngIf="showResignConfirmationPopup" class="popup"></div>

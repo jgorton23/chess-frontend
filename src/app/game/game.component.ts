@@ -29,7 +29,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
   showPromotionPopup: boolean = false;
 
+  showResignConfirmationPopup: boolean = false;
+
   promotionPiece: EventEmitter<string> = new EventEmitter();
+
+  resignation: EventEmitter<boolean> = new EventEmitter();
 
   selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
 
@@ -150,8 +154,14 @@ export class GameComponent implements OnInit, OnDestroy {
     this.selectedMove = i
   }
 
-  resign() {
-    this.gameService.resign()
+  async resign() {
+    this.showResignConfirmationPopup = true;
+    let confirm = await firstValueFrom(this.resignation)
+    if (confirm) {
+      this.gameService.resign()
+    } else {
+      this.showPromotionPopup = false;
+    }
   }
 
   pieces(): string[] {
@@ -209,6 +219,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.showPromotionPopup = true;
       moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
       this.showPromotionPopup = false;
+      console.log(moveData.promotion);
       if (!"qbnr".includes(moveData.promotion.toLowerCase())) {
         return
       }
