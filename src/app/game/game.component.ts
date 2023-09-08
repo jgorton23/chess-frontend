@@ -157,11 +157,12 @@ export class GameComponent implements OnInit, OnDestroy {
   async resign() {
     this.showResignConfirmationPopup = true;
     let confirm = await firstValueFrom(this.resignation)
+    console.log(confirm);
+    
     if (confirm) {
       this.gameService.resign()
-    } else {
-      this.showPromotionPopup = false;
     }
+    this.showResignConfirmationPopup = false;
   }
 
   pieces(): string[] {
