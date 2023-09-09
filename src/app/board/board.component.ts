@@ -20,7 +20,7 @@ export type Move = {
 })
 export class BoardComponent implements OnInit, OnChanges {
 
-  constructor(private boardUtil: BoardUtilService, private gameService: GameService) { }
+  constructor(private boardUtil: BoardUtilService) { }
 
   @Input()
   isIcon: boolean = false
@@ -36,9 +36,6 @@ export class BoardComponent implements OnInit, OnChanges {
 
   @Input()
   validMoves: string[] = [];
-
-  @Input()
-  check: string = '';
   
   @Output()
   moveEmitter: EventEmitter<Move> = new EventEmitter();
@@ -50,6 +47,8 @@ export class BoardComponent implements OnInit, OnChanges {
   ngOnInit(): void {
       console.log("FEN", this.fen);
   }
+
+  //#region tile formatting
 
   expandedGrid(): (Tile | BorderTile)[][] {
     if (this.isIcon) {
@@ -87,6 +86,8 @@ export class BoardComponent implements OnInit, OnChanges {
     let coordinate = "" + String.fromCharCode(97+x) + Math.abs(y-8)
     return (this.fen.split(" ").at(-1) ?? "").includes(coordinate)
   }
+
+  //#endregion
 
   abs(n: number) {
     return Math.abs(n)

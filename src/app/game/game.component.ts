@@ -23,17 +23,19 @@ export class GameComponent implements OnInit, OnDestroy {
 
   currentPlayer: string = 'w'
 
-  isChecked: string = '';
-
   loading: boolean = true
 
   showPromotionPopup: boolean = false;
 
   showResignConfirmationPopup: boolean = false;
 
+  showGameOverPopup: boolean = false;
+
   promotionPiece: EventEmitter<string> = new EventEmitter();
 
   resignation: EventEmitter<boolean> = new EventEmitter();
+
+  gameOver: EventEmitter<string> = new EventEmitter();
 
   selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
 
@@ -191,21 +193,20 @@ export class GameComponent implements OnInit, OnDestroy {
 
   handleMove(moveData: string) {
     let move: Move = JSON.parse(moveData)
-    
-    this.isChecked = ''
-    this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
-    if (move.isCheck) {
-      this.isChecked = this.currentPlayer
-    }
-    if (this.currentPlayer === this.playerColor) {
-      this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
-        .then(validMoves => {
-          this.validMoves = validMoves
-        })
-    } else {
-      this.validMoves = []
-    }
 
+    if (move.isMate) {
+      this.showGameOverPopup = true;
+    } else {
+      this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+      if (this.currentPlayer === this.playerColor) {
+        this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
+          .then(validMoves => {
+            this.validMoves = validMoves
+          })
+      } else {
+        this.validMoves = []
+      }
+    }
 
     this.gameService.getGame(this.gameService.currentGame!.id!)
       .then(game => {this.gameService.currentGame = game})
