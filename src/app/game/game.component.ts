@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebsocketAPIService } from 'src/app/shared/api/websocket.service';
 import { GameService } from '../shared/api/game.service';
@@ -6,6 +6,7 @@ import { Game } from '../shared/api/game.service';
 import { BoardUtilService } from 'src/app/board/board-util.service';
 import { ProfileService } from 'src/app/shared/api/profile.service';
 import { Move } from 'src/app/board/board.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -16,17 +17,27 @@ export class GameComponent implements OnInit, OnDestroy {
 
   webSocketAPI?: WebsocketAPIService;
 
-  game?: Game;
-
   playerColor: string = ' ';
 
   validMoves: string[] = []
 
   currentPlayer: string = 'w'
 
-  isChecked: string = '';
+  loading: boolean = true
 
-  loading = true
+  showPromotionPopup: boolean = false;
+
+  showResignConfirmationPopup: boolean = false;
+
+  showGameOverPopup: boolean = false;
+
+  gameOverMessage: string = '';
+
+  promotionPiece: EventEmitter<string> = new EventEmitter();
+
+  resignation: EventEmitter<boolean> = new EventEmitter();
+
+  selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
 
   constructor(
     private router: Router,
@@ -50,7 +61,7 @@ export class GameComponent implements OnInit, OnDestroy {
           this.router.navigate(["notfound"])
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
-          this.game = game          
+          this.gameService.currentGame = game
           this.currentPlayer = game.moves.trim().split(" ").length % 3 <= 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
@@ -62,15 +73,15 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Username is undefined: " + username)
         } else {
           switch(username){
-            case this.game?.whitePlayerUsername:
+            case this.gameService.currentGame?.whitePlayerUsername:
               this.playerColor = 'w'
               break
-            case this.game?.blackPlayerUsername:
+            case this.gameService.currentGame?.blackPlayerUsername:
               this.playerColor = 'b'
               break              
           }
           if (this.playerColor === this.currentPlayer){
-            return this.gameService.getValidMoves(this.game!.id!, this.playerColor)
+            return this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
           } else {
             return []
           }
@@ -85,23 +96,97 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.gameService.currentGame = undefined
     this.disconnect()
   }
 
   playerUsername(): string {
     return (this.playerColor === "b" ?
-      this.game?.blackPlayerUsername :
-      this.game?.whitePlayerUsername) || ""
+      this.gameService.currentGame?.blackPlayerUsername :
+      this.gameService.currentGame?.whitePlayerUsername) || ""
   }
+
   opponentUsername(): string {
     return (this.playerColor === "b" ?
-      this.game?.whitePlayerUsername :
-      this.game?.blackPlayerUsername) || ""
+      this.gameService.currentGame?.whitePlayerUsername :
+      this.gameService.currentGame?.blackPlayerUsername) || ""
   }
+
+  fen(): string {
+    return this.gameService.currentGame?.fen ?? ""
+  }
+
+  moves(): string[] {
+    return this.gameService.currentGame?.moves.split(" ") ?? []
+  }
+
+  isSelected(i: number) {
+    return i === this.selectedMove
+  }
+
+  previousMove() {
+    let nextIndex = this.selectedMove + 1
+    if (nextIndex % 3 === 2) {
+      nextIndex += 1
+    }
+    let move = document.getElementById("" + nextIndex)
+    
+    move?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'start'
+    })
+    this.selectedMove = Math.min(this.gameService.currentGame?.moves.split(" ").length ?? 1 - 1, nextIndex)
+  }
+  
+  nextMove() {
+    let nextIndex = this.selectedMove - 1
+    if (nextIndex % 3 === 2) {
+      nextIndex -= 1
+    }
+    let move = document.getElementById("" + nextIndex)
+
+    move?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'start'
+    })
+    this.selectedMove = Math.max(0, nextIndex)
+  }
+
+  select(i: number) {
+    this.selectedMove = i
+  }
+
+  async resign() {
+    this.showResignConfirmationPopup = true;
+    let confirm = await firstValueFrom(this.resignation)
+    console.log(confirm);
+    
+    if (confirm) {
+      this.gameService.resign()
+    }
+    this.showResignConfirmationPopup = false;
+  }
+
+  pieces(): string[] {
+    return ['q', 'r', 'b', 'n'].map((p) => this.currentPlayer === 'w' ? p.toUpperCase() : p)
+  }
+
+  navigate(page: string) {
+    this.router.navigate([page])
+  }
+
+  offerRematch() {
+    // todo - if they offered rematch, send rematch accept and redirect to the new page
+    // todo - otherwise
+    // todo - send ws message signifying rematch offer
+    // todo - await ws response signifying rematch accepted
+  }
+
+  //#region websocket
 
   connect() {
     if (!this.webSocketAPI) {
-      this.webSocketAPI = new WebsocketAPIService(this, this.game!.id!)
+      this.webSocketAPI = new WebsocketAPIService(this, this.gameService.currentGame!.id!)
     }
     this.webSocketAPI._connect();
   }
@@ -120,30 +205,41 @@ export class GameComponent implements OnInit, OnDestroy {
 
   handleMove(moveData: string) {
     let move: Move = JSON.parse(moveData)
-    
-    this.isChecked = ''
-    this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
-    if (move.isCheck) {
-      this.isChecked = this.currentPlayer
-    }
-    if (this.currentPlayer === this.playerColor) {
-      this.gameService.getValidMoves(this.game!.id!, this.playerColor)
-        .then(validMoves => {
-          this.validMoves = validMoves
-        })
+
+    if (move.isMate) {
+      this.showGameOverPopup = true;
+      this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate"
     } else {
-      this.validMoves = []
+      this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+      if (this.currentPlayer === this.playerColor) {
+        this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
+          .then(validMoves => {
+            this.validMoves = validMoves
+          })
+      } else {
+        this.validMoves = []
+      }
     }
 
-
-    this.gameService.getGame(this.game!.id!)
-      .then(game => {this.game = game})
+    this.gameService.getGame(this.gameService.currentGame!.id!)
+      .then(game => {this.gameService.currentGame = game})
   }
 
-  performMove(moveData: Move) {
-    if (!this.game || !this.game.id) {
+  async performMove(moveData: Move) {
+    if (!this.gameService.currentGame || !this.gameService.currentGame.id) {
       return
     }
+
+    if (moveData.piece.toLowerCase() === 'p' && moveData.destSquare[1] % 7 === 0) {
+      this.showPromotionPopup = true;
+      moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
+      this.showPromotionPopup = false;
+      console.log(moveData.promotion);
+      if (!"qbnr".includes(moveData.promotion.toLowerCase())) {
+        return
+      }
+    }
+    
     let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
     let moveString = this.validMoves.find(m => m.startsWith(moveData.piece) && m.includes(dest))
     if (moveString) {
@@ -151,7 +247,9 @@ export class GameComponent implements OnInit, OnDestroy {
       moveData.isCheck = moveString.includes("+")
       moveData.isMate = moveString.includes("#")
       this.validMoves = []
-      this.gameService.doMove(moveData, this.game.id).then(() => this.sendMove(moveData))
+      this.gameService.doMove(moveData, this.gameService.currentGame.id).then(() => this.sendMove(moveData))
     }
   }
+
+  //#endregion
 }

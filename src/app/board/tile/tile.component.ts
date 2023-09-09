@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BorderTile, Tile } from '../board-util.service';
+import { GameService } from 'src/app/shared/api/game.service';
 
 @Component({
   selector: 'app-tile',
@@ -20,12 +21,9 @@ export class TileComponent {
   @Input()
   col = 0
 
-  @Input()
-  isCheck: boolean = false;
-
   @Output() press: EventEmitter<number[]> = new EventEmitter<number[]>();
 
-  constructor() { }
+  constructor(private gameService: GameService) { }
 
   select() {    
     if (!this.isIcon){
@@ -61,4 +59,15 @@ export class TileComponent {
   isBoardSquare(): boolean {
     return 'piece' in this.tile
   }
+
+  isCheck(): boolean {
+    let res = 'piece' in this.tile && this.tile.piece.toLowerCase() === 'k' && this.gameService.isInCheck(this.tile.piece === 'K' ? 'w' : 'b')
+    return res
+  }
+
+  isLastMove(): boolean {
+    let coordinate = '' + String.fromCharCode(97+this.col) + (Math.abs(8-this.row))
+    return this.gameService.isInLastMove(coordinate)
+  }
+
 }

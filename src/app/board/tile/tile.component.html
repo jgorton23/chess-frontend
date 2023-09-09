@@ -11,7 +11,8 @@
     br: !isIcon && col === 8 && row === 8,
     tr: !isIcon && col === 8 && row === -1,
     bl: !isIcon && col === -1 && row === 8,
-    checked: this.isCheck,
+    checked: isCheck(),
+    lastMove: isLastMove(),
     icon: isIcon
   }"
   (click)="select()"

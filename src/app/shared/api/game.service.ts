@@ -29,6 +29,10 @@ export class GameService {
 
   currentGames: Game[] = [];
 
+  currentGame?: Game;
+
+  //#region API
+
   getGames(): Promise<Game[]> {
     
     return fetch(`${environment.baseUrl}/${ApiPaths.Games}`, {credentials: 'include'})
@@ -162,5 +166,53 @@ export class GameService {
         }
       })
   }
+
+  resign() {
+    let gameId = this.currentGame?.id
+    if (gameId) {
+      fetch(`${environment.baseUrl}/${ApiPaths.Games}/${gameId}/resign`,
+        {
+          credentials: 'include',
+          method: 'PUT',
+          headers: {
+            'Accept': "application/json, text/plain, */*",
+            'Content-Type': "application/json;charset=utf-8"
+          }
+        }).then(response => {
+          if (!response.ok) {
+            return Promise.reject(response)
+          } else {
+            return response.json()
+          }
+        }).then(body => {
+          console.log(body)
+        }).catch((error: Response) => {
+          if (error.status === 401) {
+            this.router.navigate(['login'])
+          } else if (error.status === 404) {
+            this.router.navigate(['notfound'])
+          } else {
+            error.json().then(e => console.error(e))
+          }
+        })
+    }
+  }
   
+  //#endregion
+
+  //#region logic
+
+  isInCheck(playerColor: string): boolean {
+    let moveIsCheck = (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("+")
+    let moveIsMate = (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("#")
+    let moveCount = (this.currentGame?.moves.split(" ") ?? []).length
+    return (moveIsCheck && playerColor === (moveCount % 3 === 2 ? 'b' : 'w')) || (moveIsMate && playerColor === (moveCount % 3 === 2 ? 'b' : 'w'))
+  }
+
+  isInLastMove(coordinate: string): boolean {
+    return (this.currentGame?.moves.split(" ").at(-1) ?? "").includes(coordinate)
+  }
+
+  //#endregion
+
 }

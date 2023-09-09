@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Game } from 'src/app/shared/api/game.service';
+import { Game, GameService } from 'src/app/shared/api/game.service';
 
 @Component({
   selector: 'app-game-card',
@@ -9,7 +9,7 @@ import { Game } from 'src/app/shared/api/game.service';
 })
 export class GameCardComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private gameService: GameService) { }
 
   @Input()
   gameInfo!: Game;
@@ -18,6 +18,7 @@ export class GameCardComponent implements OnInit {
   }
 
   navigateToGame() {
+    this.gameService.currentGame = this.gameInfo
     this.router.navigate(['play', {id: this.gameInfo?.id}])
   }
 }

@@ -1,27 +1,144 @@
+<!-- the navbar at the top of the screen - contains home button and logo -->
 <app-navbar></app-navbar>
-<div class="container body" style="max-width: 80vh">
-  <div class="row">
-    <h2>
-      {{ opponentUsername() }}
-    </h2>
-  </div>
-  <div *ngIf="!loading && game" class="row d-flex justify-content-center">
-    <div class="col-9 g-0 ms-3">
-      <div class="board-container">
+
+<!-- The main body of the game - contains board and surrounding info -->
+<div class="container body d-flex justify-content-center">
+  <div class="row w-100 h-100 d-flex align-items-center justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <h2 class="row" style="margin-left: 10%">
+        {{ opponentUsername() }}
+      </h2>
+      <div *ngIf="!loading" class="row d-flex justify-content-center">
         <app-board
-          [fen]="this.game.fen"
+          [fen]="fen()"
           [playerColor]="playerColor"
           [currentPlayer]="currentPlayer"
           [validMoves]="validMoves"
-          [check]="isChecked"
           (moveEmitter)="performMove($event)"
         ></app-board>
       </div>
+      <h2 class="row" style="margin-left: 10%">
+        {{ playerUsername() }}
+      </h2>
+    </div>
+    <div
+      class="col-md-8 col-lg-6"
+      style="white-space: nowrap; overflow-x: scroll; direction: rtl"
+    >
+      <h3
+        *ngFor="let move of moves().reverse(); index as i"
+        class="p-2"
+        [ngClass]="{
+          'rounded-pill': isSelected(i)
+        }"
+        style="display: inline-flex"
+        id="{{ '' + (moves().length - 1 - i) }}"
+        (click)="select(i)"
+      >
+        {{ move }}
+      </h3>
     </div>
   </div>
-  <div class="row">
-    <h2>
-      {{ playerUsername() }}
-    </h2>
+</div>
+
+<!-- the navbar at the bottom of the screen - contains chat, move selector, and resign button -->
+<nav class="navbar fixed-bottom navbar-dark bg-dark">
+  <button class="navbar-toggler ms-2" style="border: none">
+    <i class="fa-solid fa-comment" style="color: #ffffff"></i>
+  </button>
+  <div>
+    <button
+      class="navbar-toggler"
+      style="border: none"
+      (click)="previousMove()"
+    >
+      <i class="fas fa-chevron-left" style="color: #ffffff"></i>
+    </button>
+    <button class="navbar-toggler" style="border: none" (click)="nextMove()">
+      <i class="fas fa-chevron-right" style="color: #ffffff"></i>
+    </button>
+  </div>
+  <button class="navbar-toggler me-2" style="border: none" (click)="resign()">
+    <i class="fa-solid fa-flag" style="color: #ffffff"></i>
+  </button>
+</nav>
+
+<!-- the popup to select which piece to promote to if relevant -->
+<div
+  *ngIf="showPromotionPopup"
+  class="popup"
+  (click)="promotionPiece.emit('cancel')"
+>
+  <div class="row h-100 d-flex justify-content-center align-items-center">
+    <div class="card d-flex align-items-center">
+      <h3 class="m-4">Promotion</h3>
+      <div class="row mb-3">
+        <span
+          class="col g-0 m-2"
+          [class]="piece"
+          *ngFor="let piece of pieces()"
+          (click)="promotionPiece.emit(piece)"
+        >
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- the popup to confirm resign -->
+<div
+  *ngIf="showResignConfirmationPopup"
+  class="popup"
+  (click)="resignation.emit(false)"
+>
+  <div class="row h-100 d-flex justify-content-center align-items-center">
+    <div class="card d-flex align-items-center">
+      <h3 class="m-4">Resign?</h3>
+      <div
+        class="row mb-4 w-100 d-flex align-items-center justify-content-center"
+      >
+        <button
+          class="col btn btn-danger d-flex justify-content-center g-0 ms-3 me-2"
+          (click)="resignation.emit(true)"
+        >
+          <p class="mb-0">
+            <i class="fas fa-check p-2 col" style="color: #ffffff"></i>
+            Yes
+          </p>
+        </button>
+        <button
+          class="col btn btn-secondary d-flex justify-content-center g-0 me-3 ms-2"
+        >
+          <p class="mb-0">
+            <i class="fas fa-check p-2 col" style="color: #ffffff"></i>
+            No
+          </p>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- the popup at the end of the game -->
+<div *ngIf="showGameOverPopup" class="popup">
+  <div class="row h-100 d-flex justify-content-center align-items-center">
+    <div class="card d-flex align-items-center">
+      <h5 class="mt-3">{{ gameOverMessage }}</h5>
+      <button
+        class="row w-100 mb-3 btn btn-secondary"
+        (click)="navigate('home')"
+      >
+        Home
+      </button>
+      <button class="row w-100 mb-3 btn btn-secondary" (click)="offerRematch()">
+        Rematch
+      </button>
+      <button
+        class="row w-100 mb-3 btn btn-secondary"
+        (click)="showGameOverPopup = false"
+      >
+        Close
+      </button>
+    </div>
   </div>
 </div>

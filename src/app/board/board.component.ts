@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BoardUtilService, BorderTile, Tile, variations } from './board-util.service';
+import { GameService } from '../shared/api/game.service';
 
 export type Move = {
   startSquare: number[],
   destSquare: number[],
   piece: string,
+  promotion?: string,
   isCheck: boolean,
   isMate: boolean,
   isCapture: boolean,
@@ -34,9 +36,6 @@ export class BoardComponent implements OnInit, OnChanges {
 
   @Input()
   validMoves: string[] = [];
-
-  @Input()
-  check: string = '';
   
   @Output()
   moveEmitter: EventEmitter<Move> = new EventEmitter();
@@ -48,6 +47,8 @@ export class BoardComponent implements OnInit, OnChanges {
   ngOnInit(): void {
       console.log("FEN", this.fen);
   }
+
+  //#region tile formatting
 
   expandedGrid(): (Tile | BorderTile)[][] {
     if (this.isIcon) {
@@ -80,6 +81,13 @@ export class BoardComponent implements OnInit, OnChanges {
   isBorder(x: number, y: number): boolean {
     return (x === 0 || x === 9 || y === 0 || y === 9)
   }
+
+  isLastMove(x: number, y: number): boolean {
+    let coordinate = "" + String.fromCharCode(97+x) + Math.abs(y-8)
+    return (this.fen.split(" ").at(-1) ?? "").includes(coordinate)
+  }
+
+  //#endregion
 
   abs(n: number) {
     return Math.abs(n)
@@ -129,9 +137,8 @@ export class BoardComponent implements OnInit, OnChanges {
       }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
-      }else{
-        this.selectedPiece = undefined;
       }
+      this.selectedPiece = undefined;
     }
     this.updatePossible();
   }
