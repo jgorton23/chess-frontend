@@ -31,11 +31,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
   showGameOverPopup: boolean = false;
 
+  gameOverMessage: string = '';
+
   promotionPiece: EventEmitter<string> = new EventEmitter();
 
   resignation: EventEmitter<boolean> = new EventEmitter();
-
-  gameOver: EventEmitter<string> = new EventEmitter();
 
   selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
 
@@ -171,7 +171,12 @@ export class GameComponent implements OnInit, OnDestroy {
     return ['q', 'r', 'b', 'n'].map((p) => this.currentPlayer === 'w' ? p.toUpperCase() : p)
   }
 
+  navigate(page: string) {
+    this.router.navigate([page])
+  }
+
   //#region websocket
+
   connect() {
     if (!this.webSocketAPI) {
       this.webSocketAPI = new WebsocketAPIService(this, this.gameService.currentGame!.id!)
@@ -196,6 +201,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
     if (move.isMate) {
       this.showGameOverPopup = true;
+      this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate"
     } else {
       this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
       if (this.currentPlayer === this.playerColor) {

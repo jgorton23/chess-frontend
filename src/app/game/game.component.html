@@ -120,3 +120,31 @@
     </div>
   </div>
 </div>
+
+<!-- the popup at the end of the game -->
+<div *ngIf="true" class="popup">
+  <div class="row h-100 d-flex justify-content-center align-items-center">
+    <div class="card d-flex align-items-center">
+      <h5 class="mt-3">White player won by resignation</h5>
+      <!-- {{ gameOverMessage }}-->
+      <button
+        class="row w-100 mb-3 btn btn-secondary"
+        (click)="navigate('home')"
+      >
+        Home
+      </button>
+      <button
+        class="row w-100 mb-3 btn btn-secondary"
+        (click)="showGameOverPopup = false"
+      >
+        Rematch
+      </button>
+      <button
+        class="row w-100 mb-3 btn btn-secondary"
+        (click)="showGameOverPopup = false"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
