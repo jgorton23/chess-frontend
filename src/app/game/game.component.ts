@@ -175,6 +175,13 @@ export class GameComponent implements OnInit, OnDestroy {
     this.router.navigate([page])
   }
 
+  offerRematch() {
+    // todo - if they offered rematch, send rematch accept and redirect to the new page
+    // todo - otherwise
+    // todo - send ws message signifying rematch offer
+    // todo - await ws response signifying rematch accepted
+  }
+
   //#region websocket
 
   connect() {
