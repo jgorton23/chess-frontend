@@ -41,6 +41,9 @@ export class WebsocketAPIService {
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, function (sdkEvent: any) {
         _this.onMessageReceived(sdkEvent);
       });
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', function (sdkEvent: any) {
+        _this.onMessageReceived(sdkEvent);
+      });
     }, this._error);
   }
 
@@ -59,7 +62,7 @@ export class WebsocketAPIService {
    */
   _send(message: any) {
     this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify(message));
-    this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify("testMessage"));
+    this.stompClient.send('/app/game/' + this.gameId + '/chat', {}, JSON.stringify("testMessage"));
   }
 
   /**
