@@ -199,7 +199,13 @@ export class GameComponent implements OnInit, OnDestroy {
 
   sendMove(move: Move) {
     if (this.webSocketAPI){
-      this.webSocketAPI._send(move);
+      this.webSocketAPI._sendMove(move);
+    }
+  }
+
+  sendChat(chat: string) {
+    if (this.webSocketAPI){
+      this.webSocketAPI._sendChat(chat);
     }
   }
 

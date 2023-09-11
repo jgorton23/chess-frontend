@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { GameComponent } from '../../game/game.component';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
+import { Move } from 'src/app/board/board.component';
 
 @Injectable({
   providedIn: 'root'
@@ -57,12 +58,19 @@ export class WebsocketAPIService {
   }
 
   /**
-   * send a message over the socket
+   * send a Move over the socket
    * @param message the message to send
    */
-  _send(message: any) {
+  _sendMove(message: Move) {
     this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify(message));
-    this.stompClient.send('/app/game/' + this.gameId + '/chat', {}, JSON.stringify("testMessage"));
+  }
+  
+  /**
+   * Sends a chat over the socket connection
+   * @param message the chat message to send across the socket
+   */
+  _sendChat(message: string) {
+    this.stompClient.send('/app/game/' + this.gameId + '/chat', {}, JSON.stringify(message));
   }
 
   /**
