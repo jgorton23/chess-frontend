@@ -59,6 +59,7 @@ export class WebsocketAPIService {
    */
   _send(message: any) {
     this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify(message));
+    this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify("testMessage"));
   }
 
   /**
@@ -78,7 +79,6 @@ export class WebsocketAPIService {
    */
   onMessageReceived(message: any) {
     console.log("socket got message", message.body);
-    
     this.game.handleMove(message.body);
   }
 }
