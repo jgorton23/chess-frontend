@@ -149,5 +149,13 @@
 
 <!-- the chat slideout -->
 <div *ngIf="showChat" class="slideout">
-  <div class="open-close-container"></div>
+  <div class="open-close-container d-flex justify-content-center">
+    <textarea
+      name="chat"
+      cols="26"
+      rows="10"
+      class="m-2 align-self-end"
+      style="height: 10%; color: white; background-color: gray"
+    ></textarea>
+  </div>
 </div>

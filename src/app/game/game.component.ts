@@ -215,7 +215,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
   toggleChat() {
     this.showChat = !this.showChat
-    this.sendChat("testMessage")
   }
 
   handleMove(moveData: string) {
