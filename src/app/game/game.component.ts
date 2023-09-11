@@ -39,6 +39,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
 
+  chats: string[] = []
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -229,6 +231,14 @@ export class GameComponent implements OnInit, OnDestroy {
 
     this.gameService.getGame(this.gameService.currentGame!.id!)
       .then(game => {this.gameService.currentGame = game})
+  }
+
+  handleChat(chat: string) {
+    chat = JSON.parse(chat)
+    console.log(chat);
+    this.chats.push(chat);
+    console.log(this.chats);
+    
   }
 
   async performMove(moveData: Move) {

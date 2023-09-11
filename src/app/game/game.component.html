@@ -43,7 +43,11 @@
 
 <!-- the navbar at the bottom of the screen - contains chat, move selector, and resign button -->
 <nav class="navbar fixed-bottom navbar-dark bg-dark">
-  <button class="navbar-toggler ms-2" style="border: none">
+  <button
+    class="navbar-toggler ms-2"
+    style="border: none"
+    (click)="sendChat('testchat')"
+  >
     <i class="fa-solid fa-comment" style="color: #ffffff"></i>
   </button>
   <div>

@@ -40,10 +40,10 @@ export class WebsocketAPIService {
     const _this = this;
     _this.stompClient.connect({}, function (frame: any) {
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, function (sdkEvent: any) {
-        _this.onMessageReceived(sdkEvent);
+        _this.onMoveReceived(sdkEvent);
       });
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', function (sdkEvent: any) {
-        _this.onMessageReceived(sdkEvent);
+        _this.onChatReceived(sdkEvent);
       });
     }, this._error);
   }
@@ -88,9 +88,14 @@ export class WebsocketAPIService {
    * On ws message, pass the message body to the game component for handling
    * @param message 
    */
-  onMessageReceived(message: any) {
-    console.log("socket got message", message.body);
+  onMoveReceived(message: any) {
+    console.log("socket got move", message.body);
     this.game.handleMove(message.body);
+  }
+
+  onChatReceived(message: any) {
+    console.log("socket got chat", message.body)
+    this.game.handleChat(message.body);
   }
 }
 
