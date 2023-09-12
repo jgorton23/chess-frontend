@@ -43,6 +43,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   chats: string[] = []
 
+  chat: string = ''
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -207,9 +209,12 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendChat(chat: string) {
+  sendChat() {
+    console.log();
+    
     if (this.webSocketAPI){
-      this.webSocketAPI._sendChat(chat);
+      this.webSocketAPI._sendChat(this.chat);
+      this.chat = ''
     }
   }
 

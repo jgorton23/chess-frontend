@@ -42,7 +42,7 @@
 </div>
 
 <!-- the navbar at the bottom of the screen - contains chat, move selector, and resign button -->
-<nav class="navbar fixed-bottom navbar-dark bg-dark">
+<nav class="navbar fixed-bottom navbar-dark bg-dark" style="height: 56px">
   <button
     class="navbar-toggler ms-2"
     style="border: none"
@@ -148,14 +148,21 @@
 </div>
 
 <!-- the chat slideout -->
-<div *ngIf="showChat" class="slideout">
-  <div class="open-close-container d-flex justify-content-center">
-    <textarea
-      name="chat"
-      cols="26"
-      rows="10"
-      class="m-2 align-self-end"
-      style="height: 10%; color: white; background-color: gray"
-    ></textarea>
+<div *ngIf="showChat" class="slideout container open-close-container d-flex">
+  <div class="w-100" style="max-width: 100%">
+    <div style="overflow-y: scroll; height: 84%" class="">
+      <p class="m-2" style="max-width: 100%" *ngFor="let message of chats">
+        {{ message }}
+      </p>
+    </div>
+    <div style="height: 16%" class="">
+      <textarea
+        name="chat"
+        class="w-100 ms-0"
+        style="color: white; background-color: gray"
+        [(ngModel)]="chat"
+      ></textarea>
+      <button class="w-100 btn btn-secondary" (click)="sendChat()">Send</button>
+    </div>
   </div>
 </div>
