@@ -213,7 +213,7 @@ export class GameComponent implements OnInit, OnDestroy {
     console.log();
     
     if (this.webSocketAPI){
-      this.webSocketAPI._sendChat(this.chat);
+      this.webSocketAPI._sendChat(this.playerUsername() + ': ' + this.chat);
       this.chat = ''
     }
   }
