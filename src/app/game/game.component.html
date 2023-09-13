@@ -48,7 +48,16 @@
     style="border: none"
     (click)="toggleChat()"
   >
-    <i class="fa-solid fa-comment" style="color: #ffffff"></i>
+    <i
+      *ngIf="!chatsPending"
+      class="fa-solid fa-comment"
+      style="color: #ffffff"
+    ></i>
+    <i
+      *ngIf="chatsPending"
+      class="fa-solid fa-comment-dots"
+      style="color: #e4e412"
+    ></i>
   </button>
   <div>
     <button
@@ -155,14 +164,20 @@
         {{ message }}
       </p>
     </div>
-    <div style="height: 16%" class="">
+    <div style="height: 16%" class="justify-content-end">
       <textarea
         name="chat"
         class="w-100 ms-0"
-        style="color: white; background-color: gray"
+        style="color: white; background-color: gray; max-height: 66%"
         [(ngModel)]="chat"
       ></textarea>
-      <button class="w-100 btn btn-secondary" (click)="sendChat()">Send</button>
+      <button
+        class="w-100 btn btn-secondary"
+        style="max-height: 33%"
+        (click)="sendChat()"
+      >
+        Send
+      </button>
     </div>
   </div>
 </div>

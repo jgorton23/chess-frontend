@@ -33,6 +33,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   showChat: boolean = false;
 
+  chatsPending: boolean = false;
+
   gameOverMessage: string = '';
 
   promotionPiece: EventEmitter<string> = new EventEmitter();
@@ -220,6 +222,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   toggleChat() {
     this.showChat = !this.showChat
+    this.chatsPending = false;
   }
 
   handleMove(moveData: string) {
@@ -246,11 +249,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   handleChat(chat: string) {
     chat = JSON.parse(chat)
-    console.log(chat);
     this.chats.push(chat);
-    console.log(this.chats);
-    
-    // this.showChat = true;
+    if (!this.showChat) {
+      this.chatsPending = true;
+    }
   }
 
   async performMove(moveData: Move) {
