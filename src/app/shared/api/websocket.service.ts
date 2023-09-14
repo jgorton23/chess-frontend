@@ -45,6 +45,9 @@ export class WebsocketAPIService {
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', function (sdkEvent: any) {
         _this.onChatReceived(sdkEvent);
       });
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', function (sdkEvent: any) {
+        _this.onResignReceived(sdkEvent);
+      })
     }, this._error);
   }
 
@@ -73,6 +76,10 @@ export class WebsocketAPIService {
     this.stompClient.send('/app/game/' + this.gameId + '/chat', {}, JSON.stringify(message));
   }
 
+  _sendResign(message: string) {
+    this.stompClient.send('/app/game/' + this.gameId + '/resign')
+  }
+
   /**
    * On ws error, log error and attempt to reconnect
    * @param error 
@@ -96,6 +103,11 @@ export class WebsocketAPIService {
   onChatReceived(message: any) {
     console.log("socket got chat", message.body)
     this.game.handleChat(message.body);
+  }
+
+  onResignReceived(message: any) {
+    console.log("socket got resign", message.body)
+    this.game.handleResignation(message.body)
   }
 }
 

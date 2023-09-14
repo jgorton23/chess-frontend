@@ -211,12 +211,16 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendChat() {
-    console.log();
-    
+  sendChat() {    
     if (this.webSocketAPI){
       this.webSocketAPI._sendChat(this.playerUsername() + ': ' + this.chat);
       this.chat = ''
+    }
+  }
+
+  sendResign() {
+    if (this.webSocketAPI){
+      this.webSocketAPI._sendResign(this.playerUsername())
     }
   }
 
@@ -229,8 +233,8 @@ export class GameComponent implements OnInit, OnDestroy {
     let move: Move = JSON.parse(moveData)
 
     if (move.isMate) {
-      this.showGameOverPopup = true;
       this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate"
+      this.showGameOverPopup = true;
     } else {
       this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
       if (this.currentPlayer === this.playerColor) {
@@ -253,6 +257,12 @@ export class GameComponent implements OnInit, OnDestroy {
     if (!this.showChat) {
       this.chatsPending = true;
     }
+  }
+
+  handleResignation(message: string) {
+    message = JSON.parse(message);
+    this.gameOverMessage = message + " resigned"
+    this.showGameOverPopup = true;
   }
 
   async performMove(moveData: Move) {
