@@ -45,11 +45,12 @@ export class WebsocketAPIService {
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', function (sdkEvent: any) {
         _this.onChatReceived(sdkEvent);
       });
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', function (sdkEvent: any) {
-        console.log("message");
-        
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', function (sdkEvent: any) {        
         _this.onResignReceived(sdkEvent);
-      })
+      });
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', function (sdkEvent: any) {
+        _this.onRematchReceived(sdkEvent);
+      });
     }, this._error);
   }
 
@@ -78,11 +79,12 @@ export class WebsocketAPIService {
     this.stompClient.send('/app/game/' + this.gameId + '/chat', {}, JSON.stringify(message));
   }
 
-  _sendResign(message: string) {
-    console.log("resign");
-    
+  _sendResign(message: string) {    
     this.stompClient.send('/app/game/' + this.gameId + '/resign', {}, JSON.stringify(message));
-    console.log("resign2");
+  }
+
+  _sendRematchOffer(confirmed: boolean) {
+    this.stompClient.send('/app/game/' + this.gameId + '/rematch', {}, JSON.stringify(confirmed))
   }
 
   /**
@@ -111,8 +113,13 @@ export class WebsocketAPIService {
   }
 
   onResignReceived(message: any) {
-    console.log("socket got resign", message.body)
-    this.game.handleResignation(message.body)
+    console.log("socket got resign", message.body);
+    this.game.handleResignation(message.body);
+  }
+
+  onRematchReceived(confirm: any) {
+    console.log("socket got rematch", confirm.body);
+    this.game.handleRematchOffer(JSON.parse(confirm.body));
   }
 }
 

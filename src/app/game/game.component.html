@@ -65,10 +65,10 @@
       style="border: none"
       (click)="previousMove()"
     >
-      <i class="fas fa-chevron-left" style="color: #ffffff"></i>
+      <i class="fas fa-chevron-left"></i>
     </button>
     <button class="navbar-toggler" style="border: none" (click)="nextMove()">
-      <i class="fas fa-chevron-right" style="color: #ffffff"></i>
+      <i class="fas fa-chevron-right"></i>
     </button>
   </div>
   <button
@@ -77,7 +77,7 @@
     (click)="resign()"
     [disabled]="isGameOver()"
   >
-    <i class="fa-solid fa-flag" style="color: #ffffff"></i>
+    <i class="fa-solid fa-flag"></i>
   </button>
 </nav>
 
@@ -148,7 +148,7 @@
       >
         Home
       </button>
-      <button class="row w-100 mb-3 btn btn-secondary" (click)="offerRematch()">
+      <button class="row w-100 mb-3 btn btn-secondary" (click)="sendRematch()">
         Rematch
       </button>
       <button

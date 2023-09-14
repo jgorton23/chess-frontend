@@ -35,6 +35,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   chatsPending: boolean = false;
 
+  confirmRematch: boolean = false;
+
   gameOverMessage: string = '';
 
   promotionPiece: EventEmitter<string> = new EventEmitter();
@@ -188,13 +190,6 @@ export class GameComponent implements OnInit, OnDestroy {
     this.router.navigate([page])
   }
 
-  offerRematch() {
-    // todo - if they offered rematch, send rematch accept and redirect to the new page
-    // todo - otherwise
-    // todo - send ws message signifying rematch offer
-    // todo - await ws response signifying rematch accepted
-  }
-
   //#region websocket
 
   connect() {
@@ -224,10 +219,30 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   sendResign() {
-    if (this.webSocketAPI){
-      console.log("resign", this.playerUsername());
-      
+    if (this.webSocketAPI){      
       this.webSocketAPI._sendResign(this.playerUsername())
+    }
+  }
+
+  sendRematch() {
+    if (this.confirmRematch) {
+      let newGame: Game = {
+        fen: this.boardUtil.getBoard('standard'),
+        timeControl: this.gameService.currentGame!.timeControl,
+        whitePlayerUsername: this.gameService.currentGame!.blackPlayerUsername,
+        blackPlayerUsername: this.gameService.currentGame!.whitePlayerUsername,
+        date: new Date(),
+        moves: '',
+        moveTimes: '',
+        result: ''
+      }
+      this.gameService.createGame(newGame).then(() => {
+        if (this.webSocketAPI) {
+          this.webSocketAPI._sendRematchOffer(this.confirmRematch);
+        }
+      });
+    } else if (this.webSocketAPI) {
+      this.webSocketAPI._sendRematchOffer(this.confirmRematch);
     }
   }
 
@@ -270,6 +285,22 @@ export class GameComponent implements OnInit, OnDestroy {
     message = JSON.parse(message);
     this.gameOverMessage = message + " resigned"
     this.showGameOverPopup = true;
+  }
+
+  handleRematchOffer(confirm: boolean) {
+    if (confirm){
+      console.log("confirmed");
+      
+      this.gameService.getGames().then((_: Game[]) => {
+        this.router.navigate(['play', {id: this.gameService.currentGames[0].id}]).then(_ => {
+          this.ngOnInit()
+          this.confirmRematch = false
+          this.showGameOverPopup = false
+        })
+      })
+    } else {
+      this.confirmRematch = true;
+    }
   }
 
   async performMove(moveData: Move) {

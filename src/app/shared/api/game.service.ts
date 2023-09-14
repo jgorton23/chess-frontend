@@ -85,9 +85,9 @@ export class GameService {
       })
   }
 
-  createGame(game: Game) {
+  createGame(game: Game): Promise<void> {
 
-    fetch(`${environment.baseUrl}/${ApiPaths.Games}/new`, 
+    return fetch(`${environment.baseUrl}/${ApiPaths.Games}/new`, 
       {
         credentials: 'include',
         method: 'POST',
