@@ -46,6 +46,8 @@ export class WebsocketAPIService {
         _this.onChatReceived(sdkEvent);
       });
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', function (sdkEvent: any) {
+        console.log("message");
+        
         _this.onResignReceived(sdkEvent);
       })
     }, this._error);
@@ -77,7 +79,10 @@ export class WebsocketAPIService {
   }
 
   _sendResign(message: string) {
-    this.stompClient.send('/app/game/' + this.gameId + '/resign')
+    console.log("resign");
+    
+    this.stompClient.send('/app/game/' + this.gameId + '/resign', {}, JSON.stringify(message));
+    console.log("resign2");
   }
 
   /**

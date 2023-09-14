@@ -71,7 +71,12 @@
       <i class="fas fa-chevron-right" style="color: #ffffff"></i>
     </button>
   </div>
-  <button class="navbar-toggler me-2" style="border: none" (click)="resign()">
+  <button
+    class="navbar-toggler me-2"
+    style="border: none"
+    (click)="resign()"
+    [disabled]="isGameOver()"
+  >
     <i class="fa-solid fa-flag" style="color: #ffffff"></i>
   </button>
 </nav>

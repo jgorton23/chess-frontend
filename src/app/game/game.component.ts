@@ -171,8 +171,13 @@ export class GameComponent implements OnInit, OnDestroy {
     
     if (confirm) {
       this.gameService.resign()
+      this.sendResign()
     }
     this.showResignConfirmationPopup = false;
+  }
+
+  isGameOver(): boolean {
+    return this.gameService.currentGame?.result !== '*'
   }
 
   pieces(): string[] {
@@ -220,6 +225,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   sendResign() {
     if (this.webSocketAPI){
+      console.log("resign", this.playerUsername());
+      
       this.webSocketAPI._sendResign(this.playerUsername())
     }
   }
