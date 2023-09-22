@@ -98,28 +98,37 @@ export class WebsocketAPIService {
     }, 5000);
   }
 
+  //#region WebSocket Callback functions
+
   /**
    * On ws message, pass the message body to the game component for handling
    * @param message 
    */
   onMoveReceived(message: any) {
-    console.log("socket got move", message.body);
-    this.game.handleMove(message.body);
+    let move = JSON.parse(message.body);
+    this.game.handleMove(move);
   }
 
+  /**
+   * 
+   * @param message 
+   */
   onChatReceived(message: any) {
-    console.log("socket got chat", message.body)
-    this.game.handleChat(message.body);
+    let chat = message.body;
+    this.game.handleChat(chat);
   }
 
   onResignReceived(message: any) {
-    console.log("socket got resign", message.body);
-    this.game.handleResignation(message.body);
+    let resignation = message.body;
+    this.game.handleResignation(resignation);
   }
 
-  onRematchReceived(confirm: any) {
-    console.log("socket got rematch", confirm.body);
-    this.game.handleRematchOffer(JSON.parse(confirm.body));
+  onRematchReceived(message: any) {
+    let rematchRequest = JSON.parse(message.body);
+    this.game.handleRematchOffer(rematchRequest);
   }
+
+  //#endregion
+
 }
 

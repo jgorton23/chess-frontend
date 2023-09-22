@@ -240,7 +240,7 @@ export class GameComponent implements OnInit, OnDestroy {
       } else {
         this.rematchRequest.blackPlayerConfirmed = true
       }
-      
+
       this.webSocketAPI._sendRematchOffer(this.rematchRequest);
     }
   }
@@ -250,9 +250,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.chatsPending = false;
   }
 
-  handleMove(moveData: string) {
-    let move: Move = JSON.parse(moveData)
-
+  handleMove(move: Move) {
     if (move.isMate) {
       this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate"
       this.showGameOverPopup = true;
