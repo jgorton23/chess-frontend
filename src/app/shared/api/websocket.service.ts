@@ -63,6 +63,17 @@ export class WebsocketAPIService {
     }
   }
 
+  /**
+ * On ws error, log error and attempt to reconnect
+ * @param error 
+ */
+  _error(error: Error) {
+    console.log("errorCallBack -> " + error)
+    setTimeout(() => {
+        this._connect()
+    }, 5000);
+  }
+
   //#region Send WebSocket messages
 
   /**
@@ -98,17 +109,6 @@ export class WebsocketAPIService {
   }
 
   //#endregion
-
-  /**
-   * On ws error, log error and attempt to reconnect
-   * @param error 
-   */
-  _error(error: Error) {
-    console.log("errorCallBack -> " + error)
-    setTimeout(() => {
-        this._connect()
-    }, 5000);
-  }
 
   //#region WebSocket Callback functions
 
