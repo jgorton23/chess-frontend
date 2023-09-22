@@ -101,8 +101,8 @@ export class WebsocketAPIService {
   //#region WebSocket Callback functions
 
   /**
-   * On ws message, pass the message body to the game component for handling
-   * @param message 
+   * Pass the Move received from the WebSocket to the Game to be handled
+   * @param message the message from the WebSocket containing a move
    */
   onMoveReceived(message: any) {
     let move = JSON.parse(message.body);
@@ -110,19 +110,27 @@ export class WebsocketAPIService {
   }
 
   /**
-   * 
-   * @param message 
+   * Pass the chat received from the WebSocket to the Game to be handled
+   * @param message the message from the WebSocket containing a chat
    */
   onChatReceived(message: any) {
     let chat = message.body;
     this.game.handleChat(chat);
   }
 
+  /**
+   * Pass the resignation request from the WebSocket to the Game to be handled
+   * @param message the message from the WebSocket containing a resignation request
+   */
   onResignReceived(message: any) {
     let resignation = message.body;
     this.game.handleResignation(resignation);
   }
 
+  /**
+   * Pass the rematch request from the WebSocket to the Game to be handled
+   * @param message the message from the WebSocker containing a rematch request
+   */
   onRematchReceived(message: any) {
     let rematchRequest = JSON.parse(message.body);
     this.game.handleRematchOffer(rematchRequest);
