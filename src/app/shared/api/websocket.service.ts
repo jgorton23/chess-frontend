@@ -32,7 +32,7 @@ export class WebsocketAPIService {
   constructor(private game: GameComponent, @Inject(String) private gameId: string) { }
 
   /**
-   * Subscribe to the ws endpoint based on this objects gameId
+   * Subscribe to the ws endpoints based on this objects gameId
    */
   _connect() {
     let ws = new SockJS(this.wsEndpoint);
@@ -63,6 +63,8 @@ export class WebsocketAPIService {
     }
   }
 
+  //#region Send WebSocket messages
+
   /**
    * send a Move over the socket
    * @param message the message to send
@@ -79,13 +81,23 @@ export class WebsocketAPIService {
     this.stompClient.send('/app/game/' + this.gameId + '/chat', {}, JSON.stringify(message));
   }
 
+  /**
+   * Sends a resignation request over the socket connection
+   * @param message the resignation request to send
+  */
   _sendResign(message: string) {    
     this.stompClient.send('/app/game/' + this.gameId + '/resign', {}, JSON.stringify(message));
   }
 
+  /**
+   * Sends a rematch request across the socket connection
+   * @param request the rematch request to send
+   */
   _sendRematchOffer(request: RematchRequest) {
     this.stompClient.send('/app/game/' + this.gameId + '/rematch', {}, JSON.stringify(request))
   }
+
+  //#endregion
 
   /**
    * On ws error, log error and attempt to reconnect
