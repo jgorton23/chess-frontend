@@ -81,6 +81,8 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
           this.gameService.currentGame = game
+          console.log(this.gameService.currentGame);
+          
           this.currentPlayer = game.moves.trim().split(" ").length % 3 <= 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
@@ -284,9 +286,10 @@ export class GameComponent implements OnInit, OnDestroy {
     this.showGameOverPopup = true;
   }
 
-  handleRematchOffer(request: RematchRequest) {
+  handleRematchOffer(request: RematchRequest) {    
     if (request.newGameId) {
-      this.router.navigate(['play', {id: request.newGameId}])
+      this.showGameOverPopup = false
+      this.router.navigate(['play', {id: request.newGameId}]).then(_ => this.ngOnInit())
     } else {
       this.rematchRequest = request
     }
