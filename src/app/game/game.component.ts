@@ -8,6 +8,12 @@ import { ProfileService } from 'src/app/shared/api/profile.service';
 import { Move } from 'src/app/board/board.component';
 import { firstValueFrom } from 'rxjs';
 
+export type RematchRequest = {
+  whitePlayerConfirmed: boolean,
+  blackPlayerConfirmed: boolean,
+  newGameId?: string
+}
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -35,7 +41,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   chatsPending: boolean = false;
 
-  confirmRematch: boolean = false;
+  rematchRequest: RematchRequest = {
+    whitePlayerConfirmed: false,
+    blackPlayerConfirmed: false
+  }
 
   gameOverMessage: string = '';
 
@@ -225,24 +234,14 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   sendRematch() {
-    if (this.confirmRematch) {
-      let newGame: Game = {
-        fen: this.boardUtil.getBoard('standard'),
-        timeControl: this.gameService.currentGame!.timeControl,
-        whitePlayerUsername: this.gameService.currentGame!.blackPlayerUsername,
-        blackPlayerUsername: this.gameService.currentGame!.whitePlayerUsername,
-        date: new Date(),
-        moves: '',
-        moveTimes: '',
-        result: ''
+    if (this.webSocketAPI) {
+      if (this.playerColor === 'w') {
+        this.rematchRequest.whitePlayerConfirmed = true
+      } else {
+        this.rematchRequest.blackPlayerConfirmed = true
       }
-      this.gameService.createGame(newGame).then(() => {
-        if (this.webSocketAPI) {
-          this.webSocketAPI._sendRematchOffer(this.confirmRematch);
-        }
-      });
-    } else if (this.webSocketAPI) {
-      this.webSocketAPI._sendRematchOffer(this.confirmRematch);
+      
+      this.webSocketAPI._sendRematchOffer(this.rematchRequest);
     }
   }
 
@@ -287,19 +286,11 @@ export class GameComponent implements OnInit, OnDestroy {
     this.showGameOverPopup = true;
   }
 
-  handleRematchOffer(confirm: boolean) {
-    if (confirm){
-      console.log("confirmed");
-      
-      this.gameService.getGames().then((_: Game[]) => {
-        this.router.navigate(['play', {id: this.gameService.currentGames[0].id}]).then(_ => {
-          this.ngOnInit()
-          this.confirmRematch = false
-          this.showGameOverPopup = false
-        })
-      })
+  handleRematchOffer(request: RematchRequest) {
+    if (request.newGameId) {
+      this.router.navigate(['play', {id: request.newGameId}])
     } else {
-      this.confirmRematch = true;
+      this.rematchRequest = request
     }
   }
 

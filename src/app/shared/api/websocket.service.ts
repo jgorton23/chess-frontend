@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { GameComponent } from '../../game/game.component';
+import { GameComponent, RematchRequest } from '../../game/game.component';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { Move } from 'src/app/board/board.component';
@@ -83,8 +83,8 @@ export class WebsocketAPIService {
     this.stompClient.send('/app/game/' + this.gameId + '/resign', {}, JSON.stringify(message));
   }
 
-  _sendRematchOffer(confirmed: boolean) {
-    this.stompClient.send('/app/game/' + this.gameId + '/rematch', {}, JSON.stringify(confirmed))
+  _sendRematchOffer(request: RematchRequest) {
+    this.stompClient.send('/app/game/' + this.gameId + '/rematch', {}, JSON.stringify(request))
   }
 
   /**
