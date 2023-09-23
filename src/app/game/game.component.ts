@@ -308,15 +308,16 @@ export class GameComponent implements OnInit, OnDestroy {
       isMate: false,
       isCapture: false,
       playerUsername: '',
+      promotion: '',
+      miliseconds: 0,
       ...moveData
     }
 
     if (move.piece.toLowerCase() === 'p' && move.destSquare[1] % 7 === 0) {
       this.showPromotionPopup = true;
-      moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
+      move.promotion = await firstValueFrom(this.promotionPiece.asObservable())
       this.showPromotionPopup = false;
-      console.log(moveData.promotion);
-      if (!"qbnr".includes(moveData.promotion.toLowerCase())) {
+      if (!"qbnr".includes(move.promotion.toLowerCase())) {
         return
       }
     }
@@ -324,10 +325,10 @@ export class GameComponent implements OnInit, OnDestroy {
     let dest = String.fromCharCode(97+move.destSquare[0]) + Math.abs(move.destSquare[1] - 8)
     let moveString = this.validMoves.find(m => m.startsWith(move.piece) && m.includes(dest))
     if (moveString) {
-      moveData.isCapture = moveString.includes("x")
-      moveData.isCheck = moveString.includes("+")
-      moveData.isMate = moveString.includes("#")
-      moveData.playerUsername = await this.profileService.getUsername()
+      move.isCapture = moveString.includes("x")
+      move.isCheck = moveString.includes("+")
+      move.isMate = moveString.includes("#")
+      move.playerUsername = await this.profileService.getUsername()
       this.validMoves = []
       this.sendMove(move)
     }
