@@ -317,7 +317,7 @@ export class GameComponent implements OnInit, OnDestroy {
       moveData.isCheck = moveString.includes("+")
       moveData.isMate = moveString.includes("#")
       this.validMoves = []
-      this.gameService.doMove(moveData, this.gameService.currentGame.id).then(() => this.sendMove(moveData))
+      this.sendMove(moveData)
     }
   }
 
