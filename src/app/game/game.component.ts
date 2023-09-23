@@ -254,7 +254,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   handleMove(move: Move) {
     if (move.isMate) {
-      this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate"
+      this.gameOverMessage = move.playerUsername + " player won by checkmate"
       this.showGameOverPopup = true;
     } else {
       this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
@@ -295,12 +295,23 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  async performMove(moveData: Move) {
+  async performMove(moveData: Partial<Move>) {
     if (!this.gameService.currentGame || !this.gameService.currentGame.id) {
       return
     }
 
-    if (moveData.piece.toLowerCase() === 'p' && moveData.destSquare[1] % 7 === 0) {
+    let move: Move = {
+      startSquare: [],
+      destSquare: [],
+      piece: '',
+      isCheck: false,
+      isMate: false,
+      isCapture: false,
+      playerUsername: '',
+      ...moveData
+    }
+
+    if (move.piece.toLowerCase() === 'p' && move.destSquare[1] % 7 === 0) {
       this.showPromotionPopup = true;
       moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
       this.showPromotionPopup = false;
@@ -310,14 +321,15 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     }
     
-    let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
-    let moveString = this.validMoves.find(m => m.startsWith(moveData.piece) && m.includes(dest))
+    let dest = String.fromCharCode(97+move.destSquare[0]) + Math.abs(move.destSquare[1] - 8)
+    let moveString = this.validMoves.find(m => m.startsWith(move.piece) && m.includes(dest))
     if (moveString) {
       moveData.isCapture = moveString.includes("x")
       moveData.isCheck = moveString.includes("+")
       moveData.isMate = moveString.includes("#")
+      moveData.playerUsername = await this.profileService.getUsername()
       this.validMoves = []
-      this.sendMove(moveData)
+      this.sendMove(move)
     }
   }
 

@@ -52,7 +52,7 @@ export class ProfileService {
    * @returns A promise of the username
    */
   getUsername(): Promise<string> {
-    return this.getProfile().then(() => this.username)
+    return this.username ? Promise.resolve(this.username) : this.getProfile().then(() => this.username)
   }
   
   /**

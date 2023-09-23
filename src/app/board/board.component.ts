@@ -10,6 +10,7 @@ export type Move = {
   isCheck: boolean,
   isMate: boolean,
   isCapture: boolean,
+  playerUsername: string,
   miliseconds?: number
 }
 
@@ -38,7 +39,7 @@ export class BoardComponent implements OnInit, OnChanges {
   validMoves: string[] = [];
   
   @Output()
-  moveEmitter: EventEmitter<Move> = new EventEmitter();
+  moveEmitter: EventEmitter<Partial<Move>> = new EventEmitter();
   
   grid: Tile[][] = this.boardUtil.FENToTileArr(this.fen)
   
@@ -128,9 +129,6 @@ export class BoardComponent implements OnInit, OnChanges {
         let move = {
           startSquare: [this.selectedPiece.x, this.selectedPiece.y],
           destSquare: [x, y],
-          isCapture: false,
-          isCheck: false,
-          isMate: false,
           piece: this.grid[this.selectedPiece.y][this.selectedPiece.x].piece
         }
         this.moveEmitter.emit(move)
