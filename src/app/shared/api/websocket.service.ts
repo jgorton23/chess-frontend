@@ -117,8 +117,8 @@ export class WebsocketAPIService {
    * @param message the message from the WebSocket containing a move
    */
   onMoveReceived(message: any) {
-    let move = JSON.parse(message.body);
-    this.game.handleMove(move);
+    let game = JSON.parse(message.body);
+    this.game.handleMove(game);
   }
 
   /**

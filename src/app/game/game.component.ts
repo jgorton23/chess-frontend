@@ -241,7 +241,7 @@ export class GameComponent implements OnInit, OnDestroy {
     } else {
       this.rematchRequest.blackPlayerConfirmed = true
     }
-    
+
     if (this.webSocketAPI) {
       this.webSocketAPI._sendRematchOffer(this.rematchRequest);
     }
@@ -252,24 +252,26 @@ export class GameComponent implements OnInit, OnDestroy {
     this.chatsPending = false;
   }
 
-  handleMove(move: Move) {
-    if (move.isMate) {
-      this.gameOverMessage = move.playerUsername + " player won by checkmate"
+  handleMove(game: Game) {
+    
+    this.gameService.currentGame = game
+    this.validMoves = []
+
+    if (game.result !== '*') {
+      this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate";
       this.showGameOverPopup = true;
-    } else {
-      this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
-      if (this.currentPlayer === this.playerColor) {
-        this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
-          .then(validMoves => {
-            this.validMoves = validMoves
-          })
-      } else {
-        this.validMoves = []
-      }
+      return;
     }
 
-    this.gameService.getGame(this.gameService.currentGame!.id!)
-      .then(game => {this.gameService.currentGame = game})
+    this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+    
+    if (this.currentPlayer === this.playerColor) {
+      this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
+        .then(validMoves => {
+          this.validMoves = validMoves
+        })
+    }
+
   }
 
   handleChat(chat: string) {
