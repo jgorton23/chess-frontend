@@ -274,16 +274,14 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   handleChat(chat: string) {
-    chat = JSON.parse(chat)
     this.chats.push(chat);
     if (!this.showChat) {
       this.chatsPending = true;
     }
   }
 
-  handleResignation(message: string) {
-    message = JSON.parse(message);
-    this.gameOverMessage = message + " resigned"
+  handleResignation(username: string) {
+    this.gameOverMessage = username + " resigned"
     this.showGameOverPopup = true;
   }
 

@@ -126,7 +126,7 @@ export class WebsocketAPIService {
    * @param message the message from the WebSocket containing a chat
    */
   onChatReceived(message: any) {
-    let chat = message.body;
+    let chat = JSON.parse(message.body);
     this.game.handleChat(chat);
   }
 
@@ -135,8 +135,8 @@ export class WebsocketAPIService {
    * @param message the message from the WebSocket containing a resignation request
    */
   onResignReceived(message: any) {
-    let resignation = message.body;
-    this.game.handleResignation(resignation);
+    let username = JSON.parse(message.body);
+    this.game.handleResignation(username);
   }
 
   /**
