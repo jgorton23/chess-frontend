@@ -8,6 +8,12 @@ import { ProfileService } from 'src/app/shared/api/profile.service';
 import { Move } from 'src/app/board/board.component';
 import { firstValueFrom } from 'rxjs';
 
+export type RematchRequest = {
+  whitePlayerConfirmed: boolean,
+  blackPlayerConfirmed: boolean,
+  newGameId?: string
+}
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -31,6 +37,15 @@ export class GameComponent implements OnInit, OnDestroy {
 
   showGameOverPopup: boolean = false;
 
+  showChat: boolean = false;
+
+  chatsPending: boolean = false;
+
+  rematchRequest: RematchRequest = {
+    whitePlayerConfirmed: false,
+    blackPlayerConfirmed: false
+  }
+
   gameOverMessage: string = '';
 
   promotionPiece: EventEmitter<string> = new EventEmitter();
@@ -38,6 +53,10 @@ export class GameComponent implements OnInit, OnDestroy {
   resignation: EventEmitter<boolean> = new EventEmitter();
 
   selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
+
+  chats: string[] = []
+
+  chat: string = ''
 
   constructor(
     private router: Router,
@@ -62,6 +81,7 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
           this.gameService.currentGame = game
+          
           this.currentPlayer = game.moves.trim().split(" ").length % 3 <= 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
@@ -156,15 +176,8 @@ export class GameComponent implements OnInit, OnDestroy {
     this.selectedMove = i
   }
 
-  async resign() {
-    this.showResignConfirmationPopup = true;
-    let confirm = await firstValueFrom(this.resignation)
-    console.log(confirm);
-    
-    if (confirm) {
-      this.gameService.resign()
-    }
-    this.showResignConfirmationPopup = false;
+  isGameOver(): boolean {
+    return this.gameService.currentGame?.result !== '*'
   }
 
   pieces(): string[] {
@@ -175,80 +188,197 @@ export class GameComponent implements OnInit, OnDestroy {
     this.router.navigate([page])
   }
 
-  offerRematch() {
-    // todo - if they offered rematch, send rematch accept and redirect to the new page
-    // todo - otherwise
-    // todo - send ws message signifying rematch offer
-    // todo - await ws response signifying rematch accepted
-  }
-
   //#region websocket
 
-  connect() {
+  /**
+   * Connects to the ws
+   */
+  connect(): void {
     if (!this.webSocketAPI) {
       this.webSocketAPI = new WebsocketAPIService(this, this.gameService.currentGame!.id!)
     }
     this.webSocketAPI._connect();
   }
 
-  disconnect() {
+  /**
+   * disconnnects from the ws
+   */
+  disconnect(): void {
     if (this.webSocketAPI){
       this.webSocketAPI._disconnect();
     }
   }
 
-  sendMove(move: Move) {
+  /**
+   * sends a move to the ws to be done
+   * @param move the move to do
+   */
+  sendMove(move: Move): void {
+  if (this.webSocketAPI){
+      this.webSocketAPI._sendMove(move);
+    }
+  }
+
+  /**
+   * send a chat to the opponent
+   */
+  sendChat(): void {
     if (this.webSocketAPI){
-      this.webSocketAPI._send(move);
+      this.webSocketAPI._sendChat(this.playerUsername() + ': ' + this.chat);
+      this.chat = ''
     }
   }
 
-  handleMove(moveData: string) {
-    let move: Move = JSON.parse(moveData)
+  /**
+   * resign
+   */
+  sendResign(): void {
+    if (this.webSocketAPI){      
+      this.webSocketAPI._sendResign(this.playerUsername())
+    }
+  }
 
-    if (move.isMate) {
-      this.showGameOverPopup = true;
-      this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate"
+  /**
+   * request a rematch
+   */
+  sendRematch(): void {
+    if (this.playerColor === 'w') {
+      this.rematchRequest.whitePlayerConfirmed = true
     } else {
-      this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
-      if (this.currentPlayer === this.playerColor) {
-        this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
-          .then(validMoves => {
-            this.validMoves = validMoves
-          })
-      } else {
-        this.validMoves = []
-      }
+      this.rematchRequest.blackPlayerConfirmed = true
     }
 
-    this.gameService.getGame(this.gameService.currentGame!.id!)
-      .then(game => {this.gameService.currentGame = game})
+    if (this.webSocketAPI) {
+      this.webSocketAPI._sendRematchOffer(this.rematchRequest);
+    }
   }
 
-  async performMove(moveData: Move) {
+  /**
+   * Show/hide the chat box
+   */
+  toggleChat(): void {
+    this.showChat = !this.showChat
+    this.chatsPending = false;
+  }
+
+  /**
+   * Updates the game state, showing the gameOver popup if relevant. Otherwise get the valid moves for the next player
+   * @param game the new gameState
+   */
+  handleMove(game: Game): void {
+    
+    this.gameService.currentGame = game
+    this.validMoves = []
+
+    if (game.result !== '*') {
+      this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate";
+      this.showGameOverPopup = true;
+      return;
+    }
+
+    this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+
+    if (this.currentPlayer === this.playerColor) {
+      this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
+        .then(validMoves => {
+          this.validMoves = validMoves
+        })
+    }
+
+  }
+
+  /**
+   * Adds a chat to the chat room
+   * @param chat the chat to be added
+   */
+  handleChat(chat: string): void {
+    this.chats.push(chat);
+    if (!this.showChat) {
+      this.chatsPending = true;
+    }
+  }
+
+  /**
+   * Shows the game over popup
+   * @param username The username of the player who resigned
+   */
+  handleResignation(username: string): void {
+    this.gameOverMessage = username + " resigned"
+    this.showGameOverPopup = true;
+  }
+
+  /**
+   * If both players agreed to the rematch, redirect the user to the new game, otherwise update the local request information
+   * @param request containing the status of the rematch request, and possibly the new gameId
+   */
+  handleRematchOffer(request: RematchRequest) {    
+    if (request.newGameId) {
+      this.showGameOverPopup = false
+      this.router.navigate(['play', {id: request.newGameId}]).then(_ => this.ngOnInit())
+    } else {
+      this.rematchRequest = request
+    }
+  }
+
+  /**
+   * Handle a move from the moveEmitter - accepts a partial move and creates a complete move.
+   * If the move is a promotion, show the popup and wait for the response
+   * 
+   * @param moveData the partial move emitted from the board
+   */
+  async performMove(moveData: Partial<Move>): Promise<void> {
     if (!this.gameService.currentGame || !this.gameService.currentGame.id) {
       return
     }
 
-    if (moveData.piece.toLowerCase() === 'p' && moveData.destSquare[1] % 7 === 0) {
+    let move: Move = {
+      startSquare: [],
+      destSquare: [],
+      piece: '',
+      isCheck: false,
+      isMate: false,
+      isCapture: false,
+      playerUsername: '',
+      promotion: '',
+      miliseconds: 0,
+      ...moveData
+    }
+
+    if (move.piece.toLowerCase() === 'p' && move.destSquare[1] % 7 === 0) {
       this.showPromotionPopup = true;
-      moveData.promotion = await firstValueFrom(this.promotionPiece.asObservable())
+      move.promotion = await firstValueFrom(this.promotionPiece.asObservable())
       this.showPromotionPopup = false;
-      console.log(moveData.promotion);
-      if (!"qbnr".includes(moveData.promotion.toLowerCase())) {
+      if (!"qbnr".includes(move.promotion.toLowerCase())) {
         return
       }
     }
     
-    let dest = String.fromCharCode(97+moveData.destSquare[0]) + Math.abs(moveData.destSquare[1] - 8)
-    let moveString = this.validMoves.find(m => m.startsWith(moveData.piece) && m.includes(dest))
+    let dest = String.fromCharCode(97+move.destSquare[0]) + Math.abs(move.destSquare[1] - 8)
+    let moveString = this.validMoves.find(m => m.startsWith(move.piece) && m.includes(dest))
     if (moveString) {
-      moveData.isCapture = moveString.includes("x")
-      moveData.isCheck = moveString.includes("+")
-      moveData.isMate = moveString.includes("#")
+      move.isCapture = moveString.includes("x")
+      move.isCheck = moveString.includes("+")
+      move.isMate = moveString.includes("#")
+      move.playerUsername = await this.profileService.getUsername()
       this.validMoves = []
-      this.gameService.doMove(moveData, this.gameService.currentGame.id).then(() => this.sendMove(moveData))
+      this.sendMove(move)
     }
+  }
+
+  /**
+   * Handles the user pressing the resign flag, 
+   * First show the popup, then wait for the confirmation or cancelation, then hide the popup
+   */
+  async resign(): Promise<void> {
+
+    this.showResignConfirmationPopup = true;
+    
+    if (await firstValueFrom(this.resignation)) {
+      this.sendResign()
+    }
+    
+    this.showResignConfirmationPopup = false;
+
   }
 
   //#endregion

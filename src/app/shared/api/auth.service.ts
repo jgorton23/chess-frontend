@@ -34,11 +34,11 @@ export class AuthService {
         this.router.navigate(['home'])
       } else {
         // TODO show some 'Invalid Credentials' message
-        console.log(response.body);
-        console.log(await response.json());
+        console.error(response.body);
+        console.error(await response.json());
       }
     } catch(e) {
-      console.log(e);
+      console.error(e);
     }
   }
 
@@ -62,11 +62,11 @@ export class AuthService {
         this.router.navigate(['login'])
       } else {
         // TODO show some message to the user
-        console.log(response.body);
-        console.log(await response.json());
+        console.error(response.body);
+        console.error(await response.json());
       }
     } catch(e) {
-      console.log(e);
+      console.error(e);
     }
   }
 
@@ -84,7 +84,7 @@ export class AuthService {
       }).then(_ => {
         this.router.navigate(['login'])
       }).catch(error => {
-        error.json().then((e: any) => console.log(e))
+        error.json().then((e: any) => console.error(e))
       })
   }
 }

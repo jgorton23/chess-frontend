@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
-import { GameComponent } from '../../game/game.component';
+import { GameComponent, RematchRequest } from '../../game/game.component';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
+import { Move } from 'src/app/board/board.component';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class WebsocketAPIService {
   constructor(private game: GameComponent, @Inject(String) private gameId: string) { }
 
   /**
-   * Subscribe to the ws endpoint based on this objects gameId
+   * Subscribe to the ws endpoints based on this objects gameId
    */
   _connect() {
     let ws = new SockJS(this.wsEndpoint);
@@ -39,7 +40,16 @@ export class WebsocketAPIService {
     const _this = this;
     _this.stompClient.connect({}, function (frame: any) {
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, function (sdkEvent: any) {
-        _this.onMessageReceived(sdkEvent);
+        _this.onMoveReceived(sdkEvent);
+      });
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', function (sdkEvent: any) {
+        _this.onChatReceived(sdkEvent);
+      });
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', function (sdkEvent: any) {        
+        _this.onResignReceived(sdkEvent);
+      });
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', function (sdkEvent: any) {
+        _this.onRematchReceived(sdkEvent);
       });
     }, this._error);
   }
@@ -54,32 +64,91 @@ export class WebsocketAPIService {
   }
 
   /**
-   * send a message over the socket
-   * @param message the message to send
-   */
-  _send(message: any) {
-    this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify(message));
-  }
-
-  /**
-   * On ws error, log error and attempt to reconnect
-   * @param error 
-   */
+ * On ws error, log error and attempt to reconnect
+ * @param error 
+ */
   _error(error: Error) {
-    console.log("errorCallBack -> " + error)
+    console.error("errorCallBack -> " + error)
     setTimeout(() => {
         this._connect()
     }, 5000);
   }
 
+  //#region Send WebSocket messages
+
   /**
-   * On ws message, pass the message body to the game component for handling
-   * @param message 
+   * send a Move over the socket
+   * @param message the message to send
    */
-  onMessageReceived(message: any) {
-    console.log("socket got message", message.body);
-    
-    this.game.handleMove(message.body);
+  _sendMove(message: Move) {
+    this.stompClient.send('/app/game/' + this.gameId, {}, JSON.stringify(message));
   }
+  
+  /**
+   * Sends a chat over the socket connection
+   * @param message the chat message to send across the socket
+   */
+  _sendChat(message: string) {
+    this.stompClient.send('/app/game/' + this.gameId + '/chat', {}, JSON.stringify(message));
+  }
+
+  /**
+   * Sends a resignation request over the socket connection
+   * @param message the resignation request to send
+  */
+  _sendResign(message: string) {    
+    this.stompClient.send('/app/game/' + this.gameId + '/resign', {}, JSON.stringify(message));
+  }
+
+  /**
+   * Sends a rematch request across the socket connection
+   * @param request the rematch request to send
+   */
+  _sendRematchOffer(request: RematchRequest) {
+    this.stompClient.send('/app/game/' + this.gameId + '/rematch', {}, JSON.stringify(request))
+  }
+
+  //#endregion
+
+  //#region WebSocket Callback functions
+
+  /**
+   * Pass the Move received from the WebSocket to the Game to be handled
+   * @param message the message from the WebSocket containing a move
+   */
+  onMoveReceived(message: any) {
+    let game = JSON.parse(message.body);
+    this.game.handleMove(game);
+  }
+
+  /**
+   * Pass the chat received from the WebSocket to the Game to be handled
+   * @param message the message from the WebSocket containing a chat
+   */
+  onChatReceived(message: any) {
+    let chat = JSON.parse(message.body);
+    this.game.handleChat(chat);
+  }
+
+  /**
+   * Pass the resignation request from the WebSocket to the Game to be handled
+   * @param message the message from the WebSocket containing a resignation request
+   */
+  onResignReceived(message: any) {
+    let username = JSON.parse(message.body);
+    this.game.handleResignation(username);
+  }
+
+  /**
+   * Pass the rematch request from the WebSocket to the Game to be handled
+   * @param message the message from the WebSocker containing a rematch request
+   */
+  onRematchReceived(message: any) {
+    let rematchRequest = JSON.parse(message.body);
+    this.game.handleRematchOffer(rematchRequest);
+  }
+
+  //#endregion
+
 }
 

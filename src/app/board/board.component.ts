@@ -10,6 +10,7 @@ export type Move = {
   isCheck: boolean,
   isMate: boolean,
   isCapture: boolean,
+  playerUsername: string,
   miliseconds?: number
 }
 
@@ -38,14 +39,13 @@ export class BoardComponent implements OnInit, OnChanges {
   validMoves: string[] = [];
   
   @Output()
-  moveEmitter: EventEmitter<Move> = new EventEmitter();
+  moveEmitter: EventEmitter<Partial<Move>> = new EventEmitter();
   
   grid: Tile[][] = this.boardUtil.FENToTileArr(this.fen)
   
   selectedPiece?: {x: number, y: number};
 
   ngOnInit(): void {
-      console.log("FEN", this.fen);
   }
 
   //#region tile formatting
@@ -128,17 +128,16 @@ export class BoardComponent implements OnInit, OnChanges {
         let move = {
           startSquare: [this.selectedPiece.x, this.selectedPiece.y],
           destSquare: [x, y],
-          isCapture: false,
-          isCheck: false,
-          isMate: false,
           piece: this.grid[this.selectedPiece.y][this.selectedPiece.x].piece
         }
         this.moveEmitter.emit(move)
+        this.selectedPiece = undefined;
       }else if(this.isPlayerColor(this.grid[y][x].piece)){
         this.selectedPiece = {x: x, y: y};
         this.grid[y][x].selected = true;
+      } else {
+        this.selectedPiece = undefined;
       }
-      this.selectedPiece = undefined;
     }
     this.updatePossible();
   }

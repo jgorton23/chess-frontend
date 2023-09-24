@@ -52,7 +52,7 @@ export class ProfileService {
    * @returns A promise of the username
    */
   getUsername(): Promise<string> {
-    return this.getProfile().then(() => this.username)
+    return this.username ? Promise.resolve(this.username) : this.getProfile().then(() => this.username)
   }
   
   /**
@@ -105,8 +105,6 @@ export class ProfileService {
       } else {
         return response.json()
       }
-    }).then(body => {
-      console.log(body);
     }).catch(error => {
       if (error instanceof Response) {
         error.json().then((e: any) => console.error(e))

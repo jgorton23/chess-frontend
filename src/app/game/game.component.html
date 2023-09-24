@@ -42,9 +42,22 @@
 </div>
 
 <!-- the navbar at the bottom of the screen - contains chat, move selector, and resign button -->
-<nav class="navbar fixed-bottom navbar-dark bg-dark">
-  <button class="navbar-toggler ms-2" style="border: none">
-    <i class="fa-solid fa-comment" style="color: #ffffff"></i>
+<nav class="navbar fixed-bottom navbar-dark bg-dark" style="height: 56px">
+  <button
+    class="navbar-toggler ms-2"
+    style="border: none"
+    (click)="toggleChat()"
+  >
+    <i
+      *ngIf="!chatsPending"
+      class="fa-solid fa-comment"
+      style="color: #ffffff"
+    ></i>
+    <i
+      *ngIf="chatsPending"
+      class="fa-solid fa-comment-dots"
+      style="color: #e4e412"
+    ></i>
   </button>
   <div>
     <button
@@ -52,14 +65,19 @@
       style="border: none"
       (click)="previousMove()"
     >
-      <i class="fas fa-chevron-left" style="color: #ffffff"></i>
+      <i class="fas fa-chevron-left"></i>
     </button>
     <button class="navbar-toggler" style="border: none" (click)="nextMove()">
-      <i class="fas fa-chevron-right" style="color: #ffffff"></i>
+      <i class="fas fa-chevron-right"></i>
     </button>
   </div>
-  <button class="navbar-toggler me-2" style="border: none" (click)="resign()">
-    <i class="fa-solid fa-flag" style="color: #ffffff"></i>
+  <button
+    class="navbar-toggler me-2"
+    style="border: none"
+    (click)="resign()"
+    [disabled]="isGameOver()"
+  >
+    <i class="fa-solid fa-flag"></i>
   </button>
 </nav>
 
@@ -130,7 +148,7 @@
       >
         Home
       </button>
-      <button class="row w-100 mb-3 btn btn-secondary" (click)="offerRematch()">
+      <button class="row w-100 mb-3 btn btn-secondary" (click)="sendRematch()">
         Rematch
       </button>
       <button
@@ -138,6 +156,32 @@
         (click)="showGameOverPopup = false"
       >
         Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- the chat slideout -->
+<div *ngIf="showChat" class="slideout container open-close-container d-flex">
+  <div class="w-100" style="max-width: 100%">
+    <div style="overflow-y: scroll; height: 84%" class="">
+      <p class="m-2" style="max-width: 100%" *ngFor="let message of chats">
+        {{ message }}
+      </p>
+    </div>
+    <div style="height: 16%" class="justify-content-end">
+      <textarea
+        name="chat"
+        class="w-100 ms-0"
+        style="color: white; background-color: gray; max-height: 66%"
+        [(ngModel)]="chat"
+      ></textarea>
+      <button
+        class="w-100 btn btn-secondary"
+        style="max-height: 33%"
+        (click)="sendChat()"
+      >
+        Send
       </button>
     </div>
   </div>
