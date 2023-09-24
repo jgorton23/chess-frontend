@@ -30,7 +30,6 @@ export class NewGamePopupComponent implements OnInit{
   closePopup$ = new EventEmitter<boolean>();
 
   ngOnInit(): void {
-    console.log("popup");
     this.getFriends();
   }
 

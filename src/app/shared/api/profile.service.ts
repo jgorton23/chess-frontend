@@ -105,8 +105,6 @@ export class ProfileService {
       } else {
         return response.json()
       }
-    }).then(body => {
-      console.log(body);
     }).catch(error => {
       if (error instanceof Response) {
         error.json().then((e: any) => console.error(e))

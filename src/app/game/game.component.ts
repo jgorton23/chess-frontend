@@ -81,7 +81,6 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
           this.gameService.currentGame = game
-          console.log(this.gameService.currentGame);
           
           this.currentPlayer = game.moves.trim().split(" ").length % 3 <= 1 ? 'w' : 'b'
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
@@ -264,7 +263,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
-    
+
     if (this.currentPlayer === this.playerColor) {
       this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
         .then(validMoves => {

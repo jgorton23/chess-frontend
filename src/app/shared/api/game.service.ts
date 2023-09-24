@@ -123,9 +123,7 @@ export class GameService {
         } else {
           return response.json()
         }
-      }).then(body => {
-        console.log(body);
-          
+      }).then(body => {          
         return body.validMoves
       }).catch((error: Response) => {
         if (error.status === 401) {
@@ -155,8 +153,6 @@ export class GameService {
           } else {
             return response.json()
           }
-        }).then(body => {
-          console.log(body)
         }).catch((error: Response) => {
           if (error.status === 401) {
             this.router.navigate(['login'])
