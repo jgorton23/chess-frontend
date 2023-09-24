@@ -186,7 +186,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
     
     this.showResignConfirmationPopup = false;
-    
+
   }
 
   isGameOver(): boolean {
@@ -236,13 +236,13 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   sendRematch() {
+    if (this.playerColor === 'w') {
+      this.rematchRequest.whitePlayerConfirmed = true
+    } else {
+      this.rematchRequest.blackPlayerConfirmed = true
+    }
+    
     if (this.webSocketAPI) {
-      if (this.playerColor === 'w') {
-        this.rematchRequest.whitePlayerConfirmed = true
-      } else {
-        this.rematchRequest.blackPlayerConfirmed = true
-      }
-
       this.webSocketAPI._sendRematchOffer(this.rematchRequest);
     }
   }
