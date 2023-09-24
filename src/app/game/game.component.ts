@@ -176,18 +176,6 @@ export class GameComponent implements OnInit, OnDestroy {
     this.selectedMove = i
   }
 
-  async resign() {
-
-    this.showResignConfirmationPopup = true;
-    
-    if (await firstValueFrom(this.resignation)) {
-      this.sendResign()
-    }
-    
-    this.showResignConfirmationPopup = false;
-
-  }
-
   isGameOver(): boolean {
     return this.gameService.currentGame?.result !== '*'
   }
@@ -202,39 +190,58 @@ export class GameComponent implements OnInit, OnDestroy {
 
   //#region websocket
 
-  connect() {
+  /**
+   * Connects to the ws
+   */
+  connect(): void {
     if (!this.webSocketAPI) {
       this.webSocketAPI = new WebsocketAPIService(this, this.gameService.currentGame!.id!)
     }
     this.webSocketAPI._connect();
   }
 
-  disconnect() {
+  /**
+   * disconnnects from the ws
+   */
+  disconnect(): void {
     if (this.webSocketAPI){
       this.webSocketAPI._disconnect();
     }
   }
 
-  sendMove(move: Move) {
-    if (this.webSocketAPI){
+  /**
+   * sends a move to the ws to be done
+   * @param move the move to do
+   */
+  sendMove(move: Move): void {
+  if (this.webSocketAPI){
       this.webSocketAPI._sendMove(move);
     }
   }
 
-  sendChat() {    
+  /**
+   * send a chat to the opponent
+   */
+  sendChat(): void {
     if (this.webSocketAPI){
       this.webSocketAPI._sendChat(this.playerUsername() + ': ' + this.chat);
       this.chat = ''
     }
   }
 
-  sendResign() {
+  /**
+   * resign
+   */
+  sendResign(): void {
     if (this.webSocketAPI){      
       this.webSocketAPI._sendResign(this.playerUsername())
     }
   }
 
-  sendRematch() {
+  /**
+   * request a rematch
+   */
+  sendRematch(): void {
     if (this.playerColor === 'w') {
       this.rematchRequest.whitePlayerConfirmed = true
     } else {
@@ -246,12 +253,19 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleChat() {
+  /**
+   * Show/hide the chat box
+   */
+  toggleChat(): void {
     this.showChat = !this.showChat
     this.chatsPending = false;
   }
 
-  handleMove(game: Game) {
+  /**
+   * Updates the game state, showing the gameOver popup if relevant. Otherwise get the valid moves for the next player
+   * @param game the new gameState
+   */
+  handleMove(game: Game): void {
     
     this.gameService.currentGame = game
     this.validMoves = []
@@ -273,18 +287,30 @@ export class GameComponent implements OnInit, OnDestroy {
 
   }
 
-  handleChat(chat: string) {
+  /**
+   * Adds a chat to the chat room
+   * @param chat the chat to be added
+   */
+  handleChat(chat: string): void {
     this.chats.push(chat);
     if (!this.showChat) {
       this.chatsPending = true;
     }
   }
 
-  handleResignation(username: string) {
+  /**
+   * Shows the game over popup
+   * @param username The username of the player who resigned
+   */
+  handleResignation(username: string): void {
     this.gameOverMessage = username + " resigned"
     this.showGameOverPopup = true;
   }
 
+  /**
+   * If both players agreed to the rematch, redirect the user to the new game, otherwise update the local request information
+   * @param request containing the status of the rematch request, and possibly the new gameId
+   */
   handleRematchOffer(request: RematchRequest) {    
     if (request.newGameId) {
       this.showGameOverPopup = false
@@ -294,7 +320,13 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  async performMove(moveData: Partial<Move>) {
+  /**
+   * Handle a move from the moveEmitter - accepts a partial move and creates a complete move.
+   * If the move is a promotion, show the popup and wait for the response
+   * 
+   * @param moveData the partial move emitted from the board
+   */
+  async performMove(moveData: Partial<Move>): Promise<void> {
     if (!this.gameService.currentGame || !this.gameService.currentGame.id) {
       return
     }
@@ -331,6 +363,22 @@ export class GameComponent implements OnInit, OnDestroy {
       this.validMoves = []
       this.sendMove(move)
     }
+  }
+
+  /**
+   * Handles the user pressing the resign flag, 
+   * First show the popup, then wait for the confirmation or cancelation, then hide the popup
+   */
+  async resign(): Promise<void> {
+
+    this.showResignConfirmationPopup = true;
+    
+    if (await firstValueFrom(this.resignation)) {
+      this.sendResign()
+    }
+    
+    this.showResignConfirmationPopup = false;
+
   }
 
   //#endregion
