@@ -5,9 +5,14 @@
 <div class="container body d-flex justify-content-center">
   <div class="row w-100 h-100 d-flex align-items-center justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      <h2 class="row" style="margin-left: 10%">
-        {{ opponentUsername() }}
-      </h2>
+      <div class="row">
+        <h2 class="col" style="margin-left: 10%">
+          {{ opponentUsername() }}
+        </h2>
+        <h2 class="col d-flex justify-content-end" style="margin-right: 10%">
+          {{ opponentTime() }}
+        </h2>
+      </div>
       <div *ngIf="!loading" class="row d-flex justify-content-center">
         <app-board
           [fen]="fen()"
@@ -17,9 +22,14 @@
           (moveEmitter)="performMove($event)"
         ></app-board>
       </div>
-      <h2 class="row" style="margin-left: 10%">
-        {{ playerUsername() }}
-      </h2>
+      <div class="row">
+        <h2 class="col" style="margin-left: 10%">
+          {{ playerUsername() }}
+        </h2>
+        <h2 class="col d-flex justify-content-end" style="margin-right: 10%">
+          {{ playerTime() }}
+        </h2>
+      </div>
     </div>
     <div
       class="col-md-8 col-lg-6"

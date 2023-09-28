@@ -26,6 +26,12 @@ export class NewGamePopupComponent implements OnInit{
 
   opponent: string = "Select Opponent"
 
+  variant: string = "Select variation"
+
+  minutes: string = '10'
+
+  increment: string = '0'
+
   @Output()
   closePopup$ = new EventEmitter<boolean>();
 
@@ -49,7 +55,9 @@ export class NewGamePopupComponent implements OnInit{
     return this.boardUtil.getVariations();
   }
 
-  async createGame(options: {opponent: string, variant?: string}): Promise<void> {
+  async createGame(options: any): Promise<void> {
+    console.log(options);
+    
     let game: Game = {
       date: new Date(),
       fen: this.boardUtil.getBoard("standard"),

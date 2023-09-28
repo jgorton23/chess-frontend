@@ -132,6 +132,29 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gameService.currentGame?.blackPlayerUsername) || ""
   }
 
+  timeLeft(player: string): string {
+    if (this.gameService.currentGame?.timeControl) {
+      let initialMinutes: number = +this.gameService.currentGame.timeControl.split("/")[0]
+      let seconds: number = initialMinutes * 60;
+      if (player === 'b') {
+        seconds += this.gameService.currentGame.moveTimes.split(" ").map(t => +t / 1000).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
+      } else {
+        seconds += this.gameService.currentGame.moveTimes.split(" ").map(t => +t / 1000).filter((_, i) => i % 2 === 0).reduce((prev, curr) => prev+curr)
+      }
+      return "" + (Math.floor(seconds / 60)) + ":" + ("" + (seconds % 60)).padStart(2, "0")
+    } else {
+      return "";
+    }
+  }
+
+  playerTime(): string {
+    return this.timeLeft(this.playerColor);
+  }
+
+  opponentTime(): string {
+    return this.timeLeft(this.playerColor === 'b' ? 'w' : 'b');
+  }
+
   fen(): string {
     return this.gameService.currentGame?.fen ?? ""
   }
