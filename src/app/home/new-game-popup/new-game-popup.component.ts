@@ -63,7 +63,7 @@ export class NewGamePopupComponent implements OnInit{
       fen: this.boardUtil.getBoard(options.variant),
       moves: "",
       moveTimes: "",
-      timeControl: options.minutes + "/" + options.increment,
+      timeControl: options.minutes === '0' ? '' : options.minutes + "/" + options.increment,
       result: "*",
       whitePlayerUsername: await this.profileService.getUsername(),
       blackPlayerUsername: options.opponent
