@@ -136,10 +136,15 @@ export class GameComponent implements OnInit, OnDestroy {
     if (this.gameService.currentGame?.timeControl) {
       let initialMinutes: number = +this.gameService.currentGame.timeControl.split("/")[0]
       let seconds: number = initialMinutes * 60;
+      let moveTimes = this.gameService.currentGame.moveTimes.split(" ");
       if (player === 'b') {
-        seconds += this.gameService.currentGame.moveTimes.split(" ").map(t => +t / 1000).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
+        if (moveTimes.length > 1) {
+          seconds += moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
+        }
       } else {
-        seconds += this.gameService.currentGame.moveTimes.split(" ").map(t => +t / 1000).filter((_, i) => i % 2 === 0).reduce((prev, curr) => prev+curr)
+        if (moveTimes.length !== 0) {
+          seconds += moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 0).reduce((prev, curr) => prev+curr)
+        }
       }
       return "" + (Math.floor(seconds / 60)) + ":" + ("" + (seconds % 60)).padStart(2, "0")
     } else {

@@ -26,7 +26,7 @@ export class NewGamePopupComponent implements OnInit{
 
   opponent: string = "Select Opponent"
 
-  variant: string = "Select variation"
+  variant: string = "Select Variation"
 
   minutes: string = '10'
 
@@ -60,13 +60,13 @@ export class NewGamePopupComponent implements OnInit{
     
     let game: Game = {
       date: new Date(),
-      fen: this.boardUtil.getBoard("standard"),
+      fen: this.boardUtil.getBoard(options.variant),
       moves: "",
       moveTimes: "",
-      timeControl: "10/0",
+      timeControl: options.minutes + "/" + options.increment,
       result: "*",
       whitePlayerUsername: await this.profileService.getUsername(),
-      blackPlayerUsername: this.opponent
+      blackPlayerUsername: options.opponent
     }
     
     this.gameService.createGame(game)
