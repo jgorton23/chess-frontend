@@ -58,6 +58,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   chat: string = ''
 
+  moveSeconds: number = 0
+
+  timer: number = 0
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -139,11 +143,17 @@ export class GameComponent implements OnInit, OnDestroy {
       let moveTimes = this.gameService.currentGame.moveTimes.split(" ");
       if (player === 'b') {
         if (moveTimes.length > 1) {
-          seconds += moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
+          seconds -= moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
+        }
+        if (this.currentPlayer === 'b') {
+          seconds -= this.moveSeconds
         }
       } else {
         if (moveTimes.length !== 0) {
-          seconds += moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 0).reduce((prev, curr) => prev+curr)
+          seconds -= moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 0).reduce((prev, curr) => prev+curr)
+        }
+        if (this.currentPlayer === 'w') {
+          seconds -= this.moveSeconds
         }
       }
       return "" + (Math.floor(seconds / 60)) + ":" + ("" + (seconds % 60)).padStart(2, "0")
@@ -163,6 +173,8 @@ export class GameComponent implements OnInit, OnDestroy {
   fen(): string {
     return this.gameService.currentGame?.fen ?? ""
   }
+
+//#region move selector
 
   moves(): string[] {
     return this.gameService.currentGame?.moves.split(" ") ?? []
@@ -203,6 +215,8 @@ export class GameComponent implements OnInit, OnDestroy {
   select(i: number) {
     this.selectedMove = i
   }
+
+//#endregion
 
   isGameOver(): boolean {
     return this.gameService.currentGame?.result !== '*'
@@ -304,6 +318,11 @@ export class GameComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.moveSeconds = 0
+    if (this.timer === 0) {
+      this.timer = setInterval(_ => this.moveSeconds += 1, 1000)
+    }
+
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
 
     if (this.currentPlayer === this.playerColor) {
@@ -387,6 +406,7 @@ export class GameComponent implements OnInit, OnDestroy {
       move.isCapture = moveString.includes("x")
       move.isCheck = moveString.includes("+")
       move.isMate = moveString.includes("#")
+      move.miliseconds = this.moveSeconds * 1000
       move.playerUsername = await this.profileService.getUsername()
       this.validMoves = []
       this.sendMove(move)
