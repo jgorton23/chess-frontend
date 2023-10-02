@@ -156,6 +156,11 @@ export class WebsocketAPIService {
     this.game.handleRematchOffer(rematchRequest);
   }
 
+  onTimeoutReceived(message: any) {
+    let username = JSON.parse(message)
+    this.game.handleTimeout(username)
+  }
+
   //#endregion
 
 }
