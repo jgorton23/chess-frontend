@@ -380,6 +380,15 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Shows the game over popup with a timeout message
+   * @param username the username of the player who ran out of time
+   */
+  handleTimeout(username: string) {
+    this.gameOverMessage = username + " ran out of time"
+    this.showGameOverPopup = true
+  }
+
+  /**
    * Handle a move from the moveEmitter - accepts a partial move and creates a complete move.
    * If the move is a promotion, show the popup and wait for the response
    * 
