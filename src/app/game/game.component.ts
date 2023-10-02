@@ -295,6 +295,12 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
+  sendTimeout(): void {
+    if (this.webSocketAPI){
+      this.webSocketAPI._sendTimeout(this.playerUsername())
+    }
+  }
+
   /**
    * Show/hide the chat box
    */
