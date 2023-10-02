@@ -108,6 +108,14 @@ export class WebsocketAPIService {
     this.stompClient.send('/app/game/' + this.gameId + '/rematch', {}, JSON.stringify(request))
   }
 
+  /**
+   * sends a timeout message across the websocket connection
+   * @param message the username of the player who timed out
+   */
+  _sendTimeout(message: string) {
+    this.stompClient.send('/app/game/' + this.gameId + '/timeout', {}, JSON.stringify(message))
+  }
+
   //#endregion
 
   //#region WebSocket Callback functions
