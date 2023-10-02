@@ -39,18 +39,10 @@ export class WebsocketAPIService {
     this.stompClient = Stomp.over(ws);
     const _this = this;
     _this.stompClient.connect({}, function (frame: any) {
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, function (sdkEvent: any) {
-        _this.onMoveReceived(sdkEvent);
-      });
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', function (sdkEvent: any) {
-        _this.onChatReceived(sdkEvent);
-      });
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', function (sdkEvent: any) {        
-        _this.onResignReceived(sdkEvent);
-      });
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', function (sdkEvent: any) {
-        _this.onRematchReceived(sdkEvent);
-      });
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, _this.onMoveReceived);
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', _this.onChatReceived);
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', _this.onResignReceived);
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', _this.onRematchReceived);
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/timeout', _this.onTimeoutReceived)
     }, this._error);
   }
