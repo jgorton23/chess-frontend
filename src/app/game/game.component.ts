@@ -320,7 +320,13 @@ export class GameComponent implements OnInit, OnDestroy {
 
     this.moveSeconds = 0
     if (this.timer === 0) {
-      this.timer = setInterval(_ => this.moveSeconds += 1, 1000)
+      this.timer = setInterval(_ => {
+        this.moveSeconds += 1
+        if (this.playerTime() === '0:00') {
+          clearInterval(this.timer)
+          this.sendTimeout()
+        }
+      }, 1000)
     }
 
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
