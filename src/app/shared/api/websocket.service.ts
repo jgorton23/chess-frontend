@@ -142,13 +142,17 @@ export class WebsocketAPIService {
 
   /**
    * Pass the rematch request from the WebSocket to the Game to be handled
-   * @param message the message from the WebSocker containing a rematch request
+   * @param message the message from the WebSocket containing a rematch request
    */
   onRematchReceived(message: any) {
     let rematchRequest = JSON.parse(message.body);
     this.game.handleRematchOffer(rematchRequest);
   }
 
+  /**
+   * Pass the username of the player who ran out of time to the Game to be handled
+   * @param message the username of the player who timedout
+   */
   onTimeoutReceived(message: any) {
     let username = JSON.parse(message)
     this.game.handleTimeout(username)
