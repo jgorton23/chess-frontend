@@ -329,7 +329,6 @@ export class GameComponent implements OnInit, OnDestroy {
       this.timer = setInterval(_ => {
         this.moveSeconds += 1
         if (this.playerTime() === '0:00') {
-          clearInterval(this.timer)
           this.sendTimeout()
         }
       }, 1000)
@@ -384,6 +383,7 @@ export class GameComponent implements OnInit, OnDestroy {
    * @param username the username of the player who ran out of time
    */
   handleTimeout(username: string) {
+    clearInterval(this.timer)
     this.gameOverMessage = username + " ran out of time"
     this.showGameOverPopup = true
   }
