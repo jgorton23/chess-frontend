@@ -51,6 +51,7 @@ export class WebsocketAPIService {
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', function (sdkEvent: any) {
         _this.onRematchReceived(sdkEvent);
       });
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/timeout', _this.onTimeoutReceived)
     }, this._error);
   }
 
