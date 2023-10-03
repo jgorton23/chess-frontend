@@ -143,7 +143,7 @@ export class GameComponent implements OnInit, OnDestroy {
       let moveTimes = this.gameService.currentGame.moveTimes.split(" ");
       if (player === 'b') {
         if (moveTimes.length > 1) {
-          seconds -= moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
+          seconds -= moveTimes.map(t => (+t / 1000) - this.increment()).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
         }
         if (this.currentPlayer === 'b') {
           seconds -= this.moveSeconds
@@ -168,6 +168,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   opponentTime(): string {
     return this.timeLeft(this.playerColor === 'b' ? 'w' : 'b');
+  }
+
+  increment(): number {
+    return +(this.gameService.currentGame?.timeControl.split(":").at(-1) || 0)
   }
 
   fen(): string {
