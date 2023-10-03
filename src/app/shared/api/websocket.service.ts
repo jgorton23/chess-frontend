@@ -42,7 +42,7 @@ export class WebsocketAPIService {
     this.stompClient = Stomp.over(ws);
     const _this = this;
     _this.stompClient.connect({}, function (_: any) {
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, _this.onMoveReceived);
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, (event: any) => _this.onMoveReceived(event));
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', (event: any) => _this.onChatReceived(event));
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', (event: any) => _this.onResignReceived(event));
       _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', (event: any) => _this.onRematchReceived(event));
