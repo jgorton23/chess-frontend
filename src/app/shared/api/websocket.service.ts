@@ -41,12 +41,12 @@ export class WebsocketAPIService {
     let ws = new SockJS(this.wsEndpoint);
     this.stompClient = Stomp.over(ws);
     const _this = this;
-    _this.stompClient.connect({}, function (frame: any) {
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, () => _this.onMoveReceived(frame));
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', () => _this.onChatReceived(frame));
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', () => _this.onResignReceived(frame));
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', () => _this.onRematchReceived(frame));
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/timeout', () => _this.onTimeoutReceived(frame));
+    _this.stompClient.connect({}, function (_: any) {
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, (event: any) => _this.onMoveReceived(event));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', (event: any) => _this.onChatReceived(event));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', (event: any) => _this.onResignReceived(event));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', (event: any) => _this.onRematchReceived(event));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/timeout', (event: any) => _this.onTimeoutReceived(event));
     }, this._error);
   }
 
