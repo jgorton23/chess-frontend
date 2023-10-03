@@ -109,7 +109,8 @@ export class WebsocketAPIService {
    * @param message the username of the player who timed out
    */
   _sendTimeout(message: string) {
-    this.stompClient.send('/app/game/' + this.gameId + '/timeout', {}, JSON.stringify(message))
+    console.log("send message", message);
+    this.stompClient.send('/app/game/' + this.gameId + '/timeout', {}, message)
   }
 
   //#endregion
@@ -156,8 +157,8 @@ export class WebsocketAPIService {
    * Pass the username of the player who ran out of time to the Game to be handled
    * @param message the username of the player who timedout
    */
-  onTimeoutReceived(message: any) {
-    let username = JSON.parse(message)
+  onTimeoutReceived(message: any) {        
+    let username = message.body
     this.game.handleTimeout(username)
   }
 

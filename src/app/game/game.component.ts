@@ -122,6 +122,7 @@ export class GameComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.gameService.currentGame = undefined
     this.disconnect()
+    clearInterval(this.timer)
   }
 
   playerUsername(): string {
@@ -332,6 +333,7 @@ export class GameComponent implements OnInit, OnDestroy {
     if (this.timer === 0) {
       this.timer = setInterval(_ => {
         this.moveSeconds += 1
+        console.log(this.playerTime(), this.playerTime() === '0:00');
         if (this.playerTime() === '0:00') {
           this.sendTimeout()
         }
