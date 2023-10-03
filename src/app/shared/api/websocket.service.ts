@@ -29,7 +29,10 @@ export class WebsocketAPIService {
    * @param game the game component that this ws should allow to handle messages received
    * @param gameId the id of the game to be used in the WS subscription path
    */
-  constructor(private game: GameComponent, @Inject(String) private gameId: string) { }
+  constructor(private game: GameComponent, @Inject(String) private gameId: string) {
+    console.log(this);
+    
+  }
 
   /**
    * Subscribe to the ws endpoints based on this objects gameId
@@ -39,11 +42,11 @@ export class WebsocketAPIService {
     this.stompClient = Stomp.over(ws);
     const _this = this;
     _this.stompClient.connect({}, function (frame: any) {
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, _this.onMoveReceived);
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', _this.onChatReceived);
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', _this.onResignReceived);
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', _this.onRematchReceived);
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/timeout', _this.onTimeoutReceived)
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, () => _this.onMoveReceived(frame));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', () => _this.onChatReceived(frame));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', () => _this.onResignReceived(frame));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', () => _this.onRematchReceived(frame));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/timeout', () => _this.onTimeoutReceived(frame));
     }, this._error);
   }
 
@@ -118,8 +121,14 @@ export class WebsocketAPIService {
    * @param message the message from the WebSocket containing a move
    */
   onMoveReceived(message: any) {
-    let game = JSON.parse(message.body);
-    this.game.handleMove(game);
+    console.log(message.body);
+    console.log(this);
+    
+    
+    let gameState = JSON.parse(message.body);
+    console.log(this);
+        
+    this.game.handleMove(gameState);
   }
 
   /**
