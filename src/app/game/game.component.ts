@@ -323,8 +323,14 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameService.currentGame = game
     this.validMoves = []
 
-    if (game.result !== '*') {
-      this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate";
+    if (game.result !== '*'){
+      if (game.result === '1-0') {
+        this.gameOverMessage = "White player won by checkmate";
+      } else if (game.result === '0-1') {
+        this.gameOverMessage = "Black player won by checkmate";
+      } else if (game.result === '1/2-1/2') {
+        this.gameOverMessage = "Draw by stalemate";
+      }
       this.showGameOverPopup = true;
       return;
     }
