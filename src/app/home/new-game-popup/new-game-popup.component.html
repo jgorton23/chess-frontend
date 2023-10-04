@@ -25,12 +25,35 @@
             {{ friend }}
           </option>
         </select>
-        <select class="form-select mb-4" name="variant" id="variant">
+        <select
+          class="form-select mb-4"
+          name="variant"
+          id="variant"
+          [(ngModel)]="variant"
+        >
           <option selected>Select Variation</option>
           <option *ngFor="let mode of getModes()" [ngValue]="mode">
             {{ mode }}
           </option>
         </select>
+        <label for="minutes">minutes</label>
+        <input
+          class="form-control mb-4"
+          name="minutes"
+          id="minutes"
+          type="text"
+          [defaultValue]="10"
+          [(ngModel)]="minutes"
+        />
+        <label for="increment">increment</label>
+        <input
+          class="form-control mb-4"
+          name="increment"
+          id="increment"
+          type="text"
+          [defaultValue]="0"
+          [(ngModel)]="increment"
+        />
         <button
           type="submit"
           class="btn btn-secondary w-100 d-flex justify-content-center align-items-center mb-4"

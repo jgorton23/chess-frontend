@@ -58,6 +58,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   chat: string = ''
 
+  moveSeconds: number = 0
+
+  timer: number = 0
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -118,6 +122,7 @@ export class GameComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.gameService.currentGame = undefined
     this.disconnect()
+    clearInterval(this.timer)
   }
 
   playerUsername(): string {
@@ -132,9 +137,49 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gameService.currentGame?.blackPlayerUsername) || ""
   }
 
+  timeLeft(player: string): string {
+    if (this.gameService.currentGame?.timeControl) {
+      let initialMinutes: number = +this.gameService.currentGame.timeControl.split("/")[0]
+      let seconds: number = initialMinutes * 60;
+      let moveTimes = this.gameService.currentGame.moveTimes.split(" ");
+      if (player === 'b') {
+        if (moveTimes.length > 1) {
+          seconds -= moveTimes.map(t => (+t / 1000) - this.increment()).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
+        }
+        if (this.currentPlayer === 'b') {
+          seconds -= this.moveSeconds
+        }
+      } else {
+        if (moveTimes.length !== 0) {
+          seconds -= moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 0).reduce((prev, curr) => prev+curr)
+        }
+        if (this.currentPlayer === 'w') {
+          seconds -= this.moveSeconds
+        }
+      }
+      return "" + (Math.floor(seconds / 60)) + ":" + ("" + (seconds % 60)).padStart(2, "0")
+    } else {
+      return "";
+    }
+  }
+
+  playerTime(): string {
+    return this.timeLeft(this.playerColor);
+  }
+
+  opponentTime(): string {
+    return this.timeLeft(this.playerColor === 'b' ? 'w' : 'b');
+  }
+
+  increment(): number {
+    return +(this.gameService.currentGame?.timeControl.split(":").at(-1) || 0)
+  }
+
   fen(): string {
     return this.gameService.currentGame?.fen ?? ""
   }
+
+//#region move selector
 
   moves(): string[] {
     return this.gameService.currentGame?.moves.split(" ") ?? []
@@ -175,6 +220,8 @@ export class GameComponent implements OnInit, OnDestroy {
   select(i: number) {
     this.selectedMove = i
   }
+
+//#endregion
 
   isGameOver(): boolean {
     return this.gameService.currentGame?.result !== '*'
@@ -253,6 +300,12 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
+  sendTimeout(): void {
+    if (this.webSocketAPI){
+      this.webSocketAPI._sendTimeout(this.playerUsername())
+    }
+  }
+
   /**
    * Show/hide the chat box
    */
@@ -274,6 +327,17 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gameOverMessage = (this.currentPlayer === 'w' ? 'White' : 'Black') + " player won by checkmate";
       this.showGameOverPopup = true;
       return;
+    }
+
+    this.moveSeconds = 0
+    if (this.timer === 0) {
+      this.timer = setInterval(_ => {
+        this.moveSeconds += 1
+        console.log(this.playerTime(), this.playerTime() === '0:00');
+        if (this.playerTime() === '0:00') {
+          this.sendTimeout()
+        }
+      }, 1000)
     }
 
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
@@ -321,6 +385,16 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Shows the game over popup with a timeout message
+   * @param username the username of the player who ran out of time
+   */
+  handleTimeout(username: string) {
+    clearInterval(this.timer)
+    this.gameOverMessage = username + " ran out of time"
+    this.showGameOverPopup = true
+  }
+
+  /**
    * Handle a move from the moveEmitter - accepts a partial move and creates a complete move.
    * If the move is a promotion, show the popup and wait for the response
    * 
@@ -359,6 +433,7 @@ export class GameComponent implements OnInit, OnDestroy {
       move.isCapture = moveString.includes("x")
       move.isCheck = moveString.includes("+")
       move.isMate = moveString.includes("#")
+      move.miliseconds = this.moveSeconds * 1000
       move.playerUsername = await this.profileService.getUsername()
       this.validMoves = []
       this.sendMove(move)

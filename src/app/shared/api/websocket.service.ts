@@ -29,7 +29,10 @@ export class WebsocketAPIService {
    * @param game the game component that this ws should allow to handle messages received
    * @param gameId the id of the game to be used in the WS subscription path
    */
-  constructor(private game: GameComponent, @Inject(String) private gameId: string) { }
+  constructor(private game: GameComponent, @Inject(String) private gameId: string) {
+    console.log(this);
+    
+  }
 
   /**
    * Subscribe to the ws endpoints based on this objects gameId
@@ -38,19 +41,12 @@ export class WebsocketAPIService {
     let ws = new SockJS(this.wsEndpoint);
     this.stompClient = Stomp.over(ws);
     const _this = this;
-    _this.stompClient.connect({}, function (frame: any) {
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, function (sdkEvent: any) {
-        _this.onMoveReceived(sdkEvent);
-      });
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', function (sdkEvent: any) {
-        _this.onChatReceived(sdkEvent);
-      });
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', function (sdkEvent: any) {        
-        _this.onResignReceived(sdkEvent);
-      });
-      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', function (sdkEvent: any) {
-        _this.onRematchReceived(sdkEvent);
-      });
+    _this.stompClient.connect({}, function (_: any) {
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId, (event: any) => _this.onMoveReceived(event));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/chat', (event: any) => _this.onChatReceived(event));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/resign', (event: any) => _this.onResignReceived(event));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/rematch', (event: any) => _this.onRematchReceived(event));
+      _this.stompClient.subscribe(_this.topic + '/' + _this.gameId + '/timeout', (event: any) => _this.onTimeoutReceived(event));
     }, this._error);
   }
 
@@ -108,6 +104,15 @@ export class WebsocketAPIService {
     this.stompClient.send('/app/game/' + this.gameId + '/rematch', {}, JSON.stringify(request))
   }
 
+  /**
+   * sends a timeout message across the websocket connection
+   * @param message the username of the player who timed out
+   */
+  _sendTimeout(message: string) {
+    console.log("send message", message);
+    this.stompClient.send('/app/game/' + this.gameId + '/timeout', {}, message)
+  }
+
   //#endregion
 
   //#region WebSocket Callback functions
@@ -117,8 +122,8 @@ export class WebsocketAPIService {
    * @param message the message from the WebSocket containing a move
    */
   onMoveReceived(message: any) {
-    let game = JSON.parse(message.body);
-    this.game.handleMove(game);
+    let gameState = JSON.parse(message.body);        
+    this.game.handleMove(gameState);
   }
 
   /**
@@ -141,11 +146,20 @@ export class WebsocketAPIService {
 
   /**
    * Pass the rematch request from the WebSocket to the Game to be handled
-   * @param message the message from the WebSocker containing a rematch request
+   * @param message the message from the WebSocket containing a rematch request
    */
   onRematchReceived(message: any) {
     let rematchRequest = JSON.parse(message.body);
     this.game.handleRematchOffer(rematchRequest);
+  }
+
+  /**
+   * Pass the username of the player who ran out of time to the Game to be handled
+   * @param message the username of the player who timedout
+   */
+  onTimeoutReceived(message: any) {        
+    let username = message.body
+    this.game.handleTimeout(username)
   }
 
   //#endregion
