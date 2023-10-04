@@ -416,6 +416,7 @@ export class GameComponent implements OnInit, OnDestroy {
       destSquare: [],
       piece: '',
       isCheck: false,
+      isStalemate: false,
       isMate: false,
       isCapture: false,
       playerUsername: '',
@@ -439,6 +440,7 @@ export class GameComponent implements OnInit, OnDestroy {
       move.isCapture = moveString.includes("x")
       move.isCheck = moveString.includes("+")
       move.isMate = moveString.includes("#")
+      move.isStalemate = moveString.includes("$")
       move.miliseconds = this.moveSeconds * 1000
       move.playerUsername = await this.profileService.getUsername()
       this.validMoves = []
