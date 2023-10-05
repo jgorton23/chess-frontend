@@ -64,7 +64,7 @@ export class ProfileService {
       console.log("test");
     }
       
-    return this.users ? Promise.resolve(this.users) : this.getAllUsers().then(() => this.users)
+    return this.users && this.users.length > 0 ? Promise.resolve(this.users) : this.getAllUsers().then(() => this.users)
   }
   
   /**
