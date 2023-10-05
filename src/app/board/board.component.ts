@@ -9,6 +9,7 @@ export type Move = {
   promotion?: string,
   isCheck: boolean,
   isMate: boolean,
+  isStalemate: boolean,
   isCapture: boolean,
   playerUsername: string,
   miliseconds?: number
