@@ -47,12 +47,24 @@ export class ProfileService {
    */
   invitations: friend[] = []
 
+  users: string[] = []
+
   /**
    * Gets the username of the current user, locally if it is already stored, else via the API
    * @returns A promise of the username
    */
   getUsername(): Promise<string> {
     return this.username ? Promise.resolve(this.username) : this.getProfile().then(() => this.username)
+  }
+
+  getUsers(): Promise<string[]> {
+    if (this.users) {
+      console.log(this.users);
+    } else {
+      console.log("test");
+    }
+      
+    return this.users ? Promise.resolve(this.users) : this.getAllUsers().then(() => this.users)
   }
   
   /**
@@ -80,6 +92,29 @@ export class ProfileService {
           if (error.status === 401) { this.router.navigate(['login']) }
         } else {
           console.error(error);
+        }
+      })
+  }
+
+  getAllUsers(): Promise<void> {
+    return fetch(`${environment.baseUrl}/${ApiPaths.Users}`, {credentials: 'include'})
+      .then(response => {
+        if (response.status === 401) {
+          return Promise.reject(response)
+        } else {
+          return response.json()
+        }
+      }).then(body => {
+        if (!body) {
+          this.router.navigate(['login'])
+        }
+        this.users = body.users
+      }).catch(error => {
+        if (error instanceof Response) {
+          error.json().then((e: any) => console.error(e))
+          if (error.status === 401) { this.router.navigate(['login'])}
+        } else {
+          console.error(error)
         }
       })
   }

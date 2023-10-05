@@ -43,6 +43,31 @@ export class SideMenuComponent implements OnInit {
 
   viewingFriends: boolean = false;
 
+  userOptions: string[] = [
+    'user',
+    'user2',
+    'user3',
+    'user4',
+    'user5',
+    'user6',
+    'user7',
+    'user8',
+  ]
+
+  log(str: string): void {
+    console.log(str);
+  }
+
+  async getUserOptions() {
+    this.userOptions = await this.profileService.getUsers()
+  }
+    
+  addFriend(): void {
+    this.profileService.addFriend(this.friendUsername);
+    this.friendUsername = '';
+    this.userOptions = [];
+  }
+  
   changeEmail(): void {
     this.editingEmail = !this.editingEmail;
   }
