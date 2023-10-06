@@ -31,15 +31,30 @@
             type="text"
             class="form-control"
             [(ngModel)]="friendUsername"
+            (click)="getUsers()"
           />
           <button
             type="button"
             class="input-group-text"
             id="basic-addon1"
-            (click)="profileService.addFriend(friendUsername)"
+            (click)="addFriend()"
           >
             +
           </button>
+        </div>
+        <div
+          class="form-control m-0 mt-2"
+          style="max-height: 150px; overflow-y: scroll; position: relative"
+          *ngIf="getUserOptions().length > 0"
+        >
+          <span
+            *ngFor="let user of getUserOptions()"
+            class="row m-0"
+            (click)="friendUsername = user"
+            style="cursor: pointer; border-bottom: 1px solid black"
+          >
+            {{ user }}
+          </span>
         </div>
       </div>
     </div>
