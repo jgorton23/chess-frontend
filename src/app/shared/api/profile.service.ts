@@ -3,10 +3,18 @@ import { environment } from 'src/environments/environment';
 import { ApiPaths } from '../../api-paths';
 import { Router } from '@angular/router';
 
+enum Status {
+  ONLINE,
+  OFFLINE,
+  PLAYING
+}
+
 export type friend = {
   username: string,
   pending?: boolean,
-  invitation?: boolean
+  invitation?: boolean,
+  status?: Status,
+  currentGame?: string
 }
 
 @Injectable({
