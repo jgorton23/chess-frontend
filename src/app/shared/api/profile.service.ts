@@ -254,4 +254,20 @@ export class ProfileService {
         }
       })
   }
+
+  updateSession(status: Status, gameId: string) {
+    fetch(`${environment.baseUrl}/${ApiPaths.Session}?` + new URLSearchParams({status: status.toString(), gameId: gameId}), 
+      {
+        credentials: 'include', 
+        method: 'PUT'
+      }).catch(error => {
+        if (error instanceof Response) {
+          error.json().then((e: any) => console.error(e))
+          if (error.status === 401) {this.router.navigate(['login'])}
+        } else {
+          console.error(error)
+        }
+      })
+  }
+
 }
