@@ -255,11 +255,17 @@ export class ProfileService {
       })
   }
 
-  updateSession(status: Status, gameId: string) {
-    fetch(`${environment.baseUrl}/${ApiPaths.Session}?` + new URLSearchParams({status: status.toString(), gameId: gameId}), 
+  updateSession(status: Status, gameId: string): Promise<void> {
+    return fetch(`${environment.baseUrl}/${ApiPaths.Session}?` + new URLSearchParams({status: status.toString(), gameId: gameId}), 
       {
         credentials: 'include', 
         method: 'PUT'
+      }).then(response => {
+        if (response.ok) {
+          return Promise.resolve()
+        } else {
+          return Promise.reject()
+        }
       }).catch(error => {
         if (error instanceof Response) {
           error.json().then((e: any) => console.error(e))
