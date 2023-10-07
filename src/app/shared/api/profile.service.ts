@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { ApiPaths } from '../../api-paths';
 import { Router } from '@angular/router';
 
-enum Status {
+export enum Status {
   ONLINE,
   OFFLINE,
   PLAYING

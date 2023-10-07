@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Game, GameService } from '../shared/api/game.service';
+import { GameService } from '../shared/api/game.service';
+import { ProfileService, Status } from '../shared/api/profile.service';
 
 @Component({
   selector: 'app-home',
@@ -8,10 +9,11 @@ import { Game, GameService } from '../shared/api/game.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public gameService: GameService) { }
+  constructor(public gameService: GameService, private profileService: ProfileService) { }
 
   ngOnInit(): void {
     this.gameService.getGames();
+    this.profileService.updateSession(Status.ONLINE, '')
   }
 
   showSideMenu: boolean = false;
