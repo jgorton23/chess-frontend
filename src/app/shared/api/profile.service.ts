@@ -256,9 +256,9 @@ export class ProfileService {
   }
 
   updateSession(status: Status, gameId: string): Promise<void> {
-    console.log(status.toString());
+    console.log(status.toString(), gameId);
     
-    return fetch(`${environment.baseUrl}/${ApiPaths.Session}?` + new URLSearchParams({status: status.toString(), gameId: gameId}), 
+    return fetch(`${environment.baseUrl}/${ApiPaths.Session}?` + new URLSearchParams({status: status.toString(), currentGameId: gameId}), 
       {
         credentials: 'include', 
         method: 'PUT'

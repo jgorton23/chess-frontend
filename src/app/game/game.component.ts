@@ -77,6 +77,8 @@ export class GameComponent implements OnInit, OnDestroy {
       this.router.navigate(["notfound"])
       return
     }
+
+    this.profileService.updateSession(Status.PLAYING, gameId)
     
     this.gameService.getGame(gameId)
       .then(game => {        
@@ -112,7 +114,6 @@ export class GameComponent implements OnInit, OnDestroy {
       }).then(validMoves => {
         this.validMoves = validMoves
         this.loading = false
-        this.profileService.updateSession(Status.PLAYING, gameId!)
       }).catch(error => {
         console.error(error)
       })
