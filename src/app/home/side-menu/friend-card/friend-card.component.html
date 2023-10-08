@@ -33,12 +33,24 @@
         </span>
       </div>
       <div
-        *ngIg="!friendInfo?.pending && !friendInfo?.invitation"
+        *ngIf="!friendInfo?.pending && !friendInfo?.invitation"
         class="col g-0 mb-0 d-flex justify-content-end align-items-center"
       >
         <span
+          *ngIf="friendInfo?.onlineStatus?.toString() === 'ONLINE'"
+          class="badge bg-primary rounded-pill d-flex align-items-center"
+          >Online</span
+        >
+        <span
+          *ngIf="friendInfo?.onlineStatus?.toString() === 'PLAYING'"
+          class="badge bg-info rounded-pill d-flex align-items-center pill-btn"
+          (click)="watchGame()"
+          >Playing</span
+        >
+        <span
+          *ngIf="friendInfo?.onlineStatus?.toString() === 'OFFLINE'"
           class="badge bg-secondary rounded-pill d-flex align-items-center pill-btn"
-          >{{ friendInfo?.status?.toString() }}</span
+          >Offline</span
         >
       </div>
     </div>

@@ -13,8 +13,8 @@ export type friend = {
   username: string,
   pending?: boolean,
   invitation?: boolean,
-  status?: Status,
-  currentGame?: string
+  onlineStatus?: Status,
+  currentGameId?: string
 }
 
 @Injectable({
