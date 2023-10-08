@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProfileService } from 'src/app/shared/api/profile.service';
+import { Router } from '@angular/router';
+import { ProfileService, friend } from 'src/app/shared/api/profile.service';
 
 @Component({
   selector: 'app-friend-card',
@@ -8,26 +9,26 @@ import { ProfileService } from 'src/app/shared/api/profile.service';
 })
 export class FriendCardComponent implements OnInit {
 
-  constructor(private profileService: ProfileService) { }
+  constructor(private profileService: ProfileService, private router: Router) { }
 
   ngOnInit(): void {
+    console.log(this.friendInfo);
+    
   }
 
   @Input()
-  pending?: boolean;
-
-  @Input()
-  invitation?: boolean;
-
-  @Input()
-  username: string = "";
+  friendInfo?: friend
 
   rejectFriendRequest(): void {
-    this.profileService.removeFriends(this.username);
+    this.profileService.removeFriends(this.friendInfo!.username);
   }
   
   approveFriendRequest(): void {
-    this.profileService.addFriend(this.username);
+    this.profileService.addFriend(this.friendInfo!.username);
+  }
+
+  watchGame(): void {
+    this.router.navigate(['play', {id: this.friendInfo?.currentGameId}])
   }
 
 }

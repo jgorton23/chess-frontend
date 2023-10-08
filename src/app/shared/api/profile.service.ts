@@ -3,10 +3,18 @@ import { environment } from 'src/environments/environment';
 import { ApiPaths } from '../../api-paths';
 import { Router } from '@angular/router';
 
+export enum Status {
+  ONLINE = "ONLINE",
+  OFFLINE = "OFFLINE",
+  PLAYING = "PLAYING"
+}
+
 export type friend = {
   username: string,
   pending?: boolean,
-  invitation?: boolean
+  invitation?: boolean,
+  onlineStatus?: Status,
+  currentGameId?: string
 }
 
 @Injectable({
@@ -230,11 +238,11 @@ export class ProfileService {
       }).then(body => { 
         this.invitations = body.friends
           .filter((f: friend) => f.invitation)
-          .map((f: friend) => {return {username: f.username}})
+          // .map((f: friend) => {return {username: f.username}})
         this.friends = body.friends
           .filter((f: friend) => !f.invitation)
           .toSorted((a: friend, b: friend) => Number(a.pending) - Number(b.pending))
-          .map((f: friend) => {return {username: f.username, pending: f.pending}});
+          // .map((f: friend) => {return {username: f.username, pending: f.pending}});
       }).catch(error => {
         if (error instanceof Response) {
           error.json().then((e: any) => console.error(e))
@@ -246,4 +254,28 @@ export class ProfileService {
         }
       })
   }
+
+  updateSession(status: Status, gameId: string): Promise<void> {
+    console.log(status.toString(), gameId);
+    
+    return fetch(`${environment.baseUrl}/${ApiPaths.Session}?` + new URLSearchParams({status: status.toString(), currentGameId: gameId}), 
+      {
+        credentials: 'include', 
+        method: 'PUT'
+      }).then(response => {
+        if (response.ok) {
+          return Promise.resolve()
+        } else {
+          return Promise.reject()
+        }
+      }).catch(error => {
+        if (error instanceof Response) {
+          error.json().then((e: any) => console.error(e))
+          if (error.status === 401) {this.router.navigate(['login'])}
+        } else {
+          console.error(error)
+        }
+      })
+  }
+
 }

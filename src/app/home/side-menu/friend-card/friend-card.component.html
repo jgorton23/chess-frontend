@@ -2,11 +2,13 @@
   <div class="col">
     <div class="row m-1">
       <div class="col g-0">
-        {{ username }}
+        {{ friendInfo?.username }}
       </div>
-      <div class="col g-0 mb-0 d-flex justify-content-end align-items-center">
+      <div
+        *ngIf="friendInfo?.pending && !friendInfo?.invitation"
+        class="col g-0 mb-0 d-flex justify-content-end align-items-center"
+      >
         <span
-          *ngIf="pending"
           class="badge bg-secondary rounded-pill d-flex align-items-center"
           style="height: 80%"
         >
@@ -14,7 +16,7 @@
         </span>
       </div>
       <div
-        *ngIf="invitation"
+        *ngIf="friendInfo?.invitation"
         class="col g-0 mb-0 d-flex justify-content-end align-items-center"
       >
         <span
@@ -31,6 +33,27 @@
         >
           Add
         </span>
+      </div>
+      <div
+        *ngIf="!friendInfo?.pending && !friendInfo?.invitation"
+        class="col g-0 mb-0 d-flex justify-content-end align-items-center"
+      >
+        <span
+          *ngIf="friendInfo?.onlineStatus?.toString() === 'ONLINE'"
+          class="badge bg-primary rounded-pill d-flex align-items-center"
+          >Online</span
+        >
+        <span
+          *ngIf="friendInfo?.onlineStatus?.toString() === 'PLAYING'"
+          class="badge bg-info rounded-pill d-flex align-items-center pill-btn"
+          (click)="watchGame()"
+          >Playing</span
+        >
+        <span
+          *ngIf="friendInfo?.onlineStatus?.toString() === 'OFFLINE'"
+          class="badge bg-secondary rounded-pill d-flex align-items-center pill-btn"
+          >Offline</span
+        >
       </div>
     </div>
   </div>

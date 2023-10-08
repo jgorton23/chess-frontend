@@ -146,11 +146,7 @@
     </div>
     <div class="row g-0">
       <div class="col m-3">
-        <button
-          type="button"
-          class="btn btn-danger w-100"
-          (click)="authService.logout()"
-        >
+        <button type="button" class="btn btn-danger w-100" (click)="logout()">
           Log Out
         </button>
       </div>
@@ -164,8 +160,7 @@
       <div class="row ms-3" *ngFor="let friend of profileService.invitations">
         <app-friend-card
           class="p-0 col-10"
-          [invitation]="true"
-          [username]="friend.username"
+          [friendInfo]="friend"
         ></app-friend-card>
       </div>
     </div>
@@ -175,8 +170,7 @@
     <div class="row ms-3" *ngFor="let friend of profileService.friends">
       <app-friend-card
         class="p-0 col-10"
-        [pending]="friend.pending"
-        [username]="friend.username"
+        [friendInfo]="friend"
       ></app-friend-card>
     </div>
   </div>
