@@ -188,9 +188,7 @@ export class GameComponent implements OnInit, OnDestroy {
     return this.gameService.currentGame?.moves.split(" ") ?? []
   }
 
-  isSelected(i: number) {
-    console.log(i, this.selectedMove);
-    
+  isSelected(i: number) {    
     return i === this.selectedMove
   }
 
@@ -209,7 +207,7 @@ export class GameComponent implements OnInit, OnDestroy {
   nextMove() {    
     let nextIndex = this.selectedMove + 1
     if (nextIndex % 3 === 0) nextIndex += 1
-    if (nextIndex < this.moves().length - 1) this.selectedMove = nextIndex
+    if (nextIndex < this.moves().length) this.selectedMove = nextIndex
 
     let move = document.getElementById("" + nextIndex)
     move?.scrollIntoView({
