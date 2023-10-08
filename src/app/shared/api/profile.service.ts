@@ -4,9 +4,9 @@ import { ApiPaths } from '../../api-paths';
 import { Router } from '@angular/router';
 
 export enum Status {
-  ONLINE,
-  OFFLINE,
-  PLAYING
+  ONLINE = "ONLINE",
+  OFFLINE = "OFFLINE",
+  PLAYING = "PLAYING"
 }
 
 export type friend = {
@@ -256,6 +256,8 @@ export class ProfileService {
   }
 
   updateSession(status: Status, gameId: string): Promise<void> {
+    console.log(status.toString());
+    
     return fetch(`${environment.baseUrl}/${ApiPaths.Session}?` + new URLSearchParams({status: status.toString(), gameId: gameId}), 
       {
         credentials: 'include', 

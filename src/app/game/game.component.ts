@@ -4,7 +4,7 @@ import { WebsocketAPIService } from 'src/app/shared/api/websocket.service';
 import { GameService } from '../shared/api/game.service';
 import { Game } from '../shared/api/game.service';
 import { BoardUtilService } from 'src/app/board/board-util.service';
-import { ProfileService } from 'src/app/shared/api/profile.service';
+import { ProfileService, Status } from 'src/app/shared/api/profile.service';
 import { Move } from 'src/app/board/board.component';
 import { firstValueFrom } from 'rxjs';
 
@@ -85,8 +85,7 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
           this.gameService.currentGame = game
-          
-          this.currentPlayer = game.moves.trim().split(" ").length % 3 <= 1 ? 'w' : 'b'
+          this.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").length % 2]
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
           return this.profileService.getUsername()
@@ -113,6 +112,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }).then(validMoves => {
         this.validMoves = validMoves
         this.loading = false
+        this.profileService.updateSession(Status.PLAYING, gameId!)
       }).catch(error => {
         console.error(error)
       })
@@ -121,6 +121,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.gameService.currentGame = undefined
+    this.profileService.updateSession(Status.OFFLINE, '')
     this.disconnect()
     clearInterval(this.timer)
   }

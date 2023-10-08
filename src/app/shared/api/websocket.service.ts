@@ -29,10 +29,7 @@ export class WebsocketAPIService {
    * @param game the game component that this ws should allow to handle messages received
    * @param gameId the id of the game to be used in the WS subscription path
    */
-  constructor(private game: GameComponent, @Inject(String) private gameId: string) {
-    console.log(this);
-    
-  }
+  constructor(private game: GameComponent, @Inject(String) private gameId: string) {}
 
   /**
    * Subscribe to the ws endpoints based on this objects gameId
