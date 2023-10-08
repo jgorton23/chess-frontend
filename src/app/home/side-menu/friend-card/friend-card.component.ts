@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProfileService } from 'src/app/shared/api/profile.service';
+import { ProfileService, friend } from 'src/app/shared/api/profile.service';
 
 @Component({
   selector: 'app-friend-card',
@@ -14,20 +14,14 @@ export class FriendCardComponent implements OnInit {
   }
 
   @Input()
-  pending?: boolean;
-
-  @Input()
-  invitation?: boolean;
-
-  @Input()
-  username: string = "";
+  friendInfo?: friend
 
   rejectFriendRequest(): void {
-    this.profileService.removeFriends(this.username);
+    this.profileService.removeFriends(this.friendInfo!.username);
   }
   
   approveFriendRequest(): void {
-    this.profileService.addFriend(this.username);
+    this.profileService.addFriend(this.friendInfo!.username);
   }
 
 }

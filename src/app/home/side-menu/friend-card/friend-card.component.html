@@ -2,11 +2,11 @@
   <div class="col">
     <div class="row m-1">
       <div class="col g-0">
-        {{ username }}
+        {{ friendInfo?.username }}
       </div>
       <div class="col g-0 mb-0 d-flex justify-content-end align-items-center">
         <span
-          *ngIf="pending"
+          *ngIf="friendInfo?.pending"
           class="badge bg-secondary rounded-pill d-flex align-items-center"
           style="height: 80%"
         >
@@ -14,7 +14,7 @@
         </span>
       </div>
       <div
-        *ngIf="invitation"
+        *ngIf="friendInfo?.invitation"
         class="col g-0 mb-0 d-flex justify-content-end align-items-center"
       >
         <span
@@ -31,6 +31,15 @@
         >
           Add
         </span>
+      </div>
+      <div
+        *ngIg="!friendInfo?.pending && !friendInfo?.invitation"
+        class="col g-0 mb-0 d-flex justify-content-end align-items-center"
+      >
+        <span
+          class="badge bg-secondary rounded-pill d-flex align-items-center pill-btn"
+          >{{ friendInfo?.status?.toString() }}</span
+        >
       </div>
     </div>
   </div>

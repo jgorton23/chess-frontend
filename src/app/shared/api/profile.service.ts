@@ -238,11 +238,11 @@ export class ProfileService {
       }).then(body => { 
         this.invitations = body.friends
           .filter((f: friend) => f.invitation)
-          .map((f: friend) => {return {username: f.username}})
+          // .map((f: friend) => {return {username: f.username}})
         this.friends = body.friends
           .filter((f: friend) => !f.invitation)
           .toSorted((a: friend, b: friend) => Number(a.pending) - Number(b.pending))
-          .map((f: friend) => {return {username: f.username, pending: f.pending}});
+          // .map((f: friend) => {return {username: f.username, pending: f.pending}});
       }).catch(error => {
         if (error instanceof Response) {
           error.json().then((e: any) => console.error(e))
