@@ -4,9 +4,11 @@
       <div class="col g-0">
         {{ friendInfo?.username }}
       </div>
-      <div class="col g-0 mb-0 d-flex justify-content-end align-items-center">
+      <div
+        *ngIf="friendInfo?.pending && !friendInfo?.invitation"
+        class="col g-0 mb-0 d-flex justify-content-end align-items-center"
+      >
         <span
-          *ngIf="friendInfo?.pending"
           class="badge bg-secondary rounded-pill d-flex align-items-center"
           style="height: 80%"
         >
