@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/api/auth.service';
-import { ProfileService } from 'src/app/shared/api/profile.service';
+import { ProfileService, Status } from 'src/app/shared/api/profile.service';
 
 @Component({
   selector: 'app-side-menu',
@@ -86,5 +86,10 @@ export class SideMenuComponent implements OnInit {
       this.profileService.getFriends()
     }
     this.viewingFriends = !this.viewingFriends;
+  }
+
+  logout() {
+    this.profileService.updateSession(Status.OFFLINE, '')
+    this.authService.logout()
   }
 }
