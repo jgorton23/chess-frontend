@@ -194,44 +194,32 @@ export class GameComponent implements OnInit, OnDestroy {
     return i === this.selectedMove
   }
 
-  previousMove() {
-    console.log("PREV");
-    
+  previousMove() {    
     let nextIndex = this.selectedMove - 1
-    if (nextIndex % 3 === 0) {
-      nextIndex -= 1
-    }
-    console.log(this.selectedMove, nextIndex);
-    
-    let move = document.getElementById("" + nextIndex)
-    
-    move?.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'start'
-    })
+    if (nextIndex % 3 === 0) nextIndex -= 1
     if (nextIndex >= 0) this.selectedMove = nextIndex
-  }
-  
-  nextMove() {
-    console.log("NEXT");
-    
-    let nextIndex = this.selectedMove + 1
-    if (nextIndex % 3 === 0) {
-      nextIndex += 1
-    }
-    console.log(this.selectedMove, nextIndex);
 
     let move = document.getElementById("" + nextIndex)
-    
     move?.scrollIntoView({
       behavior: 'smooth',
       inline: 'start'
     })
+  }
+  
+  nextMove() {    
+    let nextIndex = this.selectedMove + 1
+    if (nextIndex % 3 === 0) nextIndex += 1
     if (nextIndex < this.moves().length - 1) this.selectedMove = nextIndex
+
+    let move = document.getElementById("" + nextIndex)
+    move?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'start'
+    })
   }
 
   select(i: number) {
-    this.selectedMove = i
+    if (i % 3 !== 0) this.selectedMove = i
   }
 
 //#endregion

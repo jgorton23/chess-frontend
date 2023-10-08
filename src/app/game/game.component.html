@@ -43,7 +43,7 @@
         }"
         style="display: inline-flex"
         id="{{ '' + (moves().length - 1 - i) }}"
-        (click)="select(i)"
+        (click)="select(moves().length - 1 - i)"
       >
         {{ move }}
       </h3>
