@@ -52,7 +52,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   resignation: EventEmitter<boolean> = new EventEmitter();
 
-  selectedMove: number = (this.gameService.currentGame?.moves.split(" ").length ?? 1) - 1
+  selectedMove: number = 0
 
   chats: string[] = []
 
@@ -87,6 +87,7 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
           this.gameService.currentGame = game
+          this.selectedMove = this.moves().length - 1
           this.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").length % 2]
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
@@ -188,35 +189,45 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   isSelected(i: number) {
+    console.log(i, this.selectedMove);
+    
     return i === this.selectedMove
   }
 
   previousMove() {
-    let nextIndex = this.selectedMove + 1
-    if (nextIndex % 3 === 2) {
-      nextIndex += 1
+    console.log("PREV");
+    
+    let nextIndex = this.selectedMove - 1
+    if (nextIndex % 3 === 0) {
+      nextIndex -= 1
     }
+    console.log(this.selectedMove, nextIndex);
+    
     let move = document.getElementById("" + nextIndex)
     
     move?.scrollIntoView({
       behavior: 'smooth',
       inline: 'start'
     })
-    this.selectedMove = Math.min(this.gameService.currentGame?.moves.split(" ").length ?? 1 - 1, nextIndex)
+    if (nextIndex >= 0) this.selectedMove = nextIndex
   }
   
   nextMove() {
-    let nextIndex = this.selectedMove - 1
-    if (nextIndex % 3 === 2) {
-      nextIndex -= 1
+    console.log("NEXT");
+    
+    let nextIndex = this.selectedMove + 1
+    if (nextIndex % 3 === 0) {
+      nextIndex += 1
     }
-    let move = document.getElementById("" + nextIndex)
+    console.log(this.selectedMove, nextIndex);
 
+    let move = document.getElementById("" + nextIndex)
+    
     move?.scrollIntoView({
       behavior: 'smooth',
       inline: 'start'
     })
-    this.selectedMove = Math.max(0, nextIndex)
+    if (nextIndex < this.moves().length - 1) this.selectedMove = nextIndex
   }
 
   select(i: number) {

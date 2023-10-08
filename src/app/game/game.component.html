@@ -39,7 +39,7 @@
         *ngFor="let move of moves().reverse(); index as i"
         class="p-2"
         [ngClass]="{
-          'rounded-pill': isSelected(i)
+          'rounded-pill': isSelected(moves().length - 1 - i)
         }"
         style="display: inline-flex"
         id="{{ '' + (moves().length - 1 - i) }}"
