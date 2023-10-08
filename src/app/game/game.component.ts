@@ -197,8 +197,7 @@ export class GameComponent implements OnInit, OnDestroy {
     if (nextIndex % 3 === 0) nextIndex -= 1
     if (nextIndex >= 0) this.selectedMove = nextIndex
 
-    let move = document.getElementById("" + nextIndex)
-    move?.scrollIntoView({
+    document.getElementById("" + nextIndex)?.scrollIntoView({
       behavior: 'smooth',
       inline: 'start'
     })
@@ -209,8 +208,7 @@ export class GameComponent implements OnInit, OnDestroy {
     if (nextIndex % 3 === 0) nextIndex += 1
     if (nextIndex < this.moves().length) this.selectedMove = nextIndex
 
-    let move = document.getElementById("" + nextIndex)
-    move?.scrollIntoView({
+    document.getElementById("" + nextIndex)?.scrollIntoView({
       behavior: 'smooth',
       inline: 'start'
     })
