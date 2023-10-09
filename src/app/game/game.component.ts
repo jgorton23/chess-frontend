@@ -228,7 +228,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   pieces(): string[] {
-    return ['q', 'r', 'b', 'n'].map((p) => this.currentPlayer === 'w' ? p.toUpperCase() : p)
+    return ['q', 'r', 'b', 'n'].map((p) => this.gameService.currentPlayer === 'w' ? p.toUpperCase() : p)
   }
 
   navigate(page: string) {
@@ -346,9 +346,9 @@ export class GameComponent implements OnInit, OnDestroy {
       }, 1000)
     }
 
-    this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+    this.gameService.currentPlayer = (this.gameService.currentPlayer === 'w' ? 'b' : 'w')
 
-    if (this.currentPlayer === this.playerColor) {
+    if (this.gameService.currentPlayer === this.playerColor) {
       this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
         .then(validMoves => {
           this.validMoves = validMoves
