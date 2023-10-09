@@ -27,36 +27,44 @@ export class GameComponent implements OnInit, OnDestroy {
 
   validMoves: string[] = []
 
-  currentPlayer: string = 'w'
-
   loading: boolean = true
 
+  //#region modals
+
+  // promotion modal
+
   showPromotionPopup: boolean = false;
+  
+  promotionPiece: EventEmitter<string> = new EventEmitter();
+
+  // resignation modal
 
   showResignConfirmationPopup: boolean = false;
+  
+  resignation: EventEmitter<boolean> = new EventEmitter();
+
+  // game over modal
 
   showGameOverPopup: boolean = false;
+  
+  gameOverMessage: string = '';
+
+  // chat variables 
 
   showChat: boolean = false;
-
+  
   chatsPending: boolean = false;
+  
+  chats: string[] = []
+  
+  chat: string = ''
+
+  //#endregion
 
   rematchRequest: RematchRequest = {
     whitePlayerConfirmed: false,
     blackPlayerConfirmed: false
   }
-
-  gameOverMessage: string = '';
-
-  promotionPiece: EventEmitter<string> = new EventEmitter();
-
-  resignation: EventEmitter<boolean> = new EventEmitter();
-
-  selectedMove: number = 0
-
-  chats: string[] = []
-
-  chat: string = ''
 
   moveSeconds: number = 0
 
@@ -87,8 +95,8 @@ export class GameComponent implements OnInit, OnDestroy {
           return Promise.reject("Game is undefined or has no id: " + game)
         } else {
           this.gameService.currentGame = game
-          this.selectedMove = this.moves().length - 1
-          this.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").length % 2]
+          this.gameService.selectedMove = this.moves().length - 1
+          this.gameService.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").length % 2]
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
           return this.profileService.getUsername()
@@ -106,7 +114,7 @@ export class GameComponent implements OnInit, OnDestroy {
               this.playerColor = 'b'
               break              
           }
-          if (this.playerColor === this.currentPlayer){
+          if (this.playerColor === this.gameService.currentPlayer){
             return this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
           } else {
             return []
@@ -145,20 +153,15 @@ export class GameComponent implements OnInit, OnDestroy {
       let initialMinutes: number = +this.gameService.currentGame.timeControl.split("/")[0]
       let seconds: number = initialMinutes * 60;
       let moveTimes = this.gameService.currentGame.moveTimes.split(" ");
-      if (player === 'b') {
-        if (moveTimes.length > 1) {
-          seconds -= moveTimes.map(t => (+t / 1000) - this.increment()).filter((_, i) => i % 2 === 1).reduce((prev, curr) => prev+curr)
-        }
-        if (this.currentPlayer === 'b') {
-          seconds -= this.moveSeconds
-        }
-      } else {
-        if (moveTimes.length !== 0) {
-          seconds -= moveTimes.map(t => +t / 1000).filter((_, i) => i % 2 === 0).reduce((prev, curr) => prev+curr)
-        }
-        if (this.currentPlayer === 'w') {
-          seconds -= this.moveSeconds
-        }
+      let mod = player === 'b' ? 1 : 0
+      if (moveTimes.length > 0) {
+        seconds -= moveTimes
+                    .map(t => (+t / 1000) - this.increment())
+                    .filter((_, i) => i % 2 === mod)
+                    .reduce((prev, curr) => prev+curr)
+      }
+      if (player === this.gameService.currentPlayer) {
+        seconds -= this.moveSeconds
       }
       return "" + (Math.floor(seconds / 60)) + ":" + ("" + (seconds % 60)).padStart(2, "0")
     } else {
@@ -189,13 +192,13 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   isSelected(i: number) {    
-    return i === this.selectedMove
+    return i === this.gameService.selectedMove
   }
 
   previousMove() {    
-    let nextIndex = this.selectedMove - 1
+    let nextIndex = this.gameService.selectedMove - 1
     if (nextIndex % 3 === 0) nextIndex -= 1
-    if (nextIndex >= 0) this.selectedMove = nextIndex
+    if (nextIndex >= 0) this.gameService.selectedMove = nextIndex
 
     document.getElementById("" + nextIndex)?.scrollIntoView({
       behavior: 'smooth',
@@ -204,9 +207,9 @@ export class GameComponent implements OnInit, OnDestroy {
   }
   
   nextMove() {    
-    let nextIndex = this.selectedMove + 1
+    let nextIndex = this.gameService.selectedMove + 1
     if (nextIndex % 3 === 0) nextIndex += 1
-    if (nextIndex < this.moves().length) this.selectedMove = nextIndex
+    if (nextIndex < this.moves().length) this.gameService.selectedMove = nextIndex
 
     document.getElementById("" + nextIndex)?.scrollIntoView({
       behavior: 'smooth',
@@ -215,7 +218,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   select(i: number) {
-    if (i % 3 !== 0) this.selectedMove = i
+    if (i % 3 !== 0) this.gameService.selectedMove = i
   }
 
 //#endregion

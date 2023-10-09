@@ -29,7 +29,15 @@ export class GameService {
 
   currentGames: Game[] = [];
 
+  //#region current game info
+
   currentGame?: Game;
+
+  selectedMove: number = 0
+
+  currentPlayer: string = 'w'
+
+  //#endregion
 
   //#region API
 
