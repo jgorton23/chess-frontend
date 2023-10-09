@@ -38,6 +38,8 @@ export class BoardComponent implements OnInit, OnChanges {
   selectedPiece?: {x: number, y: number};
 
   ngOnInit(): void {
+    console.log("FEN", this.fen);
+    
   }
 
   //#region tile formatting

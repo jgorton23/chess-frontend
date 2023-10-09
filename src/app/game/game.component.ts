@@ -90,11 +90,14 @@ export class GameComponent implements OnInit, OnDestroy {
       .then(game => {        
         if (game === undefined || game.id === undefined) {
           this.router.navigate(["notfound"])
+          return Promise.reject()
         } else {
-          this.gameService.setCurrentGame(game)
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
+          return this.gameService.setCurrentGame(game)
         }
+      }).then(() => {
+        this.loading = false;
       }).catch(error => {
         console.error(error)
       })
