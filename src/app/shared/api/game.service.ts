@@ -67,6 +67,7 @@ export class GameService {
         this.currentGames = body.games.filter((game: Game) => game.result === "*")
         this.currentGames.forEach(game => game.date = new Date(game.date))
         this.currentGames.sort((a,b) => {return (a.date.getTime() > b.date.getTime()) ? -1 : 1})
+        
         return body.games
       }).catch((error: Response) => {
         if (error.status === 401) {
@@ -188,13 +189,13 @@ export class GameService {
   //#region logic
 
   isInCheck(playerColor: string): boolean {
-    let moveIsCheck = (this.selectedGameState().moves.split(" ").at(-1) ?? "").includes("+")
-    let moveIsMate = (this.selectedGameState().moves.split(" ").at(-1) ?? "").includes("#")
+    let moveIsCheck = (this.selectedGameState()?.moves.split(" ").at(-1) ?? "").includes("+")
+    let moveIsMate = (this.selectedGameState()?.moves.split(" ").at(-1) ?? "").includes("#")
     return playerColor === (this.selectedMove % 3 === 2 ? 'b' : 'w') && (moveIsCheck || moveIsMate)
   }
 
   isInLastMove(coordinate: string): boolean {
-    return (this.selectedGameState().moves.split(" ").at(-1) ?? "").includes(coordinate)
+    return (this.selectedGameState()?.moves.split(" ").at(-1) ?? "").includes(coordinate)
   }
 
   fen(): string {

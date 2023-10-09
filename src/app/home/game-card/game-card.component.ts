@@ -14,8 +14,7 @@ export class GameCardComponent implements OnInit {
   @Input()
   gameInfo!: Game;
 
-  ngOnInit(): void {    
-  }
+  ngOnInit(): void {}
 
   navigateToGame() {
     this.gameService.currentGame = this.gameInfo
