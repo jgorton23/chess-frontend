@@ -168,6 +168,10 @@ export class BoardComponent implements OnInit, OnChanges {
     return "pqkbnr".indexOf(c) >= 0
   }
 
+  playerColor(): string {
+    return this.gameService.playerColor
+  }
+
   isPlayerColor(piece: string, color?: string) {
     color = color || this.gameService.playerColor
     return (color === 'w' && this.isWhitePiece(piece)) || (color === 'b' && this.isBlackPiece(piece))
