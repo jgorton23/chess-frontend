@@ -33,6 +33,8 @@ export class GameService {
 
   currentGame?: Game;
 
+  currentGameStates: Game[] = []
+
   selectedMove: number = 0
 
   currentPlayer: string = 'w'
@@ -178,14 +180,22 @@ export class GameService {
   //#region logic
 
   isInCheck(playerColor: string): boolean {
-    let moveIsCheck = (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("+")
-    let moveIsMate = (this.currentGame?.moves.split(" ").at(-1) ?? "").includes("#")
-    let moveCount = (this.currentGame?.moves.split(" ") ?? []).length
-    return (moveIsCheck && playerColor === (moveCount % 3 === 2 ? 'b' : 'w')) || (moveIsMate && playerColor === (moveCount % 3 === 2 ? 'b' : 'w'))
+    let moveIsCheck = (this.selectedGameState().moves.split(" ").at(-1) ?? "").includes("+")
+    let moveIsMate = (this.selectedGameState().moves.split(" ").at(-1) ?? "").includes("#")
+    return playerColor === (this.selectedMove % 3 === 2 ? 'b' : 'w') && (moveIsCheck || moveIsMate)
   }
 
   isInLastMove(coordinate: string): boolean {
-    return (this.currentGame?.moves.split(" ").at(-1) ?? "").includes(coordinate)
+    return (this.selectedGameState().moves.split(" ").at(-1) ?? "").includes(coordinate)
+  }
+
+  fen(): string {
+    return this.selectedGameState().fen
+  }
+  
+  selectedGameState(): Game {
+    let gameStateIndex = this.selectedMove
+    return (this.currentGameStates[gameStateIndex] || this.currentGame)
   }
 
   //#endregion

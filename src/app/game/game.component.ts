@@ -182,7 +182,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   fen(): string {
-    return this.gameService.currentGame?.fen ?? ""
+    return this.gameService.fen()
   }
 
 //#region move selector
