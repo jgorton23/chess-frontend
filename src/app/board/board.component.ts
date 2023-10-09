@@ -108,7 +108,7 @@ export class BoardComponent implements OnInit, OnChanges {
   select(event: number[]){    
     var x = event[1];
     var y = event[0];
-    if (this.playerColor === '' || (this.gameService.currentPlayer !== this.playerColor)) {
+    if (this.gameService.playerColor === '' || (this.gameService.currentPlayer !== this.gameService.playerColor)) {
       return
     }
     if(this.selectedPiece === undefined && this.isPlayerColor(this.grid[y][x].piece)){
@@ -142,7 +142,7 @@ export class BoardComponent implements OnInit, OnChanges {
     }
     if(this.selectedPiece){
       let start = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece + String.fromCharCode(97+this.selectedPiece.x) + Math.abs(this.selectedPiece.y-8)
-      this.validMoves.filter(move => move.startsWith(start)).forEach(move => {        
+      this.gameService.currentValidMoves.filter(move => move.startsWith(start)).forEach(move => {        
         if (move.length < 5) {
           return
         }
@@ -169,7 +169,7 @@ export class BoardComponent implements OnInit, OnChanges {
   }
 
   isPlayerColor(piece: string, color?: string) {
-    color = color || this.playerColor
+    color = color || this.gameService.playerColor
     return (color === 'w' && this.isWhitePiece(piece)) || (color === 'b' && this.isBlackPiece(piece))
   }
 
