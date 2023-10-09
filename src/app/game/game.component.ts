@@ -23,9 +23,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   webSocketAPI?: WebsocketAPIService;
 
-  playerColor: string = ' ';
-
-  validMoves: string[] = []
+  // validMoves: string[] = []
 
   loading: boolean = true
 
@@ -92,37 +90,11 @@ export class GameComponent implements OnInit, OnDestroy {
       .then(game => {        
         if (game === undefined || game.id === undefined) {
           this.router.navigate(["notfound"])
-          return Promise.reject("Game is undefined or has no id: " + game)
         } else {
-          this.gameService.currentGame = game
-          this.gameService.selectedMove = this.moves().length - 1
-          this.gameService.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").length % 2]
+          this.gameService.setCurrentGame(game)
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
-          return this.profileService.getUsername()
         }
-      }).then(username => {
-        if (username === undefined) {
-          this.router.navigate(['login'])
-          return Promise.reject("Username is undefined: " + username)
-        } else {
-          switch(username){
-            case this.gameService.currentGame?.whitePlayerUsername:
-              this.playerColor = 'w'
-              break
-            case this.gameService.currentGame?.blackPlayerUsername:
-              this.playerColor = 'b'
-              break              
-          }
-          if (this.playerColor === this.gameService.currentPlayer){
-            return this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
-          } else {
-            return []
-          }
-        }
-      }).then(validMoves => {
-        this.validMoves = validMoves
-        this.loading = false
       }).catch(error => {
         console.error(error)
       })
@@ -137,15 +109,11 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   playerUsername(): string {
-    return (this.playerColor === "b" ?
-      this.gameService.currentGame?.blackPlayerUsername :
-      this.gameService.currentGame?.whitePlayerUsername) || ""
+    return this.gameService.playerUsername
   }
 
   opponentUsername(): string {
-    return (this.playerColor === "b" ?
-      this.gameService.currentGame?.whitePlayerUsername :
-      this.gameService.currentGame?.blackPlayerUsername) || ""
+    return this.gameService.opponentUsername
   }
 
   timeLeft(player: string): string {
@@ -170,11 +138,11 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   playerTime(): string {
-    return this.timeLeft(this.playerColor);
+    return this.timeLeft(this.gameService.playerColor);
   }
 
   opponentTime(): string {
-    return this.timeLeft(this.playerColor === 'b' ? 'w' : 'b');
+    return this.timeLeft(this.gameService.playerColor === 'w' ? 'b' : 'w');
   }
 
   increment(): number {
@@ -289,7 +257,7 @@ export class GameComponent implements OnInit, OnDestroy {
    * request a rematch
    */
   sendRematch(): void {
-    if (this.playerColor === 'w') {
+    if (this.gameService.playerColor === 'w') {
       this.rematchRequest.whitePlayerConfirmed = true
     } else {
       this.rematchRequest.blackPlayerConfirmed = true
@@ -319,9 +287,6 @@ export class GameComponent implements OnInit, OnDestroy {
    * @param game the new gameState
    */
   handleMove(game: Game): void {
-    
-    this.gameService.currentGame = game
-    this.validMoves = []
 
     if (game.result !== '*'){
       if (game.result === '1-0') {
@@ -346,15 +311,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }, 1000)
     }
 
-    this.gameService.currentPlayer = (this.gameService.currentPlayer === 'w' ? 'b' : 'w')
-
-    if (this.gameService.currentPlayer === this.playerColor) {
-      this.gameService.getValidMoves(this.gameService.currentGame!.id!, this.playerColor)
-        .then(validMoves => {
-          this.validMoves = validMoves
-        })
-    }
-
+    this.gameService.handleMove(game)
   }
 
   /**
@@ -435,7 +392,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
     
     let dest = String.fromCharCode(97+move.destSquare[0]) + Math.abs(move.destSquare[1] - 8)
-    let moveString = this.validMoves.find(m => m.startsWith(move.piece) && m.includes(dest))
+    let moveString = this.gameService.currentValidMoves.find(m => m.startsWith(move.piece) && m.includes(dest))
     if (moveString) {
       move.isCapture = moveString.includes("x")
       move.isCheck = moveString.includes("+")
@@ -443,7 +400,7 @@ export class GameComponent implements OnInit, OnDestroy {
       move.isStalemate = moveString.includes("$")
       move.miliseconds = this.moveSeconds * 1000
       move.playerUsername = await this.profileService.getUsername()
-      this.validMoves = []
+      this.gameService.currentValidMoves = []
       this.sendMove(move)
     }
   }

@@ -39,6 +39,14 @@ export class GameService {
 
   currentPlayer: string = 'w'
 
+  playerColor: string = ''
+
+  playerUsername: string = ''
+
+  opponentUsername: string = ''
+
+  currentValidMoves: string[] = []
+
   //#endregion
 
   //#region API
@@ -196,6 +204,30 @@ export class GameService {
   selectedGameState(): Game {
     let gameStateIndex = this.selectedMove
     return (this.currentGameStates[gameStateIndex] || this.currentGame)
+  }
+
+  async setCurrentGame(game: Game) {
+    this.currentGame = game
+    this.selectedMove = game.moves.split(" ").length - 1
+    this.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").length % 2]
+    if (this.playerColor === 'b') {
+      this.playerUsername = this.currentGame.blackPlayerUsername
+      this.opponentUsername = this.currentGame.whitePlayerUsername
+    } else {
+      this.playerUsername = this.currentGame.whitePlayerUsername
+      this.opponentUsername = this.currentGame.blackPlayerUsername
+    }
+    this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)
+  }
+
+  async handleMove(game: Game) {
+    this.currentGame = game
+    this.currentGameStates.push(game)
+    this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+
+    if (this.currentPlayer === this.playerColor) {
+      this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)
+    }
   }
 
   //#endregion

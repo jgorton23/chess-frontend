@@ -22,22 +22,13 @@ export type Move = {
 })
 export class BoardComponent implements OnInit, OnChanges {
 
-  constructor(private boardUtil: BoardUtilService) { }
+  constructor(private boardUtil: BoardUtilService, private gameService: GameService) { }
 
   @Input()
   isIcon: boolean = false
 
   @Input()
   fen: string = this.boardUtil.getBoard(variations.Standard);
-  
-  @Input()
-  playerColor: string = ' ';
-
-  @Input()
-  currentPlayer: string = 'w';
-
-  @Input()
-  validMoves: string[] = [];
   
   @Output()
   moveEmitter: EventEmitter<Partial<Move>> = new EventEmitter();
@@ -117,7 +108,7 @@ export class BoardComponent implements OnInit, OnChanges {
   select(event: number[]){    
     var x = event[1];
     var y = event[0];
-    if (this.playerColor === '' || (this.currentPlayer !== this.playerColor)) {
+    if (this.playerColor === '' || (this.gameService.currentPlayer !== this.playerColor)) {
       return
     }
     if(this.selectedPiece === undefined && this.isPlayerColor(this.grid[y][x].piece)){
