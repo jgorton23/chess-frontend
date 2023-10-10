@@ -16,6 +16,7 @@
       <div *ngIf="!loading" class="row d-flex justify-content-center">
         <app-board
           [fen]="fen()"
+          [playerColor]="playerColor()"
           (moveEmitter)="performMove($event)"
         ></app-board>
       </div>

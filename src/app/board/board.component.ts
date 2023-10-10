@@ -29,6 +29,9 @@ export class BoardComponent implements OnInit, OnChanges {
 
   @Input()
   fen: string = this.boardUtil.getBoard(variations.Standard);
+
+  @Input()
+  playerColor: string = ''
   
   @Output()
   moveEmitter: EventEmitter<Partial<Move>> = new EventEmitter();
@@ -165,10 +168,6 @@ export class BoardComponent implements OnInit, OnChanges {
 
   isBlackPiece(c: string){
     return "pqkbnr".indexOf(c) >= 0
-  }
-
-  playerColor(): string {
-    return this.gameService.playerColor
   }
 
   isPlayerColor(piece: string, color?: string) {

@@ -1,12 +1,12 @@
 <div
   class="container g-0 p-0"
-  [ngClass]="{ rotate: playerColor() === 'b', icon: isIcon }"
+  [ngClass]="{ rotate: playerColor === 'b', icon: isIcon }"
 >
   <div class="row g-0" *ngFor="let row of expandedGrid(); index as y">
     <div
       class="col g-0"
       *ngFor="let col of row; index as x"
-      [ngClass]="{ rotate: playerColor() === 'b' && !isCorner(x, y) }"
+      [ngClass]="{ rotate: playerColor === 'b' && !isCorner(x, y) }"
     >
       <app-tile
         [isIcon]="isIcon"

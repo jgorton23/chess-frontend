@@ -207,16 +207,17 @@ export class GameService {
     return (this.currentGameStates[gameStateIndex] || this.currentGame)
   }
 
-  async setCurrentGame(game: Game) {
+  async setCurrentGame(game: Game, username: string) {
+    this.playerUsername = username
     this.currentGame = game
     this.selectedMove = game.moves.split(" ").length - 1
     this.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").length % 2]
-    if (this.playerColor === 'b') {
-      this.playerUsername = this.currentGame.blackPlayerUsername
-      this.opponentUsername = this.currentGame.whitePlayerUsername
-    } else {
-      this.playerUsername = this.currentGame.whitePlayerUsername
+    if (this.playerUsername === this.currentGame.whitePlayerUsername) {
       this.opponentUsername = this.currentGame.blackPlayerUsername
+      this.playerColor = 'w'
+    } else {
+      this.opponentUsername = this.currentGame.whitePlayerUsername
+      this.playerColor = 'b'
     }
     this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)
   }

@@ -17,7 +17,6 @@ export class GameCardComponent implements OnInit {
   ngOnInit(): void {}
 
   navigateToGame() {
-    this.gameService.setCurrentGame(this.gameInfo)
     this.router.navigate(['play', {id: this.gameInfo?.id}])
   }
 }

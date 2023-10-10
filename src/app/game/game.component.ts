@@ -23,8 +23,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
   webSocketAPI?: WebsocketAPIService;
 
-  // validMoves: string[] = []
-
   loading: boolean = true
 
   //#region modals
@@ -75,7 +73,7 @@ export class GameComponent implements OnInit, OnDestroy {
     public boardUtil: BoardUtilService,
     private profileService: ProfileService) { }
   
-  ngOnInit(): void {
+  async ngOnInit() {
 
     let gameId = this.route.snapshot.paramMap.get("id")
     
@@ -85,6 +83,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     this.profileService.updateSession(Status.PLAYING, gameId)
+    let username = await this.profileService.getUsername()
     
     this.gameService.getGame(gameId)
       .then(game => {        
@@ -94,7 +93,7 @@ export class GameComponent implements OnInit, OnDestroy {
         } else {
           this.webSocketAPI = new WebsocketAPIService(this, game.id);
           this.connect()
-          return this.gameService.setCurrentGame(game)
+          return this.gameService.setCurrentGame(game, username)
         }
       }).then(() => {
         this.loading = false;
@@ -109,6 +108,10 @@ export class GameComponent implements OnInit, OnDestroy {
     this.profileService.updateSession(Status.OFFLINE, '')
     this.disconnect()
     clearInterval(this.timer)
+  }
+
+  playerColor(): string {    
+    return this.gameService.playerColor
   }
 
   playerUsername(): string {
