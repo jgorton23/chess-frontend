@@ -227,6 +227,8 @@ export class GameService {
     this.currentGame = game
     this.currentGameStates.push(game)
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+    console.log(this.selectedGameState());
+    
 
     if (this.currentPlayer === this.playerColor) {
       this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)

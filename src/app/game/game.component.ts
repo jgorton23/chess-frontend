@@ -294,6 +294,7 @@ export class GameComponent implements OnInit, OnDestroy {
    */
   handleMove(game: Game): void {
 
+    console.log("HANDLE MOVE")
     if (game.result !== '*'){
       if (game.result === '1-0') {
         this.gameOverMessage = "White player won by checkmate";
@@ -306,6 +307,9 @@ export class GameComponent implements OnInit, OnDestroy {
       return;
     }
 
+    console.log("TEST1");
+    
+    
     this.moveSeconds = 0
     if (this.timer === 0) {
       this.timer = setInterval(_ => {
@@ -315,8 +319,11 @@ export class GameComponent implements OnInit, OnDestroy {
         }
       }, 1000)
     }
-
+    console.log("TEST2");
+    
     this.gameService.handleMove(game)
+    console.log(this.gameService.fen());
+    console.log("TEST3");
   }
 
   /**
