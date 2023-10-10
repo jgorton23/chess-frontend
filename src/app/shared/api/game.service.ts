@@ -211,7 +211,8 @@ export class GameService {
     this.playerUsername = username
     this.currentGame = game
     this.selectedMove = game.moves.split(" ").length - 1
-    this.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").length % 2]
+    
+    this.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").filter(move => move.length > 0).length % 2]
     if (this.playerUsername === this.currentGame.whitePlayerUsername) {
       this.opponentUsername = this.currentGame.blackPlayerUsername
       this.playerColor = 'w'
