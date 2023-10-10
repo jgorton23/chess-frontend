@@ -227,6 +227,16 @@ export class GameService {
     this.currentGame = game
     this.currentGameStates.push(game)
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
+    
+    let nextIndex = this.selectedGameState().moves.trim().split(" ").length - 1
+    if (nextIndex % 3 === 0) nextIndex += 1
+    this.selectedMove = nextIndex
+
+    document.getElementById("" + nextIndex)?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'start'
+    })
+
     console.log(this.selectedGameState());
     
 
