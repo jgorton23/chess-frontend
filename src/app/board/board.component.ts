@@ -110,7 +110,7 @@ export class BoardComponent implements OnInit, OnChanges {
   select(event: number[]){    
     var x = event[1];
     var y = event[0];
-    if (this.gameService.playerColor === '' || (this.gameService.currentPlayer !== this.gameService.playerColor)) {
+    if (this.gameService.playerColor === '' || (this.gameService.currentPlayer !== this.gameService.playerColor) || this.gameService.selectedMove < this.gameService.numberedMoves().length-1) {
       return
     }
     if(this.selectedPiece === undefined && this.isPlayerColor(this.grid[y][x].piece)){
