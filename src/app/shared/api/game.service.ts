@@ -33,7 +33,7 @@ export class GameService {
 
   currentGame?: Game;
 
-  currentGameStates: Game[] = []
+  currentGameStates: (Game | null)[] = []
 
   selectedMove: number = 0
 
@@ -201,16 +201,34 @@ export class GameService {
   fen(): string {
     return this.selectedGameState().fen
   }
+
+  moves(): string[] {
+    return this.currentGame?.moves.split(" ") || []
+  }
+
+  numberedMoves(): string[] {
+    let moves: string[] = []
+    let ind = 1
+    this.moves().forEach(move => {
+      if (moves.length % 3 === 0) {
+        moves.push("" + ind + ".")
+        ind += 1
+      }
+      moves.push(move)
+    });
+
+    return moves
+  }
   
   selectedGameState(): Game {
-    let gameStateIndex = this.selectedMove
-    return (this.currentGameStates[gameStateIndex] || this.currentGame)
+    let gameStateIndex = this.selectedMove - (Math.ceil(this.selectedMove / 3))
+    return (this.currentGameStates[gameStateIndex] || this.currentGame!)
   }
 
   async setCurrentGame(game: Game, username: string) {
     this.playerUsername = username
     this.currentGame = game
-    this.selectedMove = game.moves.split(" ").length - 1
+    this.selectedMove = this.numberedMoves().length - 1
     
     this.currentPlayer = ['w', 'b'][game.moves.trim().split(" ").filter(move => move.length > 0).length % 2]
     if (this.playerUsername === this.currentGame.whitePlayerUsername) {
@@ -221,6 +239,10 @@ export class GameService {
       this.playerColor = 'b'
     }
     this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)
+    this.currentGameStates = []
+    for(let i = 0; i < this.moves().length; i++){
+      this.currentGameStates.push(null)
+    }
   }
 
   async handleMove(game: Game) {
@@ -228,7 +250,7 @@ export class GameService {
     this.currentGameStates.push(game)
     this.currentPlayer = (this.currentPlayer === 'w' ? 'b' : 'w')
     
-    let nextIndex = this.selectedGameState().moves.trim().split(" ").length - 1
+    let nextIndex = this.numberedMoves().length - 1
     if (nextIndex % 3 === 0) nextIndex += 1
     this.selectedMove = nextIndex
 
