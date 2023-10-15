@@ -114,7 +114,7 @@ export class GameService {
           return response.json()
         }
       }).then(body => {
-        return body.states
+        return body.gameStates
       }).catch((error: Response) => {
         if (error.status === 401) {
           this.router.navigate(['login'])
@@ -263,9 +263,8 @@ export class GameService {
     }
     this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)
     this.currentGameStates = await this.getGameStates(this.currentGame.id!)
-    for(let i = 0; i < this.moves().length; i++){
-      this.currentGameStates.push(null)
-    }
+    console.log("test");
+    console.log(this.currentGameStates);
   }
 
   async handleMove(game: Game) {
