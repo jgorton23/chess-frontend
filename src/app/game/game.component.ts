@@ -174,11 +174,6 @@ export class GameComponent implements OnInit, OnDestroy {
     if (nextIndex % 3 === 0) nextIndex -= 1
     if (nextIndex >= 0) this.gameService.selectedMove = nextIndex
 
-    console.log(this.gameService.selectedMove, this.gameService.selectedGameState());
-    console.log(this.gameService.currentGameStates);
-    console.log(this.gameService.selectedMove - (Math.ceil(this.gameService.selectedMove / 3)));
-    
-    
     document.getElementById("" + nextIndex)?.scrollIntoView({
       behavior: 'smooth',
       inline: 'start'
@@ -189,9 +184,6 @@ export class GameComponent implements OnInit, OnDestroy {
     let nextIndex = this.gameService.selectedMove + 1
     if (nextIndex % 3 === 0) nextIndex += 1
     if (nextIndex < this.moves().length) this.gameService.selectedMove = nextIndex
-    
-    // console.log(this.gameService.selectedMove);
-    console.log(this.gameService.selectedMove - (Math.ceil(this.gameService.selectedMove / 3)));
     
     document.getElementById("" + nextIndex)?.scrollIntoView({
       behavior: 'smooth',
