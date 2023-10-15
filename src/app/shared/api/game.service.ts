@@ -263,8 +263,6 @@ export class GameService {
     }
     this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)
     this.currentGameStates = await this.getGameStates(this.currentGame.id!)
-    console.log("test");
-    console.log(this.currentGameStates);
   }
 
   async handleMove(game: Game) {
