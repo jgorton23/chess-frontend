@@ -106,7 +106,7 @@ export class GameService {
 
   getGameStates(id: string): Promise<Game[]> {
 
-    return fetch(`${environment.baseUrl}/${ApiPaths.GameStates}`, { credentials: 'include' })
+    return fetch(`${environment.baseUrl}/${ApiPaths.Games}/${id}/states`, { credentials: 'include' })
       .then(response => {
         if (!response.ok) {
           return Promise.reject(response)

@@ -7,5 +7,4 @@ export enum ApiPaths {
     Session = 'user/session',
     Users = 'user',
     Games = 'games',
-    GameStates = 'states'
 }
