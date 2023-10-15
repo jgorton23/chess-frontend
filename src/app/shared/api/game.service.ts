@@ -104,6 +104,29 @@ export class GameService {
       })
   }
 
+  getGameStates(id: string): Promise<Game[]> {
+
+    return fetch(`${environment.baseUrl}/${ApiPaths.GameStates}`, { credentials: 'include' })
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(response)
+        } else {
+          return response.json()
+        }
+      }).then(body => {
+        return body.states
+      }).catch((error: Response) => {
+        if (error.status === 401) {
+          this.router.navigate(['login'])
+        } else if (error.status === 404) {
+          this.router.navigate(['notfound'])
+        } else {
+          error.json().then(e => console.error(e))
+        }
+      })
+
+  }
+
   createGame(game: Game): Promise<void> {
 
     return fetch(`${environment.baseUrl}/${ApiPaths.Games}/new`, 
@@ -239,7 +262,7 @@ export class GameService {
       this.playerColor = 'b'
     }
     this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)
-    this.currentGameStates = []
+    this.currentGameStates = await this.getGameStates(this.currentGame.id!)
     for(let i = 0; i < this.moves().length; i++){
       this.currentGameStates.push(null)
     }
