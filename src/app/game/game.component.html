@@ -16,9 +16,7 @@
       <div *ngIf="!loading" class="row d-flex justify-content-center">
         <app-board
           [fen]="fen()"
-          [playerColor]="playerColor"
-          [currentPlayer]="currentPlayer"
-          [validMoves]="validMoves"
+          [playerColor]="playerColor()"
           (moveEmitter)="performMove($event)"
         ></app-board>
       </div>
@@ -39,11 +37,11 @@
         *ngFor="let move of moves().reverse(); index as i"
         class="p-2"
         [ngClass]="{
-          'rounded-pill': isSelected(i)
+          'rounded-pill': isSelected(moves().length - 1 - i)
         }"
         style="display: inline-flex"
         id="{{ '' + (moves().length - 1 - i) }}"
-        (click)="select(i)"
+        (click)="select(moves().length - 1 - i)"
       >
         {{ move }}
       </h3>

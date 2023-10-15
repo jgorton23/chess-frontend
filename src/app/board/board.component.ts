@@ -22,22 +22,16 @@ export type Move = {
 })
 export class BoardComponent implements OnInit, OnChanges {
 
-  constructor(private boardUtil: BoardUtilService) { }
+  constructor(private boardUtil: BoardUtilService, private gameService: GameService) { }
 
   @Input()
   isIcon: boolean = false
 
   @Input()
   fen: string = this.boardUtil.getBoard(variations.Standard);
-  
-  @Input()
-  playerColor: string = ' ';
 
   @Input()
-  currentPlayer: string = 'w';
-
-  @Input()
-  validMoves: string[] = [];
+  playerColor: string = ''
   
   @Output()
   moveEmitter: EventEmitter<Partial<Move>> = new EventEmitter();
@@ -46,8 +40,7 @@ export class BoardComponent implements OnInit, OnChanges {
   
   selectedPiece?: {x: number, y: number};
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   //#region tile formatting
 
@@ -117,7 +110,7 @@ export class BoardComponent implements OnInit, OnChanges {
   select(event: number[]){    
     var x = event[1];
     var y = event[0];
-    if (this.playerColor === '' || (this.currentPlayer !== this.playerColor)) {
+    if (this.gameService.playerColor === '' || (this.gameService.currentPlayer !== this.gameService.playerColor) || this.gameService.selectedMove < this.gameService.numberedMoves().length-1) {
       return
     }
     if(this.selectedPiece === undefined && this.isPlayerColor(this.grid[y][x].piece)){
@@ -151,7 +144,7 @@ export class BoardComponent implements OnInit, OnChanges {
     }
     if(this.selectedPiece){
       let start = this.grid[this.selectedPiece.y][this.selectedPiece.x].piece + String.fromCharCode(97+this.selectedPiece.x) + Math.abs(this.selectedPiece.y-8)
-      this.validMoves.filter(move => move.startsWith(start)).forEach(move => {        
+      this.gameService.currentValidMoves.filter(move => move.startsWith(start)).forEach(move => {        
         if (move.length < 5) {
           return
         }
@@ -178,7 +171,7 @@ export class BoardComponent implements OnInit, OnChanges {
   }
 
   isPlayerColor(piece: string, color?: string) {
-    color = color || this.playerColor
+    color = color || this.gameService.playerColor
     return (color === 'w' && this.isWhitePiece(piece)) || (color === 'b' && this.isBlackPiece(piece))
   }
 
