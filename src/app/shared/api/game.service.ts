@@ -214,7 +214,7 @@ export class GameService {
   isInCheck(playerColor: string): boolean {
     let moveIsCheck = (this.selectedGameState()?.moves.split(" ").at(-1) ?? "").includes("+")
     let moveIsMate = (this.selectedGameState()?.moves.split(" ").at(-1) ?? "").includes("#")
-    return playerColor === (this.selectedMove % 3 === 2 ? 'b' : 'w') && (moveIsCheck || moveIsMate)
+    return playerColor === (this.selectedMove % 2 === 1 ? 'b' : 'w') && (moveIsCheck || moveIsMate)
   }
 
   isInLastMove(coordinate: string): boolean {
@@ -245,7 +245,7 @@ export class GameService {
   
   selectedGameState(): Game {
     let gameStateIndex = this.selectedMove - (Math.ceil(this.selectedMove / 3))
-    return (this.currentGameStates[gameStateIndex] || this.currentGame!)
+    return (this.currentGameStates[gameStateIndex+1] || this.currentGame!)
   }
 
   async setCurrentGame(game: Game, username: string) {
@@ -277,10 +277,7 @@ export class GameService {
     document.getElementById("" + nextIndex)?.scrollIntoView({
       behavior: 'smooth',
       inline: 'start'
-    })
-
-    console.log(this.selectedGameState());
-    
+    })    
 
     if (this.currentPlayer === this.playerColor) {
       this.currentValidMoves = await this.getValidMoves(this.currentGame.id!, this.playerColor)
