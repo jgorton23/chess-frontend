@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: "https://backend:8080"
+  baseUrl: "http://backend:8080"
 };
