@@ -2,7 +2,7 @@ FROM node:latest AS node
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm build --prod
+RUN npm run build --prod
 # EXPOSE 4200
 # ENTRYPOINT [ "npm", "run", "start" ]
 
