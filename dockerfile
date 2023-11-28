@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:latest AS node
 WORKDIR /app
 COPY . .
 RUN npm install
@@ -7,4 +7,4 @@ RUN npm build --prod
 # ENTRYPOINT [ "npm", "run", "start" ]
 
 FROM nginx:alpine
-COPY --from=node /app/dist/demo-app /usr/share/nginx/html
+COPY --from=node /app/dist/frontend/ /usr/share/nginx/html
